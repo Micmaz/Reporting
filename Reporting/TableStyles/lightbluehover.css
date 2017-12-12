@@ -1,0 +1,25 @@
+.groupedTbl th {
+font-size:14px;
+font-weight:400;
+color:#039;
+padding:12px 15px;
+}
+
+.groupedTbl td {
+color:#669;
+border-top:1px solid #e8edff;
+padding:10px 15px;
+}
+
+.groupedTbl tr:hover td {
+color:#339;
+background:#eff2ff;
+}
+
+.groupedTbl {
+font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+font-size:12px;
+text-align:left;
+border-collapse:collapse;
+margin:20px;
+}

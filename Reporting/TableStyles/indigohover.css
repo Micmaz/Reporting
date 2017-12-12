@@ -1,0 +1,23 @@
+.groupedTbl th {
+font-size:14px;
+font-weight:400;
+color:#039;
+padding:12px 15px;
+}
+
+.groupedTbl td {
+color:#669;
+border-top:1px solid #e8edff;
+padding:10px 15px;
+}
+
+.groupedTbl {
+background:#d0dafd;
+border-right:10px solid transparent;
+border-left:10px solid transparent;
+}
+
+.groupedTbl tr:hover td {
+color:#339;
+background:#eff2ff;
+}

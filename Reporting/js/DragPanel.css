@@ -1,0 +1,12 @@
+.dragable {
+	border: dashed 1px black;
+	background: #eeeeee url(~/res/BaseClasses/Scripts.aspx?f=jQueryLibrary/cupertino/images/ui-bg_diagonals-thick_90_eeeeee_40x40.png) 50% 50% repeat;
+	opacity: .90;filter:Alpha(Opacity=90);
+}
+.positionable {
+	width:100px;
+	height:100px;
+	padding:5px;
+	position:absolute;
+}
+.hover { background-color: #ffC }

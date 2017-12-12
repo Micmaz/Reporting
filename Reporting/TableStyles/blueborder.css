@@ -1,0 +1,53 @@
+.groupedTbl th {
+font-weight:400;
+font-size:14px;
+color:#039;
+border-bottom:1px dashed #69c;
+padding:12px 17px;
+}
+
+.groupedTbl td {
+color:#669;
+padding:7px 17px;
+}
+
+.groupedTbl th {
+font-weight:400;
+font-size:14px;
+color:#039;
+padding:15px 10px 10px;
+}
+
+.groupedTbl td {
+color:#669;
+border-top:1px dashed #fff;
+padding:10px;
+}
+
+.groupedTbl {
+font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+font-size:12px;
+width:480px;
+text-align:left;
+border-collapse:collapse;
+border:1px solid #6cf;
+margin:20px;
+}
+
+.groupedTbl th {
+font-weight:400;
+font-size:13px;
+color:#039;
+text-transform:uppercase;
+border-right:1px solid #0865c2;
+border-top:1px solid #0865c2;
+border-left:1px solid #0865c2;
+border-bottom:1px solid #fff;
+padding:20px;
+}
+
+.groupedTbl td {
+color:#669;
+border-right:1px dashed #6cf;
+padding:10px 20px;
+}

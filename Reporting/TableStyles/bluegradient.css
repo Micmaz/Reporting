@@ -1,0 +1,27 @@
+.groupedTbl th {
+font-size:13px;
+font-weight:400;
+background:#b9c9fe url(gradhead.png) repeat-x;
+border-top:2px solid #d3ddff;
+border-bottom:1px solid #fff;
+color:#039;
+padding:8px;
+}
+
+.groupedTbl td {
+border-bottom:1px solid #fff;
+color:#669;
+border-top:1px solid #fff;
+background:#e8edff url(gradback.png) repeat-x;
+padding:8px;
+}
+
+.groupedTbl tfoot tr td {
+background:#e8edff;
+font-size:12px;
+color:#99c;
+}
+
+.groupedTbl tbody tr:hover td {
+background:#d0dafd url(gradhover.png) repeat-x;
+color:#339;

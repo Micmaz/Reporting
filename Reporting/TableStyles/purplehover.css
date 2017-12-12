@@ -1,0 +1,37 @@
+.groupedTbl {
+font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+font-size:12px;
+width:480px;
+text-align:left;
+border-collapse:collapse;
+background:url(pattern.png);
+margin:20px;
+}
+
+.groupedTbl thead tr {
+background:url(pattern-head.png);
+}
+
+.groupedTbl tbody tr:hover td {
+color:#339;
+background:#fff;
+}
+
+.groupedTbl {
+font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+font-size:12px;
+width:480px;
+text-align:left;
+border-collapse:collapse;
+background:url(patternb.png);
+margin:20px;
+}
+
+.groupedTbl thead tr {
+background:url(patternb-head.png);
+}
+
+.groupedTbl tbody tr:hover td {
+color:#339;
+background:#cdcdee;
+}

@@ -1,0 +1,40 @@
+.groupedTbl {
+font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+font-size:12px;
+width:480px;
+text-align:left;
+border-collapse:collapse;
+background:url(DCoLogo.jpg) 330px 59px no-repeat;
+margin:20px;
+}
+
+.groupedTbl th {
+font-weight:400;
+font-size:14px;
+color:#339;
+padding:12px;
+}
+
+.groupedTbl td {
+color:#669;
+border-top:1px solid #fff;
+padding:9px 12px;
+}
+
+.groupedTbl tfoot td {
+font-size:11px;
+}
+
+.groupedTbl tbody td {
+background:url(back.png);
+}
+
+* html .groupedTbl tbody td {
+filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='table-images/back.png',sizingMethod='crop');
+background:none;
+}
+
+.groupedTbl tbody tr:hover td {
+color:#339;
+background:none;
+}

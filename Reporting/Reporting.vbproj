@@ -1,0 +1,412 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9AD06030-79E7-4B75-A3F7-EBF9CA757047}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Reporting</RootNamespace>
+    <AssemblyName>Reporting</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <TargetFrameworkProfile />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\..\_Output\</OutputPath>
+    <DocumentationFile>Reporting.xml</DocumentationFile>
+    <NoWarn>42353,42354,42355</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\_Output\</OutputPath>
+    <DocumentationFile>Reporting.xml</DocumentationFile>
+    <NoWarn>42353,42354,42355</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DTIControls, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DTIControls.dll.1.0.3\lib\DTIControls.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLiteHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DTIControls.dll.1.0.3\lib\SQLiteHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.106.0\lib\net20\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Collections.Specialized" />
+    <Import Include="System.Configuration" />
+    <Import Include="System.Text" />
+    <Import Include="System.Text.RegularExpressions" />
+    <Import Include="System.Web" />
+    <Import Include="System.Web.Caching" />
+    <Import Include="System.Web.SessionState" />
+    <Import Include="System.Web.Security" />
+    <Import Include="System.Web.Profile" />
+    <Import Include="System.Web.UI" />
+    <Import Include="System.Web.UI.WebControls" />
+    <Import Include="System.Web.UI.WebControls.WebParts" />
+    <Import Include="System.Web.UI.HtmlControls" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\columnchart.gif" />
+    <EmbeddedResource Include="BaseGraph.ascx" />
+    <EmbeddedResource Include="Icons\report.gif" />
+    <EmbeddedResource Include="ReportGraphs.aspx" />
+    <EmbeddedResource Include="ReportsEdit.aspx" />
+    <EmbeddedResource Include="ExcellExport.aspx" />
+    <EmbeddedResource Include="Icons\excel.gif" />
+    <EmbeddedResource Include="FullTableGridGraph.ascx" />
+    <EmbeddedResource Include="GridGraph.ascx" />
+    <EmbeddedResource Include="Icons\edit.png" />
+    <EmbeddedResource Include="GraphTester.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="propertyEditor\baseObjectProperty.vb" />
+    <Compile Include="propertyEditor\BaseProperty.vb" />
+    <Compile Include="propertyEditor\Comparator.vb" />
+    <Compile Include="propertyEditor\ComparatorDS.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ComparatorDS.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="propertyEditor\Designerclasses.vb" />
+    <Compile Include="propertyEditor\DynamicPropertyEditor.vb" />
+    <Compile Include="propertyEditor\ListProperty.vb" />
+    <Compile Include="propertyEditor\PropertiesGrid.vb" />
+    <Compile Include="propertyEditor\PropertyCreator.vb" />
+    <Compile Include="propertyEditor\PropertyEditors.vb" />
+    <Compile Include="propertyEditor\PropertyTableRow.vb" />
+    <Compile Include="QueryBuilder\QueryBuilder.aspx.designer.vb">
+      <DependentUpon>QueryBuilder.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="QueryBuilder\QueryBuilder.aspx.vb">
+      <DependentUpon>QueryBuilder.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="QueryBuilder\tableData.aspx.designer.vb">
+      <DependentUpon>tableData.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="QueryBuilder\tableData.aspx.vb">
+      <DependentUpon>tableData.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SummaryTableGraph.ascx.designer.vb">
+      <DependentUpon>SummaryTableGraph.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SummaryTableGraph.ascx.vb">
+      <DependentUpon>SummaryTableGraph.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SummaryTables.vb" />
+    <Compile Include="DragPanel.vb" />
+    <Compile Include="GraphTester.aspx.designer.vb">
+      <DependentUpon>GraphTester.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GraphTester.aspx.vb">
+      <DependentUpon>GraphTester.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FullTableGridGraph.ascx.designer.vb">
+      <DependentUpon>FullTableGridGraph.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="FullTableGridGraph.ascx.vb">
+      <DependentUpon>FullTableGridGraph.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExcellExport.aspx.designer.vb">
+      <DependentUpon>ExcellExport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ExcellExport.aspx.vb">
+      <DependentUpon>ExcellExport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="dsReports.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsReports.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="BaseGraph.ascx.designer.vb">
+      <DependentUpon>BaseGraph.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="BaseGraph.ascx.vb">
+      <DependentUpon>BaseGraph.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GridGraph.ascx.designer.vb">
+      <DependentUpon>GridGraph.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="GridGraph.ascx.vb">
+      <DependentUpon>GridGraph.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GroupedTable.vb" />
+    <Compile Include="GroupedTableGraph.ascx.designer.vb">
+      <DependentUpon>GroupedTableGraph.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="GroupedTableGraph.ascx.vb">
+      <DependentUpon>GroupedTableGraph.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="ParmDisplay.vb" />
+    <Compile Include="ReportEditorBase.vb">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportGraphs.aspx.designer.vb">
+      <DependentUpon>ReportGraphs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportGraphs.aspx.vb">
+      <DependentUpon>ReportGraphs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportParms.aspx.designer.vb">
+      <DependentUpon>ReportParms.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportParms.aspx.vb">
+      <DependentUpon>ReportParms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportsEdit.aspx.designer.vb">
+      <DependentUpon>ReportsEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportsEdit.aspx.vb">
+      <DependentUpon>ReportsEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportSelector.vb" />
+    <Compile Include="Graph.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="Report.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dsReports.xsc">
+      <DependentUpon>dsReports.xsd</DependentUpon>
+    </None>
+    <None Include="dsReports.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReports.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="dsReports.xss">
+      <DependentUpon>dsReports.xsd</DependentUpon>
+    </None>
+    <EmbeddedResource Include="js\DragPanel.js" />
+    <EmbeddedResource Include="js\Reports.css" />
+    <EmbeddedResource Include="Icons\areachart.png" />
+    <EmbeddedResource Include="Icons\columnchart.png" />
+    <EmbeddedResource Include="Icons\graphicreport.png" />
+    <EmbeddedResource Include="Icons\groupdata.png" />
+    <EmbeddedResource Include="Icons\linechart.png" />
+    <EmbeddedResource Include="Icons\piechart.png" />
+    <EmbeddedResource Include="Icons\report.png" />
+    <EmbeddedResource Include="Icons\sales.png" />
+    <Content Include="propertyEditor\ComparatorDS.xsc">
+      <DependentUpon>ComparatorDS.xsd</DependentUpon>
+    </Content>
+    <Content Include="packages.config" />
+    <None Include="propertyEditor\ComparatorDS.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ComparatorDS.Designer.vb</LastGenOutput>
+    </None>
+    <Content Include="propertyEditor\ComparatorDS.xss">
+      <DependentUpon>ComparatorDS.xsd</DependentUpon>
+    </Content>
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="js\reportRefresher.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ReportParms.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GroupedTableGraph.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SummaryTableGraph.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TableStyles\back.png" />
+    <EmbeddedResource Include="TableStyles\bars.css" />
+    <EmbeddedResource Include="TableStyles\blueborder.css" />
+    <EmbeddedResource Include="TableStyles\blueborderhover.css" />
+    <EmbeddedResource Include="TableStyles\bluegradient.css" />
+    <EmbeddedResource Include="TableStyles\bluehover.css" />
+    <EmbeddedResource Include="TableStyles\bluezebra.css" />
+    <EmbeddedResource Include="TableStyles\bnwhover.css" />
+    <EmbeddedResource Include="TableStyles\botleft.png" />
+    <EmbeddedResource Include="TableStyles\botright.png" />
+    <EmbeddedResource Include="TableStyles\brownbackground.css" />
+    <EmbeddedResource Include="TableStyles\DCoLogo.css" />
+    <EmbeddedResource Include="TableStyles\DCoLogo.jpg" />
+    <EmbeddedResource Include="TableStyles\gradback.png" />
+    <EmbeddedResource Include="TableStyles\gradhead.png" />
+    <EmbeddedResource Include="TableStyles\gradhover.png" />
+    <EmbeddedResource Include="TableStyles\indigohover.css" />
+    <EmbeddedResource Include="TableStyles\left.png" />
+    <EmbeddedResource Include="TableStyles\lightbluehover.css" />
+    <EmbeddedResource Include="TableStyles\pattern-head.png" />
+    <EmbeddedResource Include="TableStyles\pattern.png" />
+    <EmbeddedResource Include="TableStyles\patternb-head.png" />
+    <EmbeddedResource Include="TableStyles\patternb.png" />
+    <EmbeddedResource Include="TableStyles\plain.css" />
+    <EmbeddedResource Include="TableStyles\plainhover.css" />
+    <EmbeddedResource Include="TableStyles\purplehover.css" />
+    <EmbeddedResource Include="TableStyles\right.png" />
+    <EmbeddedResource Include="TableStyles\zebrahover.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TableStyles\rounded.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="QueryBuilder\css\queryBuilder.css" />
+    <EmbeddedResource Include="QueryBuilder\js\jQuery.extendext.min.js" />
+    <EmbeddedResource Include="QueryBuilder\css\demo - Copy.css" />
+    <EmbeddedResource Include="QueryBuilder\css\demo-ie8.css" />
+    <EmbeddedResource Include="QueryBuilder\css\demo.css" />
+    <EmbeddedResource Include="QueryBuilder\css\demo.htm" />
+    <EmbeddedResource Include="QueryBuilder\css\drag-handle-active.png" />
+    <EmbeddedResource Include="QueryBuilder\css\drag-handle.png" />
+    <EmbeddedResource Include="QueryBuilder\css\drag-handlesm.png" />
+    <EmbeddedResource Include="QueryBuilder\css\dropit.css" />
+    <EmbeddedResource Include="QueryBuilder\css\layout-default-latest.css" />
+    <EmbeddedResource Include="QueryBuilder\css\style.css" />
+    <EmbeddedResource Include="QueryBuilder\QueryBuilder.aspx" />
+    <EmbeddedResource Include="QueryBuilder\img\loading.gif" />
+    <EmbeddedResource Include="QueryBuilder\img\microsoft_office_2010_icons.png" />
+    <EmbeddedResource Include="QueryBuilder\img\microsoft_office_2013_icons.png" />
+    <EmbeddedResource Include="QueryBuilder\img\microsoft_office_2013_iconscopy.png" />
+    <EmbeddedResource Include="QueryBuilder\img\progressbar.gif" />
+    <EmbeddedResource Include="QueryBuilder\img\spacer.png" />
+    <EmbeddedResource Include="QueryBuilder\js\dropit.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jmpress.custom.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jquery.dragtable.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jquery.jsPlumb-1.6.2-min.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jquery.jsPlumb-1.6.2.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jquery.layout-latest.min.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jquery.tablesorter.min.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jquery.zoomooz.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jquery.zoomooz.min.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jstree.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jstree.min.js" />
+    <EmbeddedResource Include="QueryBuilder\js\jstreeTheme\jstreeTheme.style.32px.png" />
+    <EmbeddedResource Include="QueryBuilder\js\jstreeTheme\jstreeTheme.style.40px.png" />
+    <EmbeddedResource Include="QueryBuilder\js\jstreeTheme\jstreeTheme.style.css" />
+    <EmbeddedResource Include="QueryBuilder\js\jstreeTheme\jstreeTheme.style.min.css" />
+    <EmbeddedResource Include="QueryBuilder\js\jstreeTheme\jstreeTheme.throbber.gif" />
+    <EmbeddedResource Include="QueryBuilder\js\QueryBuilder.bgTable.js" />
+    <EmbeddedResource Include="QueryBuilder\js\QueryBuilder.js" />
+    <EmbeddedResource Include="QueryBuilder\js\tablethemes\blue\tablethemes.blue.asc.gif" />
+    <EmbeddedResource Include="QueryBuilder\js\tablethemes\blue\tablethemes.blue.background.gif" />
+    <EmbeddedResource Include="QueryBuilder\js\tablethemes\blue\tablethemes.blue.desc.gif" />
+    <EmbeddedResource Include="QueryBuilder\js\tablethemes\blue\tablethemes.blue.style.css" />
+    <EmbeddedResource Include="propertyEditor\clear.png" />
+    <EmbeddedResource Include="propertyEditor\close.png" />
+    <EmbeddedResource Include="propertyEditor\open.png" />
+    <Content Include="QueryBuilder\js\tablethemes\green\tablethemes.green.asc.png" />
+    <Content Include="QueryBuilder\js\tablethemes\green\tablethemes.green.background.png" />
+    <Content Include="QueryBuilder\js\tablethemes\green\tablethemes.green.desc.png" />
+    <Content Include="QueryBuilder\js\tablethemes\green\tablethemes.green.style.css" />
+    <EmbeddedResource Include="QueryBuilder\tableData.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DTIGrid\DTIGrid\DTIGrid.vbproj">
+      <Project>{d159ea22-d9cc-43a8-94a9-d238683e8767}</Project>
+      <Name>DTIGrid</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.106.0\build\net20\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net20\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net20\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.106.0\build\net20\System.Data.SQLite.Core.targets'))" />
+  </Target>
+</Project>

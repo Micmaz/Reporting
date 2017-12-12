@@ -1,0 +1,27 @@
+.dragable {
+	border: dashed 1px black;
+	background: #eeeeee url(~/res/BaseClasses/Scripts.aspx?f=jQueryLibrary/cupertino/images/ui-bg_diagonals-thick_90_eeeeee_40x40.png) 50% 50% repeat;
+	opacity: .90;filter:Alpha(Opacity=90);
+}
+.positionable {
+	width:100px;
+	height:100px;
+	padding:5px;
+	position:absolute;
+}
+.hover { background-color: #ffC }
+
+.propEditorTable {
+	margin-top: 45px;
+}
+
+.propEditorButtons {
+position: absolute;
+top: 0px;
+left: 0px;
+	margin: 3px;
+	padding: 0px;
+	border: solid 1px;
+	background: white;
+	z-index:9999;
+}

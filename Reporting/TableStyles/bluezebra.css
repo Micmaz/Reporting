@@ -1,0 +1,50 @@
+.groupedTbl th {
+font-size:14px;
+font-weight:400;
+color:#039;
+padding:10px 8px;
+}
+
+.groupedTbl td {
+color:#669;
+padding:8px;
+}
+
+.groupedTbl {
+font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+font-size:12px;
+width:480px;
+text-align:left;
+border-collapse:collapse;
+margin:0 20px 20px;
+}
+
+.groupedTbl th {
+font-size:14px;
+font-weight:400;
+border-right:1px solid #fff;
+border-left:1px solid #fff;
+color:#039;
+padding:12px 15px;
+}
+
+.groupedTbl td {
+border-right:1px solid #fff;
+border-left:1px solid #fff;
+color:#669;
+padding:8px 15px;
+}
+
+.groupedTbl tr:nth-child(odd) td {
+background:#eff2ff;
+}
+
+.groupedTbl #vzebra-adventure,.groupedTbl #vzebra-children {
+background:#d0dafd;
+border-bottom:1px solid #c8d4fd;
+}
+
+.groupedTbl #vzebra-comedy,.groupedTbl #vzebra-action {
+background:#dce4ff;
+border-bottom:1px solid #d6dfff;
+}
