@@ -108,10 +108,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\components\Reporting\FusionCharts\FusionCharts.vbproj">
-      <Project>{a4e0dc55-9dd6-4cf8-b136-98a170b6fdef}</Project>
-      <Name>FusionCharts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Chart.js\Chart.js.vbproj">
       <Project>{c251e0f7-048a-421c-b648-43a5250c5a89}</Project>
       <Name>Chart.js</Name>

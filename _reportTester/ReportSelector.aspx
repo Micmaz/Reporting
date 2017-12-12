@@ -13,8 +13,8 @@
         <div>
         	<asp:Button ID="btnToggleEditing" runat="server" OnClick="btnToggleEditing_Click" Text="Toggle report editing" />
 			<br />
-			<DTI:ReportSelector ID="ReportSelector1" runat="server">
-			</DTI:ReportSelector>
+			<%@ Register assembly="Reporting" namespace="Reporting" tagprefix="DTI" %>
+			<DTI:ReportSelector ID="ReportSelector1" runat="server"></DTI:ReportSelector>
         </div>
     </form>
 </body>
