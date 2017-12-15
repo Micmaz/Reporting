@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C06109D9-C5A4-40C1-A8CE-FB6B8510E0E1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>FusionChartsFreeware</RootNamespace>
+    <AssemblyName>FusionChartsFreeware</AssemblyName>
+    <MyType>WebControl</MyType>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>..\..\_Output\</OutputPath>
+    <DocumentationFile>FusionChartsFreeware.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\_Output\</OutputPath>
+    <DocumentationFile>FusionChartsFreeware.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DTIControls, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DTIControls.dll.1.0.3\lib\DTIControls.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLiteHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DTIControls.dll.1.0.3\lib\SQLiteHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.106.0\lib\net20\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Chart.vb" />
+    <Compile Include="dataXml.vb" />
+    <Compile Include="FusionChartsFreewareGraph.ascx.designer.vb">
+      <DependentUpon>FusionChartsFreewareGraph.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="FusionChartsFreewareGraph.ascx.vb">
+      <DependentUpon>FusionChartsFreewareGraph.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="PropertyHash.vb" />
+    <Compile Include="xmlDataObject.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="flash\FCF_Area2D.swf" />
+    <EmbeddedResource Include="flash\FCF_Bar2D.swf" />
+    <EmbeddedResource Include="flash\FCF_Candlestick.swf" />
+    <EmbeddedResource Include="flash\FCF_Column2D.swf" />
+    <EmbeddedResource Include="flash\FCF_Column3D.swf" />
+    <EmbeddedResource Include="flash\FCF_Doughnut2D.swf" />
+    <EmbeddedResource Include="flash\FCF_Funnel.swf" />
+    <EmbeddedResource Include="flash\FCF_Gantt.swf" />
+    <EmbeddedResource Include="flash\FCF_Line.swf" />
+    <EmbeddedResource Include="flash\FCF_MSArea2D.swf" />
+    <EmbeddedResource Include="flash\FCF_MSBar2D.swf" />
+    <EmbeddedResource Include="flash\FCF_MSColumn2D.swf" />
+    <EmbeddedResource Include="flash\FCF_MSColumn2DLineDY.swf" />
+    <EmbeddedResource Include="flash\FCF_MSColumn3D.swf" />
+    <EmbeddedResource Include="flash\FCF_MSColumn3DLineDY.swf" />
+    <EmbeddedResource Include="flash\FCF_MSLine.swf" />
+    <EmbeddedResource Include="flash\FCF_Pie2D.swf" />
+    <EmbeddedResource Include="flash\FCF_Pie3D.swf" />
+    <EmbeddedResource Include="flash\FCF_StackedArea2D.swf" />
+    <EmbeddedResource Include="flash\FCF_StackedBar2D.swf" />
+    <EmbeddedResource Include="flash\FCF_StackedColumn2D.swf" />
+    <EmbeddedResource Include="flash\FCF_StackedColumn3D.swf" />
+    <EmbeddedResource Include="js\FusionCharts.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FusionChartsFreewareGraph.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Reporting\Reporting.vbproj">
+      <Project>{9ad06030-79e7-4b75-a3f7-ebf9ca757047}</Project>
+      <Name>Reporting</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.106.0\build\net20\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net20\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net20\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.106.0\build\net20\System.Data.SQLite.Core.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
