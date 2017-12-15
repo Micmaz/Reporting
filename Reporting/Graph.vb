@@ -78,12 +78,12 @@ Public Class Graph
     End Property
 
     Private _type As GraphType
-    <Bindable(True), _
-    Category("Graph Data"), _
-    DefaultValue(GraphType.Fusion), _
-    Description("The type of graph to render.  Used only when the graph doesn't exist in data."), _
-    Localizable(True)> _
-    Public Property GraphType() As GraphType
+	<Bindable(True),
+	Category("Graph Data"),
+	DefaultValue(GraphType.ChartJS),
+	Description("The type of graph to render.  Used only when the graph doesn't exist in data."),
+	Localizable(True)>
+	Public Property GraphType() As GraphType
         Get
             Return _type
         End Get
@@ -108,44 +108,44 @@ Public Class Graph
     End Property
 
     Public ReadOnly Property RenderType() As String
-        Get
-            If CustomType = "" Then
-                Return System.Enum.GetName(GetType(GraphType), GraphType)
-            Else
-                Return CustomType
-            End If
-        End Get
-    End Property
+		Get
+			If CustomType = "" Then
+				Return System.Enum.GetName(GetType(GraphType), GraphType)
+			Else
+				Return CustomType
+			End If
+		End Get
+	End Property
 
-    Private _RenderTypeId As Integer
-    Public Property RenderTypeId() As Integer
-        Get
-            If _RenderTypeId = Nothing Then
-                For Each Type As DTIGraphTypesRow In graphTypesDT
-                    If RenderType = Type.Name Then
-                        _RenderTypeId = Type.Id
-                        Exit For
-                    End If
-                Next
-            End If
-            Return _RenderTypeId
-        End Get
-        Set(ByVal value As Integer)
-            For Each Type As DTIGraphTypesRow In graphTypesDT
-                If value = Type.Id Then
-                    _RenderTypeId = value
-                    Try
-                        GraphType = DirectCast(System.Enum.Parse(GetType(GraphType), Type.Name), GraphType)
-                    Catch ex As Exception
-                        CustomType = Type.Name
-                    End Try
-                    Exit For
-                End If
-            Next
-        End Set
-    End Property
+    Private _RenderTypeId As Integer = -1
+	Public Property GraphTypeId() As Integer
+		Get
+			If _RenderTypeId = -1 Then
+				For Each Type As DTIGraphTypesRow In graphTypesDT
+					If RenderType = Type.Name Then
+						_RenderTypeId = Type.Id
+						Exit For
+					End If
+				Next
+			End If
+			Return _RenderTypeId
+		End Get
+		Set(ByVal value As Integer)
+			For Each Type As DTIGraphTypesRow In graphTypesDT
+				If value = Type.Id Then
+					_RenderTypeId = value
+					Try
+						GraphType = DirectCast(System.Enum.Parse(GetType(GraphType), Type.Name), GraphType)
+					Catch ex As Exception
+						CustomType = Type.Name
+					End Try
+					Exit For
+				End If
+			Next
+		End Set
+	End Property
 
-    Private _order As Integer
+	Private _order As Integer
     <Bindable(True), _
     Category("Graph Data"), _
     Description("The order to apply to the graph.  Used only when the graph doesn't exist in data."), _
@@ -230,10 +230,11 @@ Public Class Graph
             If Me.session("AllGraphTypes") Is Nothing Then
                 Dim dt As New DTIGraphTypesDataTable
                 Try
-                    sqlhelper.FillDataTable("select * from DTIGraphTypes", CType(dt, DataTable))
-                Catch ex As Exception
-                    'If ex.Message.Contains("Invalid object name") Then
-                    Report.loadDSToDatabase(sqlhelper)
+					sqlhelper.FillDataTable("select * from DTIGraphTypes", CType(dt, DataTable))
+					Report.getGraphTypeList(sqlhelper, dt)
+				Catch ex As Exception
+					'If ex.Message.Contains("Invalid object name") Then
+					Report.loadDSToDatabase(sqlhelper)
                     sqlhelper.FillDataTable("select * from DTIGraphTypes", CType(dt, DataTable))
                     'Else : Throw New Exception(ex.Message)
                     'End If
@@ -330,9 +331,9 @@ Public Class Graph
         Try
 
             Me.Controls.Add(parms)
-            'If Not parms.hasparms Then
-            baseGraph = CType(Me.Page.LoadControl(getGraphPath(RenderType)), BaseGraph)
-            baseGraph.graph = Me
+			'If Not parms.hasparms Then
+			baseGraph = CType(Me.Page.LoadControl(getGraphIDPath(GraphTypeId)), BaseGraph)
+			baseGraph.graph = Me
             baseGraph.Visible = Not parms.hasparms
             Me.Controls.Add(baseGraph)
             'End If
@@ -345,9 +346,9 @@ Public Class Graph
     Private savedException As Exception = Nothing
     Public Sub handelError(ByVal ex As Exception)
         Try
-            Dim errorStr As String = String.Format( _
-            "<a href='#' onclick=""$(this).next().toggle('slow');"">Error in report: {0}</a><div id='err' style='display:none;'>{1}<br>{2}</div>", getGraphPath(RenderType), ex.Message, ex.StackTrace.Replace(vbCrLf, "<br/>"))
-            Me.Controls.Add(New LiteralControl(errorStr))
+			Dim errorStr As String = String.Format(
+			"<a href='#' onclick=""$(this).next().toggle('slow');"">Error in report: {0}</a><div id='err' style='display:none;'>{1}<br>{2}</div>", getGraphIDPath(GraphTypeId), ex.Message, ex.StackTrace.Replace(vbCrLf, "<br/>"))
+			Me.Controls.Add(New LiteralControl(errorStr))
         Catch ex1 As Exception
             savedException = ex1
         End Try
@@ -368,19 +369,31 @@ Public Class Graph
         loadControl()
     End Sub
 
-    Private Function getGraphPath(ByVal cmnName As String) As String
-        For Each row As DTIGraphTypesRow In graphTypesDT.Rows
-			If row.Name = cmnName Then
+	Private Function getGraphIDPath(ByVal GraphTypeID As Integer) As String
+		For Each row As DTIGraphTypesRow In graphTypesDT.Rows
+			If row.Id = GraphTypeID Then
 				If row.Control_Name.ToLower.EndsWith("/fusiongraph.ascx") Then
 					Return "~/res/FusionCharts/FusionGraph.ascx"
 				End If
 				Return row.Control_Name
 			End If
 		Next
-        Throw New Exception("No Graph of that type found")
-    End Function
+		Throw New Exception("No Graph of that type found")
+	End Function
 
-    Public Overrides Sub DataBind()
+	'Private Function getGraphPath(ByVal cmnName As String) As String
+	'	For Each row As DTIGraphTypesRow In graphTypesDT.Rows
+	'		If row.Name = cmnName Then
+	'			If row.Control_Name.ToLower.EndsWith("/fusiongraph.ascx") Then
+	'				Return "~/res/FusionCharts/FusionGraph.ascx"
+	'			End If
+	'			Return row.Control_Name
+	'		End If
+	'	Next
+	'	Throw New Exception("No Graph of that type found")
+	'End Function
+
+	Public Overrides Sub DataBind()
         MyBase.DataBind()
     End Sub
 
@@ -469,8 +482,7 @@ Public Class Graph
 End Class
 
 Public Enum GraphType
-    'Telerik
-    Grid
-    Fusion
-    FullTableGrid
+	Chartjs
+	Grid
+	HtmlTable
 End Enum

@@ -2,9 +2,190 @@ Imports System.Web.UI.WebControls
 Imports System.Web.UI
 
 Public Class Chart
-    Inherits ChartBase
+	Inherits Panel
 
-    Public Event DrillDownEvent(ByVal sender As Chart, ByVal row As DataRow, ByVal columnName As String, ByVal columnValue As String)
+#Region "ChartBase stuff"
+	Protected innerpnl As New Panel
+	Protected content As New LiteralControl
+	'Public MustOverride Function getSwfFile() As String
+
+	Private _chartType As Integer = 0
+	Public Property chartType() As Chart.chartTypeEnum
+		Get
+			Return _chartType
+		End Get
+		Set(ByVal value As Chart.chartTypeEnum)
+			_chartType = value
+		End Set
+	End Property
+
+	Private _dataurl As String = Nothing
+	Public Property dataUrl() As String
+		Get
+			Return _dataurl
+		End Get
+		Set(ByVal value As String)
+			_dataurl = value
+		End Set
+	End Property
+
+	Private _debugmode As Boolean = False
+	Public Property debugMode() As Boolean
+		Get
+			Return _debugmode
+		End Get
+		Set(ByVal value As Boolean)
+			_debugmode = value
+		End Set
+	End Property
+
+
+	Protected Overrides Sub Render(ByVal writer As System.Web.UI.HtmlTextWriter)
+		innerpnl.Width = Me.Width
+		innerpnl.Height = Me.Height
+		innerpnl.ID = "innerpnl" & Me.ID
+		content.Text = getContent()
+		MyBase.Render(writer)
+	End Sub
+
+	Private Function getContent() As String
+
+		Dim swf As String = BaseClasses.Scripts.ScriptsURL(True) & "/FusionChartsFreeware/FCF_" & chartType.ToString() & ".swf"
+		swf = swf.Trim("/")
+		Dim swfid As String = Me.ClientID & "swf"
+		Dim xml As String
+		Dim i As Integer = New Random().Next()
+		Dim var As String = "dynchart" & i
+		If dataUrl Is Nothing Then
+			xml = var & ".setDataXML(""" & JavaScriptEncode(outputXML()) & """);"
+		Else
+			xml = var & ".setDataURL(""" & Me.dataUrl & """);"
+		End If
+		Return "   <script type=""text/javascript""> " & vbCrLf &
+"     var " & var & " = new FusionCharts(""" & swf & """, """ & swfid & """, """ & Me.Width.Value & """, """ & Me.Height.Value & """, ""0"", ""1"");" & vbCrLf &
+xml & vbCrLf &
+var & ".addParam(""wmode"", ""opaque"");" & vbCrLf &
+var & ".render(""" & innerpnl.ClientID & """);" & vbCrLf &
+"   </script> " & vbCrLf
+		'Return "   <script type=""text/javascript""> var " & var & ";" & vbCrLf &
+		'		"     $(function(){ " & var & " = new FusionCharts(""" & chartType.ToString() & """, """ & swfid & """, """ & Me.Width.Value & """, """ & Me.Height.Value & """, ""0"", ""1"");" & vbCrLf &
+		'		xml & vbCrLf &
+		'		var & ".render(""" & innerpnl.ClientID & """);" & vbCrLf &
+		'		"  }); </script> " & vbCrLf
+
+	End Function
+
+	Public Shared Function JavaScriptEncode(ByVal Str As String) As String
+
+		Str = Replace(Str, "\", "\\")
+		Str = Replace(Str, "'", "\'")
+		Str = Replace(Str, """", "\""")
+		Str = Replace(Str, Chr(8), "\b")
+		Str = Replace(Str, Chr(9), "\t")
+		Str = Replace(Str, Chr(10), "\r")
+		Str = Replace(Str, Chr(12), "\f")
+		Str = Replace(Str, Chr(13), "\n")
+
+		Return Str
+
+	End Function
+
+	''' <summary>
+	''' Registers all necessary javascript and css files for this control to function on the page.
+	''' </summary>
+	''' <param name="page"></param>
+	''' <remarks></remarks>
+	<System.ComponentModel.Description("Registers all necessary javascript and css files for this control to function on the page.")>
+	Public Shared Sub registerControl(ByVal page As Page)
+		If Not page Is Nothing Then
+			jQueryLibrary.jQueryInclude.addScriptFile(page, "/FusionChartsFreeware/FusionCharts.js")
+
+		End If
+	End Sub
+
+	Public Function removeValue(valueName As String) As Boolean
+		If props.containsKey(valueName) Then
+			props.remove(valueName)
+			Return True
+		End If
+		Return False
+	End Function
+
+	Protected props As New PropertyHash()
+	Public Property xmlprop(ByVal propname As String) As String
+		Get
+			Return props.xmlprop(propname)
+		End Get
+		Set(ByVal value As String)
+			props.xmlprop(propname) = value
+		End Set
+	End Property
+
+	Public Property xmlBoolProp(ByVal propname As String) As Boolean
+		Get
+			Return props.xmlBoolProp(propname)
+		End Get
+		Set(ByVal value As Boolean)
+			props.xmlBoolProp(propname) = value
+		End Set
+	End Property
+
+	Public Enum palettEnum
+		Not_Set = 0
+		Green = 1
+		Grey = 2
+		Brown = 3
+		Blue = 4
+		Red = 5
+	End Enum
+
+	Public Enum labelDisplayEnum
+		Not_Set = 0
+		WRAP
+		STAGGER
+		ROTATE
+		NONE
+		SLANT
+	End Enum
+
+	Public Enum ChartTheme
+		None
+		Flint
+		Fire
+		Carbon
+		Ocean
+		Zune
+	End Enum
+
+	Public Enum BooleanDefault
+		[No]
+		[Yes]
+		[Default]
+	End Enum
+
+	Public Shared Function parseColor(ByVal hexstring As String) As System.Drawing.Color
+		Try
+			Dim r As Integer = Integer.Parse(hexstring.Substring(0, 2), Globalization.NumberStyles.HexNumber)
+			Dim g As Integer = Integer.Parse(hexstring.Substring(2, 2), Globalization.NumberStyles.HexNumber)
+			Dim b As Integer = Integer.Parse(hexstring.Substring(4, 2), Globalization.NumberStyles.HexNumber)
+			Return System.Drawing.Color.FromArgb(r, g, b)
+		Catch ex As Exception
+			Return Nothing
+		End Try
+	End Function
+
+	Public Shared Function getColorHex(ByVal color As System.Drawing.Color) As String
+		If color = Nothing Then Return Nothing
+		Try
+			Return String.Format("{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B)
+		Catch ex As Exception
+			Return Nothing
+		End Try
+	End Function
+
+#End Region
+
+	Public Event DrillDownEvent(ByVal sender As Chart, ByVal row As DataRow, ByVal columnName As String, ByVal columnValue As String)
 
 
     Private Function getXml() As String
@@ -26,59 +207,26 @@ Public Class Chart
     Public Enum chartTypeEnum
         Area2D = 0
         Bar2D = 1
-        Bubble = 2
-        Column2D = 3
-        Column3D = 4
-        Doughnut2D = 5
-        Doughnut3D = 6
-        FCExporter = 7
-        Line = 8
-        MSArea = 9
-        MSBar2D = 10
-        MSBar3D = 11
-        MSColumn2D = 12
-        MSColumn3D = 13
-        MSColumn3DLineDY = 14
-        MSColumnLine3D = 15
-        MSCombi2D = 16
-        MSCombi3D = 17
-        MSCombiDY2D = 18
-        MSLine = 19
-        MSStackedColumn2D = 20
-        MSStackedColumn2DLineDY = 21
-        Pie2D = 22
-        Pie3D = 23
-        Scatter = 24
-        ScrollArea2D = 25
-        ScrollColumn2D = 26
-        ScrollCombi2D = 27
-        ScrollCombiDY2D = 28
-        ScrollLine2D = 29
-        ScrollStackedColumn2D = 30
-        SSGrid = 31
-        StackedArea2D = 32
-        StackedBar2D = 33
-        StackedBar3D = 34
-        StackedColumn2D = 35
-        StackedColumn3D = 36
-        StackedColumn3DLineDY = 37
-        zoomline
-        pareto2d
-        pareto3d
-        marimekko
-        angulargauge
-        bulb
-        cylinder
-        hled
-        hlineargauge
-        thermometer
-        vled
-        hbullet
-        vbullet
-        funnel
-        pyramid
-        gantt
-    End Enum
+		Column2D = 3
+		Column3D = 4
+		Doughnut2D = 5
+		Funnel = 7
+		Line = 8
+		MSArea2D = 9
+		MSBar2D = 10
+		MSColumn2D = 12
+		MSColumn3D = 12
+		MSColumn2DLineDY = 14
+		MSColumn3DLineDY = 14
+		MSLine = 19
+		Pie2D = 22
+		Pie3D = 23
+		StackedArea2D = 32
+		StackedBar2D = 33
+		StackedColumn2D = 35
+		StackedColumn3D = 36
+		gantt
+	End Enum
 
 
 #End Region
@@ -410,35 +558,35 @@ Public Class Chart
         End Set
     End Property
 
-    Public Property showGradient() As ChartBase.BooleanDefault
-        Get
-            Return props.xmlBoolDefault("useplotgradientcolor")
-        End Get
-        Set(ByVal value As ChartBase.BooleanDefault)
-            'If value = False Then
-            '    xmlBoolProp("plotGradientColor") = " "
-            'Else
-            '    props.remove("plotGradientColor")
-            'End If
-            props.xmlBoolDefault("useplotgradientcolor") = value
-        End Set
-    End Property
+	Public Property showGradient() As BooleanDefault
+		Get
+			Return props.xmlBoolDefault("useplotgradientcolor")
+		End Get
+		Set(ByVal value As BooleanDefault)
+			'If value = False Then
+			'    xmlBoolProp("plotGradientColor") = " "
+			'Else
+			'    props.remove("plotGradientColor")
+			'End If
+			props.xmlBoolDefault("useplotgradientcolor") = value
+		End Set
+	End Property
 
-    Public Property showShadow() As ChartBase.BooleanDefault
-        Get
-            Return props.xmlBoolDefault("showShadow")
-        End Get
-        Set(ByVal value As ChartBase.BooleanDefault)
-            If value = False Then
-                xmlBoolProp("use3DLighting") = False
-            Else
-                props.remove("use3DLighting")
-            End If
-            props.xmlBoolDefault("showShadow") = value
-        End Set
-    End Property
+	Public Property showShadow() As BooleanDefault
+		Get
+			Return props.xmlBoolDefault("showShadow")
+		End Get
+		Set(ByVal value As BooleanDefault)
+			If value = False Then
+				xmlBoolProp("use3DLighting") = False
+			Else
+				props.remove("use3DLighting")
+			End If
+			props.xmlBoolDefault("showShadow") = value
+		End Set
+	End Property
 
-    Public Property slantLabels() As Boolean
+	Public Property slantLabels() As Boolean
         Get
             Return xmlBoolProp("slantLabels")
         End Get
@@ -626,16 +774,22 @@ Public Class Chart
 
     Protected WithEvents hidfield As New HtmlControls.HtmlInputHidden
     Protected WithEvents hidbtn As New HtmlControls.HtmlInputSubmit
-    Private Sub Chart_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
-        hidbtn.Style.Item("Display") = "None"
-        'hidbtn.ID = Me.ClientID & "_hbtn"
-        hidbtn.Value = "true"
-        'hidfield.ID = Me.ClientID & "_hfld"
-        Me.Controls.Add(hidfield)
-        Me.Controls.Add(hidbtn)
-    End Sub
+	Private Sub Chart_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
 
-    Private Sub Chart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+		registerControl(Me.Page)
+
+		innerpnl.Controls.Add(content)
+		Me.Controls.Add(innerpnl)
+
+		hidbtn.Style.Item("Display") = "None"
+		'hidbtn.ID = Me.ClientID & "_hbtn"
+		hidbtn.Value = "true"
+		'hidfield.ID = Me.ClientID & "_hfld"
+		Me.Controls.Add(hidfield)
+		Me.Controls.Add(hidbtn)
+	End Sub
+
+	Private Sub Chart_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Me.Page.IsPostBack Then
             If Me.Page.Request.Params(hidbtn.UniqueID) IsNot Nothing Then
                 Dim vals() As String = Me.Page.Request.Params(hidfield.UniqueID).Split(",")
@@ -651,57 +805,57 @@ Public Class Chart
 
     End Sub
 
-    Public Overrides Function outputXML() As String
-        Try
-            If data Is Nothing Then
-                Return testXml()
-            End If
-            If labelCol Is Nothing OrElse labelCol = "" Then
-                labelCol = dt.Columns(1).ColumnName
-            End If
-            If _valueCols Is Nothing OrElse _valueCols.Length = 0 Then
-                Dim serLen As Integer = numberOfSeries
-                Dim colList As String = ""
-                For j As Integer = 1 To serLen
-                    Dim i As Integer = j
-                    If i = 1 Then i = 0
-                    If dt.Columns.Count > i Then
-                        colList &= dt.Columns(i).ColumnName & ","
-                    End If
-                Next
-                valueColsStr = colList
-            End If
-            If displayedTextCol IsNot Nothing AndAlso displayedTextCol.Length < valueCols.Length Then
-                Dim cols As String() = valueCols.Clone
-                Dim i As Integer = 0
-                For Each displayName As String In displayedTextCol
-                    If Not displayName.Trim = "" Then _
-                        cols(i) = displayName
-                    i += 1
-                Next
-                displayedTextCol = cols
-            End If
-            If displayedTextCol Is Nothing OrElse displayedTextCol.Length < valueCols.Length Then
-                displayedTextCol = valueCols
-            End If
+	Public Function outputXML() As String
+		Try
+			If data Is Nothing Then
+				Return testXml()
+			End If
+			If labelCol Is Nothing OrElse labelCol = "" Then
+				labelCol = dt.Columns(1).ColumnName
+			End If
+			If _valueCols Is Nothing OrElse _valueCols.Length = 0 Then
+				Dim serLen As Integer = numberOfSeries
+				Dim colList As String = ""
+				For j As Integer = 1 To serLen
+					Dim i As Integer = j
+					If i = 1 Then i = 0
+					If dt.Columns.Count > i Then
+						colList &= dt.Columns(i).ColumnName & ","
+					End If
+				Next
+				valueColsStr = colList
+			End If
+			If displayedTextCol IsNot Nothing AndAlso displayedTextCol.Length < valueCols.Length Then
+				Dim cols As String() = valueCols.Clone
+				Dim i As Integer = 0
+				For Each displayName As String In displayedTextCol
+					If Not displayName.Trim = "" Then _
+						cols(i) = displayName
+					i += 1
+				Next
+				displayedTextCol = cols
+			End If
+			If displayedTextCol Is Nothing OrElse displayedTextCol.Length < valueCols.Length Then
+				displayedTextCol = valueCols
+			End If
 			Dim out As String = "<graph " & props.xmlpropString & " " & addtionalChartProperties & " >"
 			If numberOfSeries > 1 And Not singleset Then
-                out &= getCatagoriesString(labelCol)
-                For i As Integer = 0 To valueCols.Length - 1
-                    out &= series(i).getMultiSerieseString(valueCols(i), displayedTextCol(i))
-                Next
-            Else
-                out &= series(0).getSingleSerieseString(labelCol, valueCols(0))
-            End If
+				out &= getCatagoriesString(labelCol)
+				For i As Integer = 0 To valueCols.Length - 1
+					out &= series(i).getMultiSerieseString(valueCols(i), displayedTextCol(i))
+				Next
+			Else
+				out &= series(0).getSingleSerieseString(labelCol, valueCols(0))
+			End If
 			out &= addtionalXML & "</graph>"
 			Return out
-        Catch ex As Exception
+		Catch ex As Exception
 
-        End Try
+		End Try
 		Return "<graph " & props.xmlpropString & " ></graph>"
 	End Function
 
-    Public Function getValueStr(ByVal row As DataRow, ByVal colname As String) As String
+	Public Function getValueStr(ByVal row As DataRow, ByVal colname As String) As String
         Dim out As String = " value='" & row(colname) & "'"
         Dim X As String = "|,|"
         If drillable Then

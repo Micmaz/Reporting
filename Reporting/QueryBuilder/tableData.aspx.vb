@@ -73,8 +73,9 @@ Public Class tableData
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Response.Clear()
-        'Try
-        If sql IsNot Nothing Then
+		'Try
+
+		If sql IsNot Nothing Then
             Dim sqltop As String = sql.Substring(6)
             sqltop = "select top 10 " & sqltop
             If helpername.StartsWith("sqlhelper") Then
@@ -352,8 +353,9 @@ Public Class tableData
         If rels Is Nothing Then rels = relationList()
         schema &= "		""relations"":["
         Dim relString = "         {3}""table"":""{0}"",""child_cols"":[{1}],""parent_cols"":[{2}]{4},"
-        Dim q = """"
-        Dim dv As New DataView(rels, "FK_Table = '" & tableName & "' OR FK_Table = '[" & tableName & "]'", "", DataViewRowState.CurrentRows)
+		Dim q = """"
+		tableName = tableName.Trim({"["c, "]"c})
+		Dim dv As New DataView(rels, "FK_Table = '" & tableName & "' OR FK_Table = '[" & tableName & "]'", "", DataViewRowState.CurrentRows)
         Dim relationName = ""
         Dim FKCols = ""
         Dim PKCols = ""

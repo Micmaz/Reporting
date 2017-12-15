@@ -15,8 +15,8 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -108,9 +108,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DTIGrid\DTIGrid\DTIGrid.vbproj">
+      <Project>{d159ea22-d9cc-43a8-94a9-d238683e8767}</Project>
+      <Name>DTIGrid</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chart.js\Chart.js.vbproj">
       <Project>{c251e0f7-048a-421c-b648-43a5250c5a89}</Project>
       <Name>Chart.js</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FusionCharts1.2.3\FusionChartsFreeware.vbproj">
+      <Project>{c06109d9-c5a4-40c1-a8ce-fb6b8510e0e1}</Project>
+      <Name>FusionChartsFreeware</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FusionCharts\FusionCharts.vbproj">
+      <Project>{a4e0dc55-9dd6-4cf8-b136-98a170b6fdef}</Project>
+      <Name>FusionCharts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Reporting\Reporting.vbproj">
       <Project>{9ad06030-79e7-4b75-a3f7-ebf9ca757047}</Project>

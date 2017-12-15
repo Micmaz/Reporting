@@ -679,11 +679,11 @@ Public Class PropertiesGrid
         Dim vSortedProperties As SortedList = Nothing
         Dim vInCacheB As Boolean = False
         Dim vNameInCache As String = "PE." & pClassType.Name
-        Dim vBindingFlags As BindingFlags = BindingFlags.[Public] Or BindingFlags.Instance
+		Dim vBindingFlags As BindingFlags = BindingFlags.[Public] Or BindingFlags.Instance Or BindingFlags.DeclaredOnly
 
-        ' non-public fields require a different BindingFlags list.
-        ' We'll use a different cache too because the list is different.
-        If xShowNonPublicB Then
+		' non-public fields require a different BindingFlags list.
+		' We'll use a different cache too because the list is different.
+		If xShowNonPublicB Then
             vBindingFlags = BindingFlags.[Public] Or BindingFlags.Instance Or BindingFlags.NonPublic
             vNameInCache = "PE.ALL." & pClassType.Name
         End If

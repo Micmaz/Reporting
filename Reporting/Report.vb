@@ -415,8 +415,8 @@ Public Class Report
             With row
                 grph.SQLStmt = .SelectStmt
                 grph.GraphName = .Name
-                grph.RenderTypeId = .Graph_Type
-                grph.Order = .Order
+				grph.GraphTypeId = .Graph_Type
+				grph.Order = .Order
                 grph.drillable = .Drillable
                 grph.ExportExcel = Not (.IsExportNull OrElse Not .Export)
             End With
@@ -517,40 +517,83 @@ Public Class Report
         End Get
     End Property
 
-    Public Shared Sub loadDSToDatabase(ByRef myhelper As BaseHelper)
-        Dim ds As New dsReports
-        For Each dt As DataTable In ds.Tables
-            If Not myhelper.checkDBObjectExists(dt.TableName) Then
-                myhelper.checkAndCreateTable(dt)
-                If dt.TableName = ds.DTIGraphTypes.TableName Then
-                    Dim tmpht As New Hashtable
-                    'This shouldn't use the enum. It should spider the project for decending types of baseGraph
-                    For Each graphName As String In System.Enum.GetNames(GetType(GraphType))
-                        Dim newGraph As DTIGraphTypesRow = ds.DTIGraphTypes.NewDTIGraphTypesRow
-                        With newGraph
-                            .Control_Name = "~/res/Reporting/" & graphName & "Graph.ascx"
-                            .Name = graphName
-                        End With
-                        tmpht.Add(newGraph.Control_Name.ToLower, newGraph.Id)
-                        ds.DTIGraphTypes.AddDTIGraphTypesRow(newGraph)
-                    Next
-                    For Each asm As System.Reflection.Assembly In AppDomain.CurrentDomain.GetAssemblies
-                        For Each tp As Type In asm.GetTypes()
-                            If tp.IsSubclassOf(GetType(BaseGraph)) Then
-                                Dim newGraph As DTIGraphTypesRow = ds.DTIGraphTypes.NewDTIGraphTypesRow
-                                newGraph.Control_Name = "~/res/" & tp.FullName.Replace(".", "/") & ".ascx"
-                                newGraph.Name = tp.Name
-                                If Not tmpht.ContainsKey(newGraph.Control_Name.ToLower) Then
-                                    ds.DTIGraphTypes.AddDTIGraphTypesRow(newGraph)
-                                End If
-                            End If
-                        Next
-                    Next
-                    myhelper.Update(ds.DTIGraphTypes)
-                End If
-            End If
-        Next
-    End Sub
+	Public Shared Sub loadDSToDatabase(ByRef myhelper As BaseHelper)
+		Dim ds As New dsReports
+		For Each dt As DataTable In ds.Tables
+			If Not myhelper.checkDBObjectExists(dt.TableName) Then
+				myhelper.checkAndCreateTable(dt)
+				If dt.TableName = ds.DTIGraphTypes.TableName Then
+					getGraphTypeList(myhelper, ds.DTIGraphTypes)
+
+				End If
+			End If
+		Next
+	End Sub
+
+	Public Shared Function getGraphTypeList(myhelper As BaseHelper, Optional dtGraphTypes As dsReports.DTIGraphTypesDataTable = Nothing) As dsReports.DTIGraphTypesDataTable
+		If dtGraphTypes Is Nothing Then dtGraphTypes = New dsReports.DTIGraphTypesDataTable
+		If dtGraphTypes.Count = 0 Then 
+			myhelper.FillDataTable("Select * from DTIGraphTypes", dtGraphTypes)
+		End If
+		Dim tmpht As New Hashtable
+		Dim delht As New Dictionary(Of String, dsReports.DTIGraphTypesRow)
+		'Get Graph types from the database
+		For Each row As dsReports.DTIGraphTypesRow In dtGraphTypes
+			tmpht.Add(row.Control_Name.ToLower, row.Id)
+			delht.Add(row.Control_Name.ToLower, row)
+		Next
+
+		'Get Graph types from the Enum
+		For Each graphName As String In System.Enum.GetNames(GetType(GraphType))
+			Dim newGraphRow As DTIGraphTypesRow = dtGraphTypes.NewDTIGraphTypesRow
+			With newGraphRow
+				.Control_Name = "~/res/Reporting/" & graphName & "Graph.ascx"
+				.Name = graphName
+			End With
+			If Not tmpht.ContainsKey(newGraphRow.Control_Name.ToLower) Then
+				dtGraphTypes.AddDTIGraphTypesRow(newGraphRow)
+				tmpht.Add(newGraphRow.Control_Name.ToLower, newGraphRow.Id)
+				delht.Add(newGraphRow.Control_Name.ToLower, newGraphRow)
+			End If
+		Next
+
+		For Each row As dsReports.DTIGraphTypesRow In dtGraphTypes
+			If row.Control_Name.ToLower() = "~/res/reporting/fusiongraph.ascx" Then
+				row.Control_Name = "~/res/FusionCharts/FusionGraph.ascx"
+			End If
+			If row.Control_Name.ToLower() = "~/res/reporting/fusionchartsfreewaregraph.ascx" Then
+				row.Control_Name = "~/res/FusionChartsFreeware/FusionChartsFreewareGraph.ascx"
+			End If
+			If row.Control_Name.ToLower() = "~/res/reporting/chartsjsgraph.ascx" Then
+				row.Control_Name = "~/res/Chartsjs/ChartjsGraph.ascx"
+			End If
+		Next
+
+		'Get Graph types from the Assembly cache
+		For Each asm As System.Reflection.Assembly In AppDomain.CurrentDomain.GetAssemblies
+			For Each tp As Type In asm.GetTypes()
+				If tp.IsSubclassOf(GetType(BaseGraph)) Then
+					Dim newGraph As DTIGraphTypesRow = dtGraphTypes.NewDTIGraphTypesRow
+					newGraph.Control_Name = "~/res/" & tp.FullName.Replace(".", "/") & ".ascx"
+					newGraph.Name = tp.Name.Replace("Graph", "")
+					If Not tmpht.ContainsKey(newGraph.Control_Name.ToLower) Then
+						dtGraphTypes.AddDTIGraphTypesRow(newGraph)
+					Else
+						delht.Remove(newGraph.Control_Name.ToLower)
+					End If
+				End If
+			Next
+		Next
+		myhelper.Update(dtGraphTypes)
+		'Remove rows not fount in the assembly cache
+		For Each row As dsReports.DTIGraphTypesRow In delht.Values
+			row.Delete()
+		Next
+		dtGraphTypes.AcceptChanges()
+		Return dtGraphTypes
+	End Function
+
+
 
 	Private Sub Report_PreRender(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.PreRender
 		If isadmin Then

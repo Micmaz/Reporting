@@ -364,9 +364,14 @@ Public Class ColorProperty
         ' first position. We don't ever want it at -1
         fColorControl.ID = "proped_color_" & propertyPath
         fColorControl.Style.Add("display", "inline-block")
-        fColorControl.miniPicker = True
-        Controls.Add(fColorControl)
-        Controls.Add(New LiteralControl("<a href=""javascript:void(0);"" style='margin:4px;' onclick=""$(this).parent().find('.colorSelector').first().find('div').css('background-color',''); $(this).parent().find('input[type=hidden]').val('');return false;"">Use Default</a>"))
+		fColorControl.miniPicker = True
+		Try
+			fColorControl.color = fPropertyInfo.GetValue(instance, Nothing)
+		Catch ex As Exception
+
+		End Try
+		Controls.Add(fColorControl)
+		Controls.Add(New LiteralControl("<a href=""javascript:void(0);"" style='margin:4px;' onclick=""$(this).parent().find('.colorSelector').first().find('div').css('background-color',''); $(this).parent().find('input[type=hidden]').val('');return false;"">Use Default</a>"))
     End Sub
 End Class
 

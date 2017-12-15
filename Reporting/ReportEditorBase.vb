@@ -3,7 +3,7 @@ Public Class ReportEditorBase
     Inherits BaseClasses.BaseSecurityPage
 
     Private Sub Page_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
-        If Not Report.isGlobalAdmin Then Response.End()
+		If Not Report.isGlobalAdmin Then Response.End()
 		jQueryLibrary.ThemeAdder.AddThemeToIframe(Me, True)
 		jQueryLibrary.jQueryInclude.addStyleBlock(Me, ".ui-widget,body {font-size: 12px !important;}")
 		jQueryLibrary.jQueryInclude.addScriptFile(Page, "SummerNote/css/font-awesome.min.css")
@@ -44,12 +44,15 @@ Public Class ReportEditorBase
     End Sub
 
 	Public Function addGraph(reportID As Integer) As Integer
+		If ds.DTIGraphTypes.Count = 0 Then
+			Report.getGraphTypeList(sqlhelper, ds.DTIGraphTypes)
+		End If
 		Dim cnt As Integer = ds.DTIGraphs.Count + 1
 		Dim ReportName As String = sqlhelper.FetchSingleValue("select name from DTIReports where id= @id", reportID)
 		If cnt > 0 Then
 			ReportName = ReportName & " " & cnt
 		End If
-		ds.DTIGraphs.AddDTIGraphsRow(Integer.Parse(Request.QueryString("repid")), ReportName,
+		ds.DTIGraphs.AddDTIGraphsRow(reportID, ReportName,
 			"--Select Y-Axis, X-Axis, OtherAxisOrParm " & vbCrLf &
 			"--Ex: " & vbCrLf &
 			"-- Select Count(*) as ct, user.username as Name, user.userid " & vbCrLf &

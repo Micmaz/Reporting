@@ -103,11 +103,11 @@ Public Class GroupedTable
         End Set
     End Property
 
-    Public Property tableStyle As TableStyles = TableStyles.NotSet
+	Public Property tableStyle As TableStyles = TableStyles.Rounded
 
 #End Region
 
-    Enum TableStyles
+	Enum TableStyles
         NotSet
         Bars
         Blueborder

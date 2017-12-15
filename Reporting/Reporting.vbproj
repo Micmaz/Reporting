@@ -101,7 +101,7 @@
     <EmbeddedResource Include="ReportsEdit.aspx" />
     <EmbeddedResource Include="ExcellExport.aspx" />
     <EmbeddedResource Include="Icons\excel.gif" />
-    <EmbeddedResource Include="FullTableGridGraph.ascx" />
+    <EmbeddedResource Include="TableEditorGridGraph.ascx" />
     <EmbeddedResource Include="GridGraph.ascx" />
     <EmbeddedResource Include="Icons\edit.png" />
     <EmbeddedResource Include="GraphTester.aspx" />
@@ -136,15 +136,6 @@
       <DependentUpon>tableData.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="SummaryTableGraph.ascx.designer.vb">
-      <DependentUpon>SummaryTableGraph.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="SummaryTableGraph.ascx.vb">
-      <DependentUpon>SummaryTableGraph.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SummaryTables.vb" />
-    <Compile Include="DragPanel.vb" />
     <Compile Include="GraphTester.aspx.designer.vb">
       <DependentUpon>GraphTester.aspx</DependentUpon>
     </Compile>
@@ -152,11 +143,11 @@
       <DependentUpon>GraphTester.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="FullTableGridGraph.ascx.designer.vb">
-      <DependentUpon>FullTableGridGraph.ascx</DependentUpon>
+    <Compile Include="TableEditorGridGraph.ascx.designer.vb">
+      <DependentUpon>TableEditorGridGraph.ascx</DependentUpon>
     </Compile>
-    <Compile Include="FullTableGridGraph.ascx.vb">
-      <DependentUpon>FullTableGridGraph.ascx</DependentUpon>
+    <Compile Include="TableEditorGridGraph.ascx.vb">
+      <DependentUpon>TableEditorGridGraph.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ExcellExport.aspx.designer.vb">
@@ -186,11 +177,11 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="GroupedTable.vb" />
-    <Compile Include="GroupedTableGraph.ascx.designer.vb">
-      <DependentUpon>GroupedTableGraph.ascx</DependentUpon>
+    <Compile Include="HtmlTableGraph.ascx.designer.vb">
+      <DependentUpon>HtmlTableGraph.ascx</DependentUpon>
     </Compile>
-    <Compile Include="GroupedTableGraph.ascx.vb">
-      <DependentUpon>GroupedTableGraph.ascx</DependentUpon>
+    <Compile Include="HtmlTableGraph.ascx.vb">
+      <DependentUpon>HtmlTableGraph.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="My Project\Application.Designer.vb">
@@ -276,16 +267,13 @@
     <EmbeddedResource Include="ReportParms.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GroupedTableGraph.ascx" />
+    <EmbeddedResource Include="HtmlTableGraph.ascx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="SummaryTableGraph.ascx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TableStyles\back.png" />

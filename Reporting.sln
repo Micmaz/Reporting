@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_reportTester", "_reportTes
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Chart.js", "Chart.js\Chart.js.vbproj", "{C251E0F7-048A-421C-B648-43A5250C5A89}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FusionCharts1.2.3", "FusionCharts1.2.3\FusionCharts1.2.3.vbproj", "{C06109D9-C5A4-40C1-A8CE-FB6B8510E0E1}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FusionChartsFreeware", "FusionCharts1.2.3\FusionChartsFreeware.vbproj", "{C06109D9-C5A4-40C1-A8CE-FB6B8510E0E1}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FusionCharts", "FusionCharts\FusionCharts.vbproj", "{A4E0DC55-9DD6-4CF8-B136-98A170B6FDEF}"
 EndProject

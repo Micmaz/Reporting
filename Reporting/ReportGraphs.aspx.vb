@@ -23,15 +23,16 @@ Public Partial Class ReportGraphs
             ds.Clear()
             If ReportID <> -1 Then
                 Try
-                    sqlhelper.FillDataSetMultiSelect("Select * from DTIReports where id = " & ReportID & "; Select * from DTIGraphs where Report_Id = " & ReportID & " order by [order];Select * from DTIGraphTypes", ds, New String() {"DTIReports", "DTIGraphs", "DTIGraphTypes"})
-                Catch ex As Exception
+					sqlhelper.FillDataSetMultiSelect("Select * from DTIReports where id = " & ReportID & "; Select * from DTIGraphs where Report_Id = " & ReportID & " order by [order];Select * from DTIGraphTypes", ds, New String() {"DTIReports", "DTIGraphs", "DTIGraphTypes"})
+					Report.getGraphTypeList(sqlhelper, ds.DTIGraphTypes)
+				Catch ex As Exception
                     Report.loadDSToDatabase(sqlhelper)
                     sqlhelper.FillDataSetMultiSelect("Select * from DTIReports where id = " & ReportID & "; Select * from DTIGraphs where Report_Id = " & ReportID & " order by [order];Select * from DTIGraphTypes", ds, New String() {"DTIReports", "DTIGraphs", "DTIGraphTypes"})
                 End Try
             End If
 
 
-            If ds.DTIReports.Count > 0 Then
+			If ds.DTIReports.Count > 0 Then
                 tbReportName.Text = ds.DTIReports(0).Name
             End If
             hidReportID.Value = ReportID
@@ -45,23 +46,13 @@ Public Partial Class ReportGraphs
         repeater1.DataBind()
     End Sub
 
-    Private Sub ReorderList1_ItemCommand(ByVal source As Object, ByVal e As System.Web.UI.WebControls.RepeaterCommandEventArgs) Handles repeater1.ItemCommand
-        If (e.CommandName = "btnDelete") Then
-            Dim id As Integer = Integer.Parse(e.CommandArgument)
-            ds.DTIGraphs.FindById(id).Delete()
-            loadgrid()
-        End If
-    End Sub
-
-	'Private Shared hasCheckedTypes As Boolean = False
-	'Private Shared graphTypes As dsReports.DTIGraphTypesDataTable
-	'Private Sub setupGraphTypes()
-	'	If Not hasCheckedTypes Then
-
-
-	'		hasCheckedTypes = True
-	'	End If
-	'End Sub
+	Private Sub ReorderList1_ItemCommand(ByVal source As Object, ByVal e As System.Web.UI.WebControls.RepeaterCommandEventArgs) Handles repeater1.ItemCommand
+		If (e.CommandName = "btnDelete") Then
+			Dim id As Integer = Integer.Parse(e.CommandArgument)
+			ds.DTIGraphs.FindById(id).Delete()
+			loadgrid()
+		End If
+	End Sub
 
 	Private Sub ReorderList1_ItemDataBound(ByVal sender As Object, ByVal e As System.Web.UI.WebControls.RepeaterItemEventArgs) Handles repeater1.ItemDataBound
         If (e.Item.ItemType = ListItemType.Item) Or (e.Item.ItemType = ListItemType.AlternatingItem) Then

@@ -48,22 +48,22 @@ Public Class PropertyHash
         End Set
     End Property
 
-    Public Property xmlBoolDefault(ByVal propname As String) As ChartBase.BooleanDefault
-        Get
-            If xmlprop(propname) Is Nothing Then Return ChartBase.BooleanDefault.Default
-            If xmlprop(propname) = "1" Then Return ChartBase.BooleanDefault.Yes
-            Return ChartBase.BooleanDefault.No
-        End Get
-        Set(ByVal value As ChartBase.BooleanDefault)
-            If value = ChartBase.BooleanDefault.Yes Then
-                xmlprop(propname) = "1"
-            ElseIf value = ChartBase.BooleanDefault.No Then
-                xmlprop(propname) = "0"
-            End If
-            If value = ChartBase.BooleanDefault.Default Then
-                remove(propname)
-            End If
-        End Set
+	Public Property xmlBoolDefault(ByVal propname As String) As Chart.BooleanDefault
+		Get
+			If xmlprop(propname) Is Nothing Then Return Chart.BooleanDefault.Default
+			If xmlprop(propname) = "1" Then Return Chart.BooleanDefault.Yes
+			Return Chart.BooleanDefault.No
+		End Get
+		Set(ByVal value As Chart.BooleanDefault)
+			If value = Chart.BooleanDefault.Yes Then
+				xmlprop(propname) = "1"
+			ElseIf value = Chart.BooleanDefault.No Then
+				xmlprop(propname) = "0"
+			End If
+			If value = Chart.BooleanDefault.Default Then
+				remove(propname)
+			End If
+		End Set
     End Property
 
     Public Property xmlpropString() As String
