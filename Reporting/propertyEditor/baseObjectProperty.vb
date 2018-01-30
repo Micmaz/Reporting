@@ -70,14 +70,14 @@ Public MustInherit Class BaseObjectProperty
         'fButtonControl.ID = "pedit_" & Me.propertyPath
         fButtonControl.EnableViewState = False
         If xOpen Then
-            fButtonControl.ImageUrl = BaseClasses.Scripts.ScriptsURL(False) & "PropertiesEditorvb/close.png"
-            'fButtonControl.ImageUrl = Page.ClientScript.GetWebResourceUrl(Me.GetType, "PropertiesEditorvb.close.png")
-            'fButtonControl.Text = "- " & ButtonNoun
-        Else
-            fButtonControl.ImageUrl = BaseClasses.Scripts.ScriptsURL(False) & "PropertiesEditorvb/open.png"
-            'fButtonControl.ImageUrl = Page.ClientScript.GetWebResourceUrl(Me.GetType, "PropertiesEditorvb.open.png")
-            'fButtonControl.Text = "+ " & ButtonNoun
-        End If
+			fButtonControl.ImageUrl = BaseClasses.Scripts.ScriptsURL(False) & "Reporting/close.png"
+			'fButtonControl.ImageUrl = Page.ClientScript.GetWebResourceUrl(Me.GetType, "PropertiesEditorvb.close.png")
+			'fButtonControl.Text = "- " & ButtonNoun
+		Else
+			fButtonControl.ImageUrl = BaseClasses.Scripts.ScriptsURL(False) & "Reporting/open.png"
+			'fButtonControl.ImageUrl = Page.ClientScript.GetWebResourceUrl(Me.GetType, "PropertiesEditorvb.open.png")
+			'fButtonControl.Text = "+ " & ButtonNoun
+		End If
         propertyPath = propertyPath.Trim(".")
         fButtonControl.CausesValidation = False
         fButtonControl.ID = "Propedbtn_" & propertyPath.Replace("(", "_").Replace(")", "_")
@@ -115,10 +115,10 @@ Public MustInherit Class BaseObjectProperty
         ' correct the button
         If xOpen Then
             If fButtonControl Is Nothing Then CreateChildControls()
-            fButtonControl.ImageUrl = BaseClasses.Scripts.ScriptsURL(False) & "/res/PropertiesEditorvb/close.png"
-            'fButtonControl.ImageUrl = Page.ClientScript.GetWebResourceUrl(Me.GetType, "PropertiesEditorvb.close.png")
-            'CType(fOwnerControl, PropertiesEditor).DataBind()
-            If fOwnerControl.GetType Is GetType(PropertiesGrid) Then
+			fButtonControl.ImageUrl = BaseClasses.Scripts.ScriptsURL(False) & "/res/Reporting/close.png"
+			'fButtonControl.ImageUrl = Page.ClientScript.GetWebResourceUrl(Me.GetType, "PropertiesEditorvb.close.png")
+			'CType(fOwnerControl, PropertiesEditor).DataBind()
+			If fOwnerControl.GetType Is GetType(PropertiesGrid) Then
                 Dim newInstance As Object = getValue()
                 'CType(fOwnerControl, PropertiesEditor).CreateObjectRowChildren1(newInstance, fPropertyInfo.PropertyType, propertyPath, xOpen, Me.propertyPath, Me, Me.Parent.Parent, Me.Parent.Parent.Parent.Controls.IndexOf(Me.Parent.Parent))
                 Return 1
@@ -131,10 +131,10 @@ Public MustInherit Class BaseObjectProperty
             End If
         Else
             If Not fButtonControl Is Nothing Then _
-            fButtonControl.ImageUrl = BaseClasses.Scripts.ScriptsURL(False) & "/res/PropertiesEditorvb/open.png"
-            'fButtonControl.ImageUrl = Page.ClientScript.GetWebResourceUrl(Me.GetType, "PropertiesEditorvb.open.png")
-            'fButtonControl.Text = "+"
-            Return 0
+			fButtonControl.ImageUrl = BaseClasses.Scripts.ScriptsURL(False) & "/res/Reporting/open.png"
+			'fButtonControl.ImageUrl = Page.ClientScript.GetWebResourceUrl(Me.GetType, "PropertiesEditorvb.open.png")
+			'fButtonControl.Text = "+"
+			Return 0
         End If
     End Function
 

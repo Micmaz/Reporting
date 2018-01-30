@@ -231,7 +231,7 @@ Public Class Graph
                 Dim dt As New DTIGraphTypesDataTable
                 Try
 					sqlhelper.FillDataTable("select * from DTIGraphTypes", CType(dt, DataTable))
-					Report.getGraphTypeList(sqlhelper, dt)
+					'Report.getGraphTypeList(sqlhelper, dt)
 				Catch ex As Exception
 					'If ex.Message.Contains("Invalid object name") Then
 					Report.loadDSToDatabase(sqlhelper)
@@ -328,17 +328,24 @@ Public Class Graph
         'If Me.Visible Then
         Me.Controls.Clear()
 
-        Try
+		Try
+			Me.Controls.Add(parms)
+			'If this report isn't the first, make the parmlist the one from the actual first graph
+			If Me.parentReport IsNot Nothing AndAlso Me.parentReport.GraphsList.Count > 0 AndAlso Me.parentReport.GraphsList(0).ID <> Me.ID Then
+				Me.parms.Visible = False
+				Me.parms = Me.parentReport.GraphsList(0).parms
+			Else
 
-            Me.Controls.Add(parms)
+			End If
+
 			'If Not parms.hasparms Then
 			baseGraph = CType(Me.Page.LoadControl(getGraphIDPath(GraphTypeId)), BaseGraph)
 			baseGraph.graph = Me
-            baseGraph.Visible = Not parms.hasparms
-            Me.Controls.Add(baseGraph)
-            'End If
-        Catch ex As Exception
-            handelError(ex)
+			baseGraph.Visible = Not parms.hasparms
+			Me.Controls.Add(baseGraph)
+			'End If
+		Catch ex As Exception
+			handelError(ex)
         End Try
         'End If
     End Sub
@@ -372,13 +379,29 @@ Public Class Graph
 	Private Function getGraphIDPath(ByVal GraphTypeID As Integer) As String
 		For Each row As DTIGraphTypesRow In graphTypesDT.Rows
 			If row.Id = GraphTypeID Then
-				If row.Control_Name.ToLower.EndsWith("/fusiongraph.ascx") Then
-					Return "~/res/FusionCharts/FusionGraph.ascx"
-				End If
-				Return row.Control_Name
+				Return correctGraphPath(row.Control_Name)
 			End If
 		Next
 		Throw New Exception("No Graph of that type found")
+	End Function
+
+	Public Shared Function correctGraphPath(graphPath As String) As String
+		Dim ctrlName As String = graphPath.ToLower()
+		If ctrlName.EndsWith("/fusiongraph.ascx") Then
+			Return "~/res/FusionCharts/FusionGraph.ascx"
+		End If
+		If ctrlName = "~/res/reporting/fusiongraph.ascx" Then
+			Return "~/res/FusionCharts/FusionGraph.ascx"
+		ElseIf ctrlName = "~/res/reporting/fusionchartsfreewaregraph.ascx" Then
+			Return "~/res/FusionChartsFreeware/FusionChartsFreewareGraph.ascx"
+		ElseIf ctrlName = "~/res/reporting/chartsjsgraph.ascx" Then
+			Return "~/res/Chartsjs/ChartjsGraph.ascx"
+		ElseIf ctrlName = "~/res/Reporting/FullTableGridGraph.ascx".ToLower() Then
+			Return "~/res/Reporting/HtmlTableGraph.ascx"
+		ElseIf ctrlName = "~/res/Reporting/GroupedTableGraph.ascx".ToLower() Then
+			Return "~/res/Reporting/HtmlTableGraph.ascx"
+		End If
+		Return graphPath
 	End Function
 
 	'Private Function getGraphPath(ByVal cmnName As String) As String

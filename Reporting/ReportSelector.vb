@@ -110,11 +110,24 @@ Public Class ReportSelector
 		Next
 		Me.Controls.Add(ddlist)
 
+		If shownreport.isadmin Then
+			Report.reghsString(Me.Page)
+			Me.Controls.Add(JqueryUIControls.Dialog.CreateDialogueUrl("~/res/Reporting/ReportsEdit.aspx",
+				"<i class='fa fa-book'></i> Edit Reports", JqueryUIControls.Dialog.DialogOpener.Link, 640, 600, "style='font-size: x-small; display:inline-block;margin-left: 5px;'"))
+			'Dim jqTester As JqueryUIControls.Dialog = JqueryUIControls.Dialog.CreateDialogueUrl("~/res/Reporting/GraphTester.aspx?sql=", _
+			'    "SQL Tester", JqueryUIControls.Dialog.DialogOpener.Link, 800, 650, "style='font-size: x-small;display:none;'")
+			'jqTester.ID = "sqlTester"
+			'jqTester.Title = "SQL Tester"
+			'Me.Controls.Add(jqTester)
+			'Me.Controls.Add(New LiteralControl("&nbsp;&nbsp;&nbsp;<a style=""font-size: x-small;"" href=""~/res/Reporting/ReportsEdit.aspx"" id=""btneditRep"" onclick=""return hs.htmlExpand(this, { objectType: 'iframe', width: '600', height: '720' } )"">Edit Reports</a>"))
+		End If
+
 		If Not selectedReport Is Nothing Then
 			shownreport.ReportName = selectedReport
 			shownreport.ReportSettingsConnection = Me.ReportSettingsConnection
-			lbRevert.Text = " Clear Report "
+			lbRevert.Text = "Clear Report "
 			lbRevert.Font.Size = New FontUnit(FontSize.Smaller)
+			Me.Controls.Add(New LiteralControl(" "))
 			Me.Controls.Add(lbRevert)
 			If Page.Request.Params("__EVENTTARGET") = lbRevert.UniqueID Then
 				If Not shownreport Is Nothing Then shownreport.cleargraphs()
@@ -126,17 +139,7 @@ Public Class ReportSelector
 			Me.Controls.Add(shownreport)
 		End If
 
-		If shownreport.isadmin Then
-			Report.reghsString(Me.Page)
-			Me.Controls.Add(JqueryUIControls.Dialog.CreateDialogueUrl("~/res/Reporting/ReportsEdit.aspx",
-				" <i class='fa fa-book'></i> Edit Reports", JqueryUIControls.Dialog.DialogOpener.Link, 640, 600, "style='font-size: x-small;'"))
-			'Dim jqTester As JqueryUIControls.Dialog = JqueryUIControls.Dialog.CreateDialogueUrl("~/res/Reporting/GraphTester.aspx?sql=", _
-			'    "SQL Tester", JqueryUIControls.Dialog.DialogOpener.Link, 800, 650, "style='font-size: x-small;display:none;'")
-			'jqTester.ID = "sqlTester"
-			'jqTester.Title = "SQL Tester"
-			'Me.Controls.Add(jqTester)
-			'Me.Controls.Add(New LiteralControl("&nbsp;&nbsp;&nbsp;<a style=""font-size: x-small;"" href=""~/res/Reporting/ReportsEdit.aspx"" id=""btneditRep"" onclick=""return hs.htmlExpand(this, { objectType: 'iframe', width: '600', height: '720' } )"">Edit Reports</a>"))
-		End If
+
 
 		'If Not Page.IsPostBack Then
 		'    selectedReport = Nothing

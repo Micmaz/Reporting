@@ -443,11 +443,12 @@ Public Class Report
         If isadmin Then
             Report.reghsString(Me.Page)
 			Me.Controls.AddAt(1, JqueryUIControls.Dialog.CreateDialogueUrl("~/res/Reporting/ReportGraphs.aspx?repid=" & Me.reportId,
-				"<i class='fa fa-pie-chart'></i> Edit Report Graphs", JqueryUIControls.Dialog.DialogOpener.Link, 600, 600, "style='font-size: x-small;'"))
+				"<i class='fa fa-pie-chart'></i> Edit Report Graphs", JqueryUIControls.Dialog.DialogOpener.Link, 600, 600, "style='font-size: x-small;display:inline-block;margin-left: 5px;'"))
 			'Dim literaladd As String = "&nbsp;&nbsp;&nbsp;<a style=""font-size: x-small;"" href=""~/res/Reporting/ReportGraphs.aspx?repid=" & Me.reportId & """ id=""btnUpload"" onclick=""return hs.htmlExpand(this, { objectType: 'iframe', width: '600', height: '720' } )"">Edit Report Graphs</a>"
 			'Me.Controls.AddAt(1, New LiteralControl(literaladd))
 			Controls.AddAt(1, New LiteralControl("&nbsp;&nbsp;&nbsp;"))
-        End If
+
+		End If
 
     End Sub
 
@@ -535,39 +536,62 @@ Public Class Report
 		If dtGraphTypes.Count = 0 Then 
 			myhelper.FillDataTable("Select * from DTIGraphTypes", dtGraphTypes)
 		End If
-		Dim tmpht As New Hashtable
-		Dim delht As New Dictionary(Of String, dsReports.DTIGraphTypesRow)
+		Dim ctrlList As New List(Of String)
+		'Dim tmpht As New Dictionary(Of String, List(Of Int32))
+		'Dim delht As New Dictionary(Of String, List(Of dsReports.DTIGraphTypesRow))
+
+
 		'Get Graph types from the database
 		For Each row As dsReports.DTIGraphTypesRow In dtGraphTypes
-			tmpht.Add(row.Control_Name.ToLower, row.Id)
-			delht.Add(row.Control_Name.ToLower, row)
+			ctrlList.Add(row.Control_Name.ToLower())
 		Next
+		'For Each row As dsReports.DTIGraphTypesRow In dtGraphTypes
+		'	Dim ctrlName As String = row.Control_Name.ToLower()
+		'	If Not tmpht.ContainsKey(ctrlName) Then tmpht.Add(ctrlName, New List(Of Integer))
+		'	tmpht(ctrlName).Add(row.Id)
+		'	If Not delht.ContainsKey(ctrlName) Then delht.Add(ctrlName, New List(Of dsReports.DTIGraphTypesRow))
+		'	delht(ctrlName).Add(row)
+		'Next
 
-		'Get Graph types from the Enum
+		'Get Graph types from the Enum add them to the dt
 		For Each graphName As String In System.Enum.GetNames(GetType(GraphType))
-			Dim newGraphRow As DTIGraphTypesRow = dtGraphTypes.NewDTIGraphTypesRow
-			With newGraphRow
+			Dim row As DTIGraphTypesRow = dtGraphTypes.NewDTIGraphTypesRow
+			With row
 				.Control_Name = "~/res/Reporting/" & graphName & "Graph.ascx"
 				.Name = graphName
 			End With
-			If Not tmpht.ContainsKey(newGraphRow.Control_Name.ToLower) Then
-				dtGraphTypes.AddDTIGraphTypesRow(newGraphRow)
-				tmpht.Add(newGraphRow.Control_Name.ToLower, newGraphRow.Id)
-				delht.Add(newGraphRow.Control_Name.ToLower, newGraphRow)
+			If Not ctrlList.Contains(row.Control_Name.ToLower) OrElse dtGraphTypes.Select("Name = '" & row.Name & "'").Length = 0 Then
+				dtGraphTypes.AddDTIGraphTypesRow(row)
+				ctrlList.Add(row.Control_Name.ToLower())
 			End If
+
+			'If Not tmpht.ContainsKey(row.Control_Name.ToLower) Then
+			'	dtGraphTypes.AddDTIGraphTypesRow(row)
+
+			'	Dim ctrlName As String = row.Control_Name.ToLower
+			'	If Not tmpht.ContainsKey(ctrlName) Then tmpht.Add(ctrlName, New List(Of Integer))
+			'	tmpht(ctrlName).Add(row.Id)
+			'	If Not delht.ContainsKey(ctrlName) Then delht.Add(ctrlName, New List(Of dsReports.DTIGraphTypesRow))
+			'	delht(ctrlName).Add(row)
+			'End If
 		Next
 
+		Dim fullList As New Dictionary(Of String, List(Of dsReports.DTIGraphTypesRow))
+		Dim foundlist As New List(Of String)
+
 		For Each row As dsReports.DTIGraphTypesRow In dtGraphTypes
-			If row.Control_Name.ToLower() = "~/res/reporting/fusiongraph.ascx" Then
-				row.Control_Name = "~/res/FusionCharts/FusionGraph.ascx"
-			End If
-			If row.Control_Name.ToLower() = "~/res/reporting/fusionchartsfreewaregraph.ascx" Then
-				row.Control_Name = "~/res/FusionChartsFreeware/FusionChartsFreewareGraph.ascx"
-			End If
-			If row.Control_Name.ToLower() = "~/res/reporting/chartsjsgraph.ascx" Then
-				row.Control_Name = "~/res/Chartsjs/ChartjsGraph.ascx"
-			End If
+			row.Control_Name = Graph.correctGraphPath(row.Control_Name)
+			Dim ctrlName As String = row.Control_Name.ToLower
+			If Not fullList.ContainsKey(ctrlName) Then fullList.Add(ctrlName, New List(Of DTIGraphTypesRow))
+			fullList(ctrlName).Add(row)
+			'If Not delht.ContainsKey(row.Control_Name.ToLower) AndAlso row.Control_Name.ToLower().StartsWith("~/res/asp/") Then
+			'	Dim ctrlName As String = row.Control_Name.ToLower
+			'	If Not delht.ContainsKey(ctrlName) Then delht.Add(ctrlName, New List(Of dsReports.DTIGraphTypesRow))
+			'	delht(ctrlName).Add(row)
+			'End If
 		Next
+
+
 
 		'Get Graph types from the Assembly cache
 		For Each asm As System.Reflection.Assembly In AppDomain.CurrentDomain.GetAssemblies
@@ -576,18 +600,31 @@ Public Class Report
 					Dim newGraph As DTIGraphTypesRow = dtGraphTypes.NewDTIGraphTypesRow
 					newGraph.Control_Name = "~/res/" & tp.FullName.Replace(".", "/") & ".ascx"
 					newGraph.Name = tp.Name.Replace("Graph", "")
-					If Not tmpht.ContainsKey(newGraph.Control_Name.ToLower) Then
+					Dim ctrlName As String = newGraph.Control_Name.ToLower
+					foundlist.Add(ctrlName)
+					If Not fullList.ContainsKey(ctrlName) Then
+						'ctrlList.Add(ctrlName)
+						fullList.Add(ctrlName, New List(Of DTIGraphTypesRow))
+						fullList(ctrlName).Add(newGraph)
 						dtGraphTypes.AddDTIGraphTypesRow(newGraph)
-					Else
-						delht.Remove(newGraph.Control_Name.ToLower)
 					End If
 				End If
 			Next
 		Next
+
 		myhelper.Update(dtGraphTypes)
-		'Remove rows not fount in the assembly cache
-		For Each row As dsReports.DTIGraphTypesRow In delht.Values
-			row.Delete()
+
+		'Remove rows not fount in the assembly cache, remove duplicate controls that may have different names.
+		For Each ctrlName As String In fullList.Keys
+			Dim rowlist As List(Of dsReports.DTIGraphTypesRow) = fullList(ctrlName)
+			rowlist.Reverse()
+			Dim skip As Boolean = False
+			If foundlist.Contains(ctrlName) Then skip = True
+			If ctrlName.StartsWith("~/res/asp/") Then skip = False
+			For Each row As dsReports.DTIGraphTypesRow In rowlist
+				If Not skip Then row.Delete()
+				skip = False
+			Next
 		Next
 		dtGraphTypes.AcceptChanges()
 		Return dtGraphTypes
@@ -596,15 +633,28 @@ Public Class Report
 
 
 	Private Sub Report_PreRender(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.PreRender
+		'renderParameters()
+		Dim parms As New Label
+		renderParameters(parms)
+		Controls.AddAt(1, parms)
+	End Sub
+
+	Private Sub renderParameters(Optional destControl As Control = Nothing)
 		If isadmin Then
-			Dim dlg As JqueryUIControls.Dialog = JqueryUIControls.Dialog.CreateDialogue("Show Current Parameters")
-			Dim str As String = ""
-			For Each key As String In clickedvals.Keys
-				str &= String.Format("@{0} = {1} <br/>", key, clickedvals(key))
-			Next
-			dlg.Controls.Add(New LiteralControl(str))
-			Me.Controls.Add(New LiteralControl("<br/>"))
-			Me.Controls.Add(dlg)
+			If clickedvals.Count > 0 Then
+				If destControl Is Nothing Then destControl = Me
+				Dim dlg As JqueryUIControls.Dialog = JqueryUIControls.Dialog.CreateDialogue("Show Current Parameters")
+				dlg.OpenerAttributes = "style='font-size: x-small;display:inline-block;margin-left: 5px;'"
+				dlg.OpenerText = "<i class='fa fa-list' aria-hidden='true'></i> Show Current Parameters"
+				'dlg.Style = "font-size: x-small;"
+				Dim str As String = ""
+				For Each key As String In clickedvals.Keys
+					str &= String.Format("@{0} = {1} <br/>", key, clickedvals(key))
+				Next
+				dlg.Controls.Add(New LiteralControl(str))
+				destControl.Controls.Add(dlg)
+			End If
+
 		End If
 	End Sub
 

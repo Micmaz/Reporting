@@ -340,8 +340,8 @@ Public Class DynamicPropertyEditor
 
         dlgChanges.OpenerAttributes = "style='font-size: x-small;'"
 
-        dlgChanges.OpenerText = "Edit Properties"
-        Me.Controls.AddAt(0, dlgChanges)
+		dlgChanges.OpenerText = "<i class='fa fa-wrench' aria-hidden='true'></i> Edit Properties"
+		Me.Controls.AddAt(0, dlgChanges)
         'Me.Controls.AddAt(0, New LiteralControl(dlgChanges.openerLink("Edit Properties")))
         'Me.Controls.AddAt(0, New LiteralControl("<a style=""font-size: x-small;"" href=""#"" onclick=""toggleProperties('" & pnl.ClientID & "');"">Edit Properties</a> "))
         'Me.Controls.Add(getScript)

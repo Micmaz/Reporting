@@ -45,7 +45,7 @@
   <ItemGroup>
     <Reference Include="DTIControls, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DTIControls\_Output\DTIControls.dll</HintPath>
+      <HintPath>..\..\_Output\DTIControls.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

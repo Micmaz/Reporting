@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Reporting", "Reporting\Reporting.vbproj", "{9AD06030-79E7-4B75-A3F7-EBF9CA757047}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_reportTester", "_reportTester\_reportTester.csproj", "{10CB324E-A733-472C-B14C-30EA57AD2D82}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Chart.js", "Chart.js\Chart.js.vbproj", "{C251E0F7-048A-421C-B648-43A5250C5A89}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FusionChartsFreeware", "FusionCharts1.2.3\FusionChartsFreeware.vbproj", "{C06109D9-C5A4-40C1-A8CE-FB6B8510E0E1}"
@@ -14,6 +12,8 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FusionCharts", "FusionCharts\FusionCharts.vbproj", "{A4E0DC55-9DD6-4CF8-B136-98A170B6FDEF}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DTIGrid", "..\DTIGrid\DTIGrid\DTIGrid.vbproj", "{D159EA22-D9CC-43A8-94A9-D238683E8767}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_reportTester", "_reportTester\_reportTester.csproj", "{10CB324E-A733-472C-B14C-30EA57AD2D82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,6 @@ Global
 		{9AD06030-79E7-4B75-A3F7-EBF9CA757047}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AD06030-79E7-4B75-A3F7-EBF9CA757047}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AD06030-79E7-4B75-A3F7-EBF9CA757047}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10CB324E-A733-472C-B14C-30EA57AD2D82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10CB324E-A733-472C-B14C-30EA57AD2D82}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10CB324E-A733-472C-B14C-30EA57AD2D82}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10CB324E-A733-472C-B14C-30EA57AD2D82}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C251E0F7-048A-421C-B648-43A5250C5A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C251E0F7-048A-421C-B648-43A5250C5A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C251E0F7-048A-421C-B648-43A5250C5A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{D159EA22-D9CC-43A8-94A9-D238683E8767}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D159EA22-D9CC-43A8-94A9-D238683E8767}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D159EA22-D9CC-43A8-94A9-D238683E8767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10CB324E-A733-472C-B14C-30EA57AD2D82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10CB324E-A733-472C-B14C-30EA57AD2D82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10CB324E-A733-472C-B14C-30EA57AD2D82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10CB324E-A733-472C-B14C-30EA57AD2D82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

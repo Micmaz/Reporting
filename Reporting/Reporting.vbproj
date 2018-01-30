@@ -52,10 +52,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DTIControls, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DTIControls.dll.1.0.3\lib\DTIControls.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_Output\DTIControls.dll</HintPath>
+    </Reference>
+    <Reference Include="DTIGrid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_Output\DTIGrid.dll</HintPath>
     </Reference>
     <Reference Include="SQLiteHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DTIControls.dll.1.0.3\lib\SQLiteHelper.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_Output\SQLiteHelper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -252,13 +258,6 @@
     <Content Include="propertyEditor\ComparatorDS.xss">
       <DependentUpon>ComparatorDS.xsd</DependentUpon>
     </Content>
-    <Content Include="web.config" />
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="js\reportRefresher.js" />
@@ -358,12 +357,6 @@
     <Content Include="QueryBuilder\js\tablethemes\green\tablethemes.green.desc.png" />
     <Content Include="QueryBuilder\js\tablethemes\green\tablethemes.green.style.css" />
     <EmbeddedResource Include="QueryBuilder\tableData.aspx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\DTIGrid\DTIGrid\DTIGrid.vbproj">
-      <Project>{d159ea22-d9cc-43a8-94a9-d238683e8767}</Project>
-      <Name>DTIGrid</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

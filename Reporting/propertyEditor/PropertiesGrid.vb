@@ -681,6 +681,10 @@ Public Class PropertiesGrid
         Dim vNameInCache As String = "PE." & pClassType.Name
 		Dim vBindingFlags As BindingFlags = BindingFlags.[Public] Or BindingFlags.Instance Or BindingFlags.DeclaredOnly
 
+		'If you declare a property list, show any properties from parent classes.
+		If propertyList <> "" Then
+			vBindingFlags = BindingFlags.[Public] Or BindingFlags.Instance
+		End If
 		' non-public fields require a different BindingFlags list.
 		' We'll use a different cache too because the list is different.
 		If xShowNonPublicB Then
