@@ -63,6 +63,7 @@
   <ItemGroup>
     <Content Include="chartJS.aspx" />
     <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
     <Content Include="ReportSelector.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -83,6 +84,9 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportSelector.aspx.cs">
       <DependentUpon>ReportSelector.aspx</DependentUpon>
@@ -94,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="tables.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

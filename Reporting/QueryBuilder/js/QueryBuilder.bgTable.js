@@ -45,71 +45,73 @@ function reorderCols(event, ui) {
     });
 }
 
+var prevSql = "";
 function buildTable(sql) {
-    if (sql && sql != "")
-        $.getJSON(tableDataJsonCall, { sql: encodeURIComponent(sql) }, function (data) {
-            if (data) {
-                $("table.tablesorter thead tr").empty();
-                $("table.tablesorter tbody").empty();
-                tabledata = data;
-                var htmlString = "";
-                $.each(data.columns, function (i, col) {
-                    var th = $("<th>");
-                    th.text(col.name);
-                    th.attr("colType", col.type);
-                    th.attr("colname", col.name);
-                    th.data("col", col);
-                    $("table.tablesorter thead tr").append(th);
-                });
-                $.each(data.rows, function (i, row) {
-                    var tr = $("<tr>");
-                    $.each(row, function (key, val) {
-                        tr.append($("<td>").append($("<div class='cellvalue'>").text(val)));
-                        //$("<div class='cellvalue'>").text(val).appendTo(tr);
-                    });
-                    $("table.tablesorter tbody").append(tr);
-                });
-                $(".tablesorter th").each(function (index, column) {
-                    $(this).prepend("<span class='dragtable-drag-handle'>&nbsp;</span>");
-                    var colmenuID = "colmenu" + index;
-                    var colmnu = $("#colmenu").clone().attr("id", colmenuID);
-                    var btn = colmnu.children().first();
-                    var menu = btn.next();
-                    menu.menu({ select: columnGroupFunction });
+	if (!sql) sql = "";
+	if (sql.trim() == "select *  \nfrom") sql = "";
+	if (sql != "" && sql != prevSql) {
+		prevSql = sql;
+		$.getJSON(tableDataJsonCall, { sql: encodeURIComponent(sql) }, function (data) {
+			if (data) {
+				$("table.tablesorter thead tr").empty();
+				$("table.tablesorter tbody").empty();
+				tabledata = data;
+				var htmlString = "";
+				$.each(data.columns, function (i, col) {
+					var th = $("<th>");
+					th.text(col.name);
+					th.attr("colType", col.type);
+					th.attr("colname", col.name);
+					th.data("col", col);
+					$("table.tablesorter thead tr").append(th);
+				});
+				$.each(data.rows, function (i, row) {
+					var tr = $("<tr>");
+					$.each(row, function (key, val) {
+						tr.append($("<td>").append($("<div class='cellvalue'>").text(val)));
+						//$("<div class='cellvalue'>").text(val).appendTo(tr);
+					});
+					$("table.tablesorter tbody").append(tr);
+				});
+				$(".tablesorter th").each(function (index, column) {
+					$(this).prepend("<span class='dragtable-drag-handle'>&nbsp;</span>");
+					var colmenuID = "colmenu" + index;
+					var colmnu = $("#colmenu").clone().attr("id", colmenuID);
+					var btn = colmnu.children().first();
+					var menu = btn.next();
+					menu.menu({ select: columnGroupFunction });
 
-                    btn.button({
-                        icons: { primary: 'ui-icon-triangle-1-s' },
-                        text: false
-                    }).click(function () {
-                        //menu.slideToggle();
-                        $(".colddmenu").not(menu).hide();
-                        menu.css("top", "-500px").css("left", "-500px")
-                        menu.slideToggle("fast");
-                        menu.position({
-                            'my': 'right top',
-                            'at': 'right bottom',
-                            'of': $(this),
-                            'collision': 'fit flip'
-                            //,'within': $(".dataPreview")
-                        });
-                        return false;
-                    });
-                    $(this).append(colmnu);
-                });
+					btn.button({
+						icons: { primary: 'ui-icon-triangle-1-s' },
+						text: false
+					}).click(function () {
+						//menu.slideToggle();
+						$(".colddmenu").not(menu).hide();
+						menu.css("top", "-500px").css("left", "-500px")
+						menu.slideToggle("fast");
+						menu.position({
+							'my': 'right top',
+							'at': 'right bottom',
+							'of': $(this),
+							'collision': 'fit flip'
+							//,'within': $(".dataPreview")
+						});
+						return false;
+					});
+					$(this).append(colmnu);
+				});
 
-                //$('.colmenu1').menu();   //dropit({ action: 'mouseenter' });
-                $(".tablesorter").dragtable({
-                    placeholder: 'dragtable-col-placeholder test3',
-                    items: 'thead th:not( .notdraggable ):not( :has( .dragtable-drag-handle ) ), .dragtable-drag-handle',
-                    appendTarget: $(".tablesorter"),
-                    change: reorderCols,
-                    scroll: true
-                });
-            }
-        }).fail(function (jqxhr, textStatus, error) {
-            var err = textStatus + ", " + error;
-            console.log("Request Failed: " + err);
-        });
+				//$('.colmenu1').menu();   //dropit({ action: 'mouseenter' });
+				$(".tablesorter").dragtable({
+					placeholder: 'dragtable-col-placeholder test3',
+					items: 'thead th:not( .notdraggable ):not( :has( .dragtable-drag-handle ) ), .dragtable-drag-handle',
+					appendTarget: $(".tablesorter"),
+					change: reorderCols,
+					scroll: true
+				});
+			}
+		}).fail(ajaxError);
+	}
 }
 
 /*
@@ -240,7 +242,9 @@ function buildSql() {
                 groupby += "," + colname;
             }
         });
-        sql = "Select " + groupbyColumnLst.substr(1) + "\n from (\n" + sql + "\n) as GroupTbl \ngroup by " + groupby.substr(1) + " ";
+		sql = "Select " + groupbyColumnLst.substr(1) + "\n from (\n" + sql + "\n) as GroupTbl "
+		if (groupby.substr(1) != "")
+			sql += " \ngroup by " + groupby.substr(1) + " ";
     }
 
     
@@ -255,6 +259,8 @@ function buildSql() {
         buildTable(lastSQL);
     }
 
+	if (sql == "select *  \nfrom \n")
+		sql = "";
     return sql;
 }
 

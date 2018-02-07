@@ -4,11 +4,11 @@ Imports System.Xml
 
 
 Public Class tableData
-    Inherits ReportEditorBase
+	Inherits ReportEditorBase
 
 #Region "Properties"
 
-    Private _sql As String = Nothing
+	Private _sql As String = Nothing
     Public ReadOnly Property sql As String
         Get
             If _sql = Nothing Then
@@ -63,49 +63,53 @@ Public Class tableData
                 End If
                 Return _helper
             Else
-                Return sqlHelper
-            End If
+				Return BaseClasses.DataBase.getHelper()
+			End If
         End Get
     End Property
 
 #End Region
 
 
-    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        Response.Clear()
+	Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+		If Not Report.isGlobalAdmin Then
+			BaseClasses.DataBase.endResponse()
+			Return
+		End If
+		Response.Clear()
 		'Try
 
-		If sql IsNot Nothing Then
-            Dim sqltop As String = sql.Substring(6)
-            sqltop = "select top 10 " & sqltop
-            If helpername.StartsWith("sqlhelper") Then
-                sqltop = sqltop & " OPTION (MAXDOP 1) "
-            End If
-            Try
-                Response.Write(getJsonTableData(helper.FillDataTable(sqltop)))
-            Catch ex As Exception
-                Response.End()
-            End Try
+		If Not String.IsNullOrEmpty(sql) AndAlso sql.Length > 6 Then
+			Dim sqltop As String = sql.Substring(6)
+			sqltop = "select top 10 " & sqltop
+			If helpername.StartsWith("sqlhelper") Then
+				sqltop = sqltop & " OPTION (MAXDOP 1) "
+			End If
+			Try
+				Response.Write(getJsonTableData(helper.FillDataTable(sqltop)))
+			Catch ex As Exception
+				Response.End()
+			End Try
+		End If
+		If schema Then
+			Response.Write(getJsonSchema(tableList()))
+		End If
+		If views Then
+			Response.Write(getJsonSchema(viewList()))
+		End If
+		If otherDatabases Then
+			If otherDatabaseName Is Nothing Then
+				Response.Write(getJsonTableData(databaseList()))
+			Else
+				Response.Write(getJsonSchema(tableList()))
+			End If
+		End If
+		BaseClasses.DataBase.endResponse()
+	End Sub
 
-        End If
-        If schema Then
-            Response.Write(getJsonSchema(tableList()))
-        End If
-        If views Then
-            Response.Write(getJsonSchema(viewList()))
-        End If
-        If otherDatabases Then
-            If otherDatabaseName Is Nothing Then
-                Response.Write(getJsonTableData(databaseList()))
-            Else
-                Response.Write(getJsonSchema(tableList()))
-            End If
-        End If
 
-        Response.End()
-    End Sub
 
-    Public ds As New DataSet
+	Public ds As New DataSet
     Public Function getJsonSchema(tableList As DataTable) As String
         Dim schema As String = "{"
         Dim hasSchemaName As Boolean = tableList.Columns.Contains("sch")
@@ -324,8 +328,8 @@ Public Class tableData
             If Not row(col) Is DBNull.Value Then
                 val = row(col).ToString()
                 val = val.Replace("'", "###")
-                val = JavaScriptEncode(val).Replace("###", "'")
-            End If
+				val = BaseClasses.BaseSecurityPage.JavaScriptEncode(val).Replace("###", "'")
+			End If
         Catch ex As Exception
 
         End Try
@@ -347,42 +351,43 @@ Public Class tableData
     End Function
 
 
-    Private rels As DataTable
-    Public Function getJsonRelations(tableName As String) As String
-        Dim schema As String = "" '"{"
-        If rels Is Nothing Then rels = relationList()
-        schema &= "		""relations"":["
-        Dim relString = "         {3}""table"":""{0}"",""child_cols"":[{1}],""parent_cols"":[{2}]{4},"
+	Private rels As DataTable
+
+	Public Function getJsonRelations(tableName As String) As String
+		Dim schema As String = "" '"{"
+		If rels Is Nothing Then rels = relationList()
+		schema &= "		""relations"":["
+		Dim relString = "         {3}""table"":""{0}"",""child_cols"":[{1}],""parent_cols"":[{2}]{4},"
 		Dim q = """"
 		tableName = tableName.Trim({"["c, "]"c})
 		Dim dv As New DataView(rels, "FK_Table = '" & tableName & "' OR FK_Table = '[" & tableName & "]'", "", DataViewRowState.CurrentRows)
-        Dim relationName = ""
-        Dim FKCols = ""
-        Dim PKCols = ""
-        Dim pkTable = ""
-        For Each rel As DataRowView In dv
-            If relationName <> rel("CONSTRAINT_NAME") And relationName <> "" Then
-                schema &= vbCrLf & String.Format(relString, pkTable, FKCols.Trim(","), PKCols.Trim(","), "{", "}")
-                FKCols = ""
-                PKCols = ""
-            End If
-            pkTable = rel("PK_Table")
-            If ds.Tables(pkTable) Is Nothing Then
-                pkTable = "[" & pkTable & "]"
-            End If
-            relationName = rel("CONSTRAINT_NAME")
-            FKCols &= q & rel("FK_Column") & q & ","
-            PKCols &= q & rel("PK_Column") & q & ","
+		Dim relationName = ""
+		Dim FKCols = ""
+		Dim PKCols = ""
+		Dim pkTable = ""
+		For Each rel As DataRowView In dv
+			If relationName <> rel("CONSTRAINT_NAME") And relationName <> "" Then
+				schema &= vbCrLf & String.Format(relString, pkTable, FKCols.Trim(","), PKCols.Trim(","), "{", "}")
+				FKCols = ""
+				PKCols = ""
+			End If
+			pkTable = rel("PK_Table")
+			If ds.Tables(pkTable) Is Nothing Then
+				pkTable = "[" & pkTable & "]"
+			End If
+			relationName = rel("CONSTRAINT_NAME")
+			FKCols &= q & rel("FK_Column") & q & ","
+			PKCols &= q & rel("PK_Column") & q & ","
 
-        Next
-        If relationName <> "" Then _
-            schema &= vbCrLf & String.Format(relString, pkTable, FKCols.Trim(","), PKCols.Trim(","), "{", "}")
-        schema = schema.Trim(",")
-        If dv.Count > 0 Then schema &= vbCrLf & "		"
-        Return schema & "]"
-    End Function
+		Next
+		If relationName <> "" Then _
+			schema &= vbCrLf & String.Format(relString, pkTable, FKCols.Trim(","), PKCols.Trim(","), "{", "}")
+		schema = schema.Trim(",")
+		If dv.Count > 0 Then schema &= vbCrLf & "		"
+		Return schema & "]"
+	End Function
 
-    Public Function getJsonTableSchema(dt As DataTable) As String
+	Public Function getJsonTableSchema(dt As DataTable) As String
         Dim tblString As String = ""
         tblString &= "	""" & dt.TableName & """: {"
         tblString &= vbCrLf & "		""description"": """ & dt.DisplayExpression & ""","
@@ -393,6 +398,10 @@ Public Class tableData
 
         Return tblString
     End Function
+
+	Private Sub tableData_PreInit(sender As Object, e As EventArgs) Handles Me.PreInit
+		showscripts = False
+	End Sub
 
 #End Region
 

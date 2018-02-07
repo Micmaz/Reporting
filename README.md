@@ -13,5 +13,5 @@ Code behind:
 		protected void btnToggleEditing_Click(object sender, EventArgs e)
 		{
 			Reporting.Report.isGlobalAdmin = !Reporting.Report.isGlobalAdmin;
-			Response.Redirect("Reports.aspx");
+			Response.Redirect(Request.Url.AbsoluteUri);
 		}

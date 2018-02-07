@@ -141,16 +141,17 @@ function initializeDesignDrag(){
     dragInitialized =true;
 }
 
-function setupData(schema,targetElement){
-            var htmlString = "";
-            if (!targetElement)
-                targetElement = '#jstree';
-            $(targetElement).find(".hideWhenDone").hide();
-            $.each(schema, function (key, val) {
-                htmlString += createTreeString(key);
-            });
-            jtree = createTree(htmlString, $(targetElement), ["dnd", "search", "types", "html_data", "state"], true);
-            initializeDesignDrag();
+function setupData(schema, targetElement) {
+		schema = makeUniversalRelations(schema);
+		var htmlString = "";
+		if (!targetElement)
+              targetElement = '#jstree';
+        $(targetElement).find(".hideWhenDone").hide();
+        $.each(schema, function (key, val) {
+			htmlString += createTreeString(key);
+        });
+        jtree = createTree(htmlString, $(targetElement), ["dnd", "search", "types", "html_data", "state"], true);
+        initializeDesignDrag();
 }
 
 
@@ -166,16 +167,17 @@ function setupData(schema,targetElement){
 */
 
 function loadData(){
-        $.getJSON(schemaExtendedJsonCall, function (data) { 
+	$.getJSON(schemaExtendedJsonCall, {}, function (data) { 
             tableSchemaExtended = data; 
-        }).fail(ajaxError);
-        $.getJSON(schemaJsonCall, function (data) {
+    }).fail(ajaxError);
+	$.getJSON(schemaJsonCall, {}, function (data) {
             tableSchema = data;
             var externalTables="";  //Tables in external Schema that aren't in the main database.
             $.each(tableSchemaExtended,function(key,val){ 
                 if(!(key in tableSchema)) externalTables+= key + "##"
             });
-            tableSchema = $.extendext(true, 'concat',{}, tableSchema, tableSchemaExtended);
+			tableSchema = $.extendext(true, 'concat', {}, tableSchema, tableSchemaExtended);
+			
             //jQuery.extend(true, tableSchema, tableSchemaExtended);
             if(externalTables=="")
                 setupData(tableSchema);
@@ -184,9 +186,9 @@ function loadData(){
                     //jQuery.extend(true, tableSchema, data);
                     tableSchema = $.extendext(true, 'concat',{}, tableSchema, data);
                     setupData(tableSchema);   
-                 }).fail(ajaxError);
-        }).fail(ajaxError);
-        $("body").trigger("dataloaded");
+                }).fail(ajaxError);
+    }).fail(ajaxError);
+    $("body").trigger("dataloaded");
 }
 
 var viewsLoaded = false;
@@ -501,6 +503,40 @@ function ajaxError(jqxhr, textStatus, error,waitElem) {
         $(waitElem).after(errorSpan);
          $(waitElem).hide();
     }
+}
+
+//Allows a universal relation so for example all columns called "customerID" will join to the customer table on the parent column ID
+function makeUniversalRelations(schema) {
+	if (!schema) schema = tableSchema;
+
+	var containsCols = function (lookingForCols, colArray) {
+		for (var i = 0; i < lookingForCols.length; i++) {
+			var searchStr = lookingForCols[i].toLowerCase();
+			var foundcol = colArray.find(function (column) { return column.name.toLowerCase() == searchStr; });
+			if (!foundcol) return false;
+		}
+		return true;
+	}
+
+	$.each(schema, function (parentTableName, parentTable) {							//for each table in the schema
+		if (parentTable.universalRelations) {											//if there is a universal relation
+			$.each(parentTable.universalRelations, function (key, join) {				//look at all the universal relations..
+				$.each(schema, function (childTableName, childTable) {					//and compare those to all the other tables
+					if (parentTableName != childTableName && containsCols(join.parent_cols,parentTable.columns )) {					//except if it's the current table, or the parent table dosen't have the listed cols'
+						if (containsCols(join.child_cols, childTable.columns)) {								//if the table has all the join columns
+							var newRelation = { "table": parentTableName, "child_cols": join.child_cols, "parent_cols": join.parent_cols };
+							var findRelation = childTable.relations.find(function (relation) {
+								return JSON.stringify(relation) === JSON.stringify(newRelation)
+							});
+							if (!findRelation)
+								childTable.relations.push(newRelation);
+						}
+					}
+				});
+			})
+		}
+	});
+	return schema;
 }
 
 var cloneCount = 1;

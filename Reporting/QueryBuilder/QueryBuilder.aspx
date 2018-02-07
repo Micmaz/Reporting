@@ -145,7 +145,7 @@
             <!-- development area -->
   <div class="tableList ui-layout-west">
   search:
-  <a href="#" onclick="$('#searchnodes').val('');$('.jstree').each(function () { $(this).jstree().search(''); });" style="float:right;margin-right: 6px;">clear</a>
+  <a href="#" onclick="$('#searchnodes').val('');$('.jstree').each(function () { $(this).jstree().search('');$(this).jstree('close_all'); });" style="float:right;margin-right: 6px;">clear</a>
   <br/>
   <input type="text" id="searchnodes" value class="input">
 
