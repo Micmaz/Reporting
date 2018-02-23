@@ -51,10 +51,10 @@ Partial Public Class GridGraph
     End Function
 
     Public Overrides ReadOnly Property propertyList() As String
-        Get
-            Return "ajaxEnable,BackColor,BorderColor,BorderStyle,BorderWidth,Columns,EnablePaging,EnableSorting,ForeColor,Height,hiddenColumns,PageSize,renderAsTable,ShowDateAndTime,ShrinkToFit,Title,visibleColumns,Width"
-        End Get
-    End Property
+		Get
+			Return "ajaxEnable,BackColor,BorderColor,BorderStyle,BorderWidth,Columns,EnablePaging,EnableSorting,EnableSearching,ForeColor,Height,hiddenColumns,PageSize,renderAsTable,ShowDateAndTime,ShrinkToFit,Title,visibleColumns,Width"
+		End Get
+	End Property
 
     Private Function getsort() As String
         Dim regwhere As New Regex("order\sby\s", options)

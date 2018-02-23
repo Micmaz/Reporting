@@ -510,6 +510,7 @@ function makeUniversalRelations(schema) {
 	if (!schema) schema = tableSchema;
 
 	var containsCols = function (lookingForCols, colArray) {
+		if (!colArray) return false;
 		for (var i = 0; i < lookingForCols.length; i++) {
 			var searchStr = lookingForCols[i].toLowerCase();
 			var foundcol = colArray.find(function (column) { return column.name.toLowerCase() == searchStr; });

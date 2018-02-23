@@ -27,16 +27,16 @@ Public Class Report
 
 #Region "Properties"
 
-    Public Shared Property ReportDataConnectionShared() As System.Data.Common.DbConnection
-        Get
-            Return Sharedsession("ReportDataConnection")
-        End Get
-        Set(ByVal value As System.Data.Common.DbConnection)
-            Sharedsession("ReportDataConnection") = value
-        End Set
-    End Property
+	Public Shared Property ReportDataConnectionShared() As System.Data.Common.DbConnection
+		Get
+			Return Sharedsession("ReportDataConnection")
+		End Get
+		Set(ByVal value As System.Data.Common.DbConnection)
+			Sharedsession("ReportDataConnection") = value
+		End Set
+	End Property
 
-    Public Shared Property ReportSettingsConnectionShared() As System.Data.Common.DbConnection
+	Public Shared Property ReportSettingsConnectionShared() As System.Data.Common.DbConnection
         Get
             Return Sharedsession("ReportSettingsConnection")
         End Get
@@ -45,42 +45,72 @@ Public Class Report
         End Set
     End Property
 
-    Private _ReportDataConnection As System.Data.Common.DbConnection
-    Public Property ReportDataConnection() As System.Data.Common.DbConnection
-        Get
-            If session("ReportDataConnection") Is Nothing Then Return BaseClasses.DataBase.getHelper.defaultConnection
-            Return session("ReportDataConnection")
-        End Get
-        Set(ByVal value As System.Data.Common.DbConnection)
-            session("ReportDataConnection") = value
-        End Set
-    End Property
+	Private _ReportDataConnection As System.Data.Common.DbConnection
+	Public Property ReportDataConnection() As System.Data.Common.DbConnection
+		Get
+			If _ReportDataConnection IsNot Nothing Then Return _ReportDataConnection
+			If session("ReportDataConnection") IsNot Nothing Then Return session("ReportDataConnection")
+			Return BaseClasses.DataBase.getHelper.defaultConnection
+		End Get
+		Set(ByVal value As System.Data.Common.DbConnection)
+			_ReportDataConnection = value
+			'session("ReportDataConnection") = value
+		End Set
+	End Property
 
-    Public Property ReportSettingsConnection() As System.Data.Common.DbConnection
-        Get
-            If session("ReportSettingsConnection") Is Nothing Then Return sqlhelper.defaultConnection
-            Return session("ReportSettingsConnection")
-        End Get
-        Set(ByVal value As System.Data.Common.DbConnection)
-            If ReportDataConnection.ToString = sqlhelper.defaultConnection.ToString Then
-                ReportDataConnection = sqlhelper.defaultConnection
-            End If
-            session("ReportSettingsConnection") = value
-            _helper = BaseClasses.DataBase.createHelper(value)
-        End Set
-    End Property
+	Private _ReportSettingsConnection As System.Data.Common.DbConnection
+	Public Property ReportSettingsConnection() As System.Data.Common.DbConnection
+		Get
+			If _ReportSettingsConnection IsNot Nothing Then Return _ReportSettingsConnection
+			If session("ReportSettingsConnection") IsNot Nothing Then Return session("ReportSettingsConnection")
+			Return BaseClasses.DataBase.defaultConnectionSessionWide
+		End Get
+		Set(ByVal value As System.Data.Common.DbConnection)
+			'If ReportDataConnection.ToString = sqlhelper.defaultConnection.ToString Then
+			'	ReportDataConnection = sqlhelper.defaultConnection
+			'End If
+			_ReportSettingsConnection = value
+			_helper = Nothing
+		End Set
+	End Property
 
-    Private _helper As BaseHelper
+	Private _ReportSettingsConnectionName As String = Nothing
+	Public Property ReportSettingsConnectionName As String
+		Get
+			Return _ReportSettingsConnectionName
+		End Get
+		Set(value As String)
+			_ReportSettingsConnectionName = value
+			If value Is Nothing Then
+				ReportSettingsConnection = Nothing
+			Else
+				ReportSettingsConnection = BaseClasses.DataBase.createHelperFromConnectionName(value).defaultConnection
+			End If
+		End Set
+	End Property
+
+	Private _ReportDataConnectionName As String = Nothing
+	Public Property ReportDataConnectionName As String
+		Get
+			Return _ReportDataConnectionName
+		End Get
+		Set(value As String)
+			_ReportDataConnectionName = value
+			If value Is Nothing Then
+				ReportDataConnection = Nothing
+			Else
+				ReportDataConnection = BaseClasses.DataBase.createHelperFromConnectionName(value).defaultConnection
+			End If
+		End Set
+	End Property
+
+	Private _helper As BaseHelper
     Public Property sqlhelper() As BaseClasses.BaseHelper
         Get
-            If _helper Is Nothing Then
-                If session("ReportSettingsConnection") Is Nothing Then
-                    _helper = BaseClasses.DataBase.getHelper
-                Else
-                    _helper = BaseClasses.DataBase.createHelper(session("ReportSettingsConnection"))
-                End If
-            End If
-            Return _helper
+			If _helper Is Nothing Then
+				_helper = BaseClasses.DataBase.createHelper(ReportSettingsConnection)
+			End If
+			Return _helper
         End Get
         Set(ByVal value As BaseClasses.BaseHelper)
             _helper = value
@@ -391,12 +421,12 @@ Public Class Report
 
     Public  Property lastClickIndex() As Integer
         Get
-            If ViewState("LastClickedIdx") Is Nothing Then Return 0
-            Return ViewState("LastClickedIdx")
-        End Get
+			If Me.Page.Cache(Me.ID & "LastClickedIdx") Is Nothing Then Return 0
+			Return Me.Page.Cache(Me.ID & "LastClickedIdx")
+		End Get
         Set(ByVal value As Integer)
-            ViewState("LastClickedIdx") = value
-        End Set
+			Me.Page.Cache(Me.ID & "LastClickedIdx") = value
+		End Set
     End Property
 
     Public Sub buildData()
@@ -612,7 +642,13 @@ Public Class Report
 			Next
 		Next
 
-		myhelper.Update(dtGraphTypes)
+		Try
+			'this update is to add any new graph types from other assemblies.
+			myhelper.Update(dtGraphTypes)
+		Catch ex As Exception
+
+		End Try
+
 
 		'Remove rows not fount in the assembly cache, remove duplicate controls that may have different names.
 		For Each ctrlName As String In fullList.Keys
@@ -629,8 +665,6 @@ Public Class Report
 		dtGraphTypes.AcceptChanges()
 		Return dtGraphTypes
 	End Function
-
-
 
 	Private Sub Report_PreRender(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.PreRender
 		'renderParameters()

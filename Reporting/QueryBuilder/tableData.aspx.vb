@@ -104,7 +104,7 @@ Public Class tableData
 				Response.Write(getJsonSchema(tableList()))
 			End If
 		End If
-		BaseClasses.DataBase.endResponse()
+		Response.End()
 	End Sub
 
 

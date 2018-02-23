@@ -53,16 +53,52 @@ Public Class ReportSelector
         Get
             Return sqlhelper.defaultConnection
         End Get
-        Set(ByVal value As System.Data.Common.DbConnection)
-            sqlhelper = BaseClasses.DataBase.createHelper(value)
-            If shownreport IsNot Nothing Then
-                shownreport.ReportSettingsConnection = value
-            End If
-        End Set
-    End Property
+		Set(ByVal value As System.Data.Common.DbConnection)
+			If value Is Nothing Then
+				sqlhelper = Nothing
+			Else
+				sqlhelper = BaseClasses.DataBase.createHelper(value)
+			End If
+			If shownreport IsNot Nothing Then
+				shownreport.ReportSettingsConnection = sqlhelper.defaultConnection
+			End If
+		End Set
+	End Property
 
 
-    Private ReadOnly Property session() As System.Web.SessionState.HttpSessionState
+
+	Private _ReportSettingsConnectionName As String = Nothing
+	Public Property ReportSettingsConnectionName As String
+		Get
+			Return _ReportSettingsConnectionName
+		End Get
+		Set(value As String)
+			_ReportSettingsConnectionName = value
+			If value Is Nothing Then
+				ReportSettingsConnection = Nothing
+			Else
+				ReportSettingsConnection = BaseClasses.DataBase.createHelperFromConnectionName(value).defaultConnection
+			End If
+		End Set
+	End Property
+
+	Private _ReportDataConnectionName As String = Nothing
+	Public Property ReportDataConnectionName As String
+		Get
+			Return _ReportDataConnectionName
+		End Get
+		Set(value As String)
+			_ReportDataConnectionName = value
+			If value Is Nothing Then
+				ReportDataConnection = Nothing
+			Else
+				ReportDataConnection = BaseClasses.DataBase.createHelperFromConnectionName(value).defaultConnection
+			End If
+		End Set
+	End Property
+
+
+	Private ReadOnly Property session() As System.Web.SessionState.HttpSessionState
         Get
             If Page Is Nothing Then Return System.Web.HttpContext.Current.Session Else Return Me.Page.Session
         End Get
