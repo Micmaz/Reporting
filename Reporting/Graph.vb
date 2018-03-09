@@ -332,21 +332,35 @@ Public Class Graph
 			Me.Controls.Add(parms)
 			'If this report isn't the first, make the parmlist the one from the actual first graph
 			If Me.parentReport IsNot Nothing AndAlso Me.parentReport.GraphsList.Count > 0 AndAlso Me.parentReport.GraphsList(0).ID <> Me.ID Then
-				Me.parms.Visible = False
-				Me.parms = Me.parentReport.GraphsList(0).parms
+				'Me.parms.Visible = False
+				'Me.parms = Me.parentReport.GraphsList(0).parms
+				For Each parmName As String In parms.controlParmHash.Keys
+					If (Not Me.parentReport.GraphsList(0).parms.controlParmHash.ContainsKey(parmName)) Then
+						Me.parentReport.GraphsList(0).parms.controlParmHash.Add(parmName, parms.controlParmHash(parmName))
+					End If
+				Next
+				'Me.parms.Visible = False
+				'Me.parms = Me.parentReport.GraphsList(0).parms
+				parms.setVisible()
 			Else
 
 			End If
 
 			'If Not parms.hasparms Then
-			baseGraph = CType(Me.Page.LoadControl(getGraphIDPath(GraphTypeId)), BaseGraph)
+			Try
+				baseGraph = CType(Me.Page.LoadControl(getGraphIDPath(GraphTypeId)), BaseGraph)
+			Catch ex As Exception
+				handelError(ex)
+				baseGraph = CType(Me.Page.LoadControl("~/res/Reporting/BaseGraph.ascx"), BaseGraph)
+			End Try
+
 			baseGraph.graph = Me
 			baseGraph.Visible = Not parms.hasparms
 			Me.Controls.Add(baseGraph)
 			'End If
 		Catch ex As Exception
 			handelError(ex)
-        End Try
+		End Try
         'End If
     End Sub
 

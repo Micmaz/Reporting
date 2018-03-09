@@ -109,19 +109,26 @@ Public Class ParmDisplay
             End If
         End If
         If Not c Is Nothing Then
-            'c.ID = "parm_" & Me.parentGraph.GraphID & "_" & name
-            Me.Controls.Add(New LiteralControl(displayname & ": "))
-            Me.Controls.Add(c)
-            'If type = parmType.Autocomplete Then
-            '    If controlOptions.Split(vbCrLf).Length >= 2 Then
-            '        CType(c, JqueryUIControls.Autocomplete).setDistinctAutocomplete(controlOptions.Split(vbCrLf)(0), controlOptions.Split(vbCrLf)(1), , , Me.parentGraph.parentReport.ReportDataConnection)
-            '    End If
-            'End If
+			'c.ID = "parm_" & Me.parentGraph.GraphID & "_" & name
+			Dim p As New Panel()
+			p.CssClass = "dtiReportingPArm"
+			Dim l As New Label
+			l.CssClass = "dtiReportingParmLabel"
+			l.Text = displayname & ": "
+			p.Controls.Add(l)
+			p.Controls.Add(c)
+			'If type = parmType.Autocomplete Then
+			'    If controlOptions.Split(vbCrLf).Length >= 2 Then
+			'        CType(c, JqueryUIControls.Autocomplete).setDistinctAutocomplete(controlOptions.Split(vbCrLf)(0), controlOptions.Split(vbCrLf)(1), , , Me.parentGraph.parentReport.ReportDataConnection)
+			'    End If
+			'End If
 
-            Me.Controls.Add(New LiteralControl("<br />"))
-        End If
-        Return c
-    End Function
+			'Me.Controls.Add(New LiteralControl("<br />"))
+			Me.Controls.Add(p)
+			Return p
+		End If
+		Return Nothing
+	End Function
 
     Public Function parentSavedParms() As Dictionary(Of String, dsReports.DTIGraphParmsRow)
         Dim dv As New DataView(parentGraph.parentReport.graphParmsDT, "graph_id = " & parentGraph.GraphRowId, "", DataViewRowState.CurrentRows)
@@ -133,25 +140,26 @@ Public Class ParmDisplay
     End Function
 
     Private Sub submitClicked()
-        For Each key As String In controlParmHash.Keys
-            Dim c As Control = controlParmHash(key)
-            If Not c Is Nothing Then
-                If TypeOf c Is JqueryUIControls.DatePicker Then
-                    Dim dte As Date = Date.Today
-                    If Not Date.TryParse(Me.Page.Request.Params(c.UniqueID), dte) Then
-                        dte = Date.Today
-                    End If
-                    parentGraph.clickedvals.Add(key, dte)
-                ElseIf TypeOf c Is DropDownList Then
-                    parentGraph.clickedvals.Add(key, Me.Page.Request.Params(c.UniqueID))
-                ElseIf TypeOf c Is JqueryUIControls.Autocomplete Then
-                    parentGraph.clickedvals.Add(key, CType(c, JqueryUIControls.Autocomplete).Value)
-                Else
-                    parentGraph.clickedvals.Add(key, Me.Page.Request.Params(c.UniqueID))
-                End If
-            End If
-        Next
-        Me.Page.Response.Redirect(Me.Page.Request.Url.PathAndQuery)
+		For Each key As String In controlParmHash.Keys
+			Dim p As Panel = controlParmHash(key)
+			Dim c As Control = p.Controls(1)
+			If Not c Is Nothing Then
+				If TypeOf c Is JqueryUIControls.DatePicker Then
+					Dim dte As Date = Date.Today
+					If Not Date.TryParse(Me.Page.Request.Params(c.UniqueID), dte) Then
+						dte = Date.Today
+					End If
+					parentGraph.clickedvals.Add(key, dte)
+				ElseIf TypeOf c Is DropDownList Then
+					parentGraph.clickedvals.Add(key, Me.Page.Request.Params(c.UniqueID))
+				ElseIf TypeOf c Is JqueryUIControls.Autocomplete Then
+					parentGraph.clickedvals.Add(key, CType(c, JqueryUIControls.Autocomplete).Value)
+				Else
+					parentGraph.clickedvals.Add(key, Me.Page.Request.Params(c.UniqueID))
+				End If
+			End If
+		Next
+		Me.Page.Response.Redirect(Me.Page.Request.Url.PathAndQuery)
     End Sub
 
     Public Shared Function getParmsFromSql(ByVal sqlString As String) As String()
@@ -166,21 +174,21 @@ Public Class ParmDisplay
         Return a.ToArray
     End Function
 
-    Public controlParmHash As New Hashtable
-    'Public hasparms As Boolean = False
+	Public controlParmHash As New Dictionary(Of String, Control)
+	'Public hasparms As Boolean = False
 
-    Public ReadOnly Property hasparms() As Boolean
-        Get
-            For Each parmName As String In getParmsFromSql(parentGraph.SQLStmt)
-                If Not parentGraph.clickedvals.ContainsKey(parmName) Then
-                    Return True
-                End If
-            Next
-            Return False
-        End Get
-    End Property
+	Public ReadOnly Property hasparms() As Boolean
+		Get
+			For Each parmName As String In getParmsFromSql(parentGraph.SQLStmt)
+				If Not parentGraph.clickedvals.ContainsKey(parmName) Then
+					Return True
+				End If
+			Next
+			Return False
+		End Get
+	End Property
 
-    Private Sub ReportParmDisplay_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
+	Private Sub ReportParmDisplay_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
         Submit.Text = "Submit"
         Dim savedparms As Dictionary(Of String, dsReports.DTIGraphParmsRow) = parentSavedParms()
         For Each parmName As String In savedparms.Keys
@@ -202,21 +210,39 @@ Public Class ParmDisplay
                 End If
             End If
         Next
-        Me.Controls.Add(Submit)
-
-        If hasparms Then
-            Me.Controls.AddAt(0, New LiteralControl("<fieldset class='reportField'><legend>" & Me.parentGraph.GraphName & "</legend>"))
-            Me.Controls.Add(New LiteralControl("</fieldset>"))
-        End If
-        Submit.Visible = hasparms
-
-        If Me.Page.Request.Params(Submit.UniqueID) = Submit.Text Then
-            submitClicked()
-            Me.Visible = False
-            'hasparms = False
-        End If
 
 
-    End Sub
+		'If hasparms Then
+		Me.Controls.AddAt(0, New LiteralControl("<fieldset class='reportField'><legend>" & Me.parentGraph.GraphName & "</legend>"))
+		Me.Controls.Add(Submit)
+		Me.Controls.Add(New LiteralControl("</fieldset>"))
+		'End If
 
+		If Me.Page.Request.Params(Submit.UniqueID) = Submit.Text Then
+			submitClicked()
+		End If
+		setVisible()
+
+	End Sub
+
+	Private addedField As Boolean = False
+	Public Function setVisible() As Boolean
+
+		Me.Visible = hasparms
+		If Me.Page.Request.Params(Submit.UniqueID) = Submit.Text Then
+			Me.Visible = False
+			'hasparms = False
+		End If
+		Return Me.Visible
+	End Function
+
+	Private Sub ParmDisplay_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+		If Not Me.parentGraph.parms Is Me Then
+			For Each parm As String In controlParmHash.Keys
+				Me.parentGraph.parms.Controls.Add(controlParmHash(parm))
+				Me.parentGraph.parms.Visible = True
+			Next
+
+		End If
+	End Sub
 End Class

@@ -43,13 +43,16 @@ Partial Public Class ReportParms
     End Sub
 
     Private Sub generateParms()
-        For Each r As DataRow In ds.DTIGraphParms
-            r.Delete()
-        Next
-        For Each parm As String In ParmDisplay.getParmsFromSql(ds.DTIGraphs(0).SelectStmt)
-            ds.DTIGraphParms.AddDTIGraphParmsRow(parm, parm, 0, ds.DTIGraphs(0).Id, "")
-        Next
-    End Sub
+		For Each r As DataRow In ds.DTIGraphParms
+			r.Delete()
+		Next
+		For Each g As dsReports.DTIGraphsRow In ds.DTIGraphs
+			For Each parm As String In ParmDisplay.getParmsFromSql(g.SelectStmt)
+				ds.DTIGraphParms.AddDTIGraphParmsRow(parm, parm, 0, g.Id, "")
+			Next
+			If g.Drillable Then Return
+		Next
+	End Sub
 
     Private Sub loadgrid()
         repeater1.DataSource = ds
