@@ -20,5 +20,6 @@ Partial Public Class HtmlTableGraph
 	'''Auto-generated field.
 	'''To modify move field declaration from designer file to code-behind file.
 	'''</remarks>
+<System.ComponentModel.Description("groupedTbl control.")> _
 	Protected WithEvents groupedTbl As Global.Reporting.GroupedTable
 End Class

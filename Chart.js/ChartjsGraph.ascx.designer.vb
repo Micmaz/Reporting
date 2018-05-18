@@ -20,5 +20,6 @@ Partial Public Class ChartjsGraph
 	'''Auto-generated field.
 	'''To modify move field declaration from designer file to code-behind file.
 	'''</remarks>
+<System.ComponentModel.Description("Chart1 control.")> _
 	Protected WithEvents Chart1 As Global.Chart.js.Chart
 End Class

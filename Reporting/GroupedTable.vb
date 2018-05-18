@@ -233,8 +233,8 @@ Public Class GroupedTable
         Next
         Rows.AddAt(Rows.GetRowIndex(rowList(0)) + 1, r)
         If rowAfterTotal Then
-            r = New TableRow
-            For Each col As String In cols()
+			r = New TableRow
+			For Each col As String In cols()
                 r.Cells.Add(makeCell("&nbsp;", "spacerCell"))
             Next
             Rows.AddAt(Rows.GetRowIndex(rowList(0)) + 2, r)
@@ -250,11 +250,12 @@ Public Class GroupedTable
 
             'Make the header
             r = New TableHeaderRow
-            For Each col As String In colLst
-                col = col.Trim()
-                r.Cells.Add(makeHeaderCell(col, "headerCell"))
-            Next
-            Rows.Add(r)
+			For Each col As String In colLst
+				col = col.Trim()
+				r.Cells.Add(makeHeaderCell(col, "headerCell"))
+			Next
+			r.TableSection = TableRowSection.TableHeader
+			Rows.Add(r)
 
             For Each row As DataRow In DataSource.Rows
                 r = New TableRow

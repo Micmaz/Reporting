@@ -12,6 +12,7 @@ Option Explicit On
 
 
 Partial Public Class ReportGraphs
+
     
     '''<summary>
     '''form1 control.
@@ -20,7 +21,9 @@ Partial Public Class ReportGraphs
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("form1 control.")> _
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
+
     
     '''<summary>
     '''hidReportID control.
@@ -29,7 +32,9 @@ Partial Public Class ReportGraphs
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("hidReportID control.")> _
     Protected WithEvents hidReportID As Global.System.Web.UI.WebControls.HiddenField
+
     
     '''<summary>
     '''tbReportName control.
@@ -38,7 +43,9 @@ Partial Public Class ReportGraphs
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("tbReportName control.")> _
     Protected WithEvents tbReportName As Global.System.Web.UI.WebControls.TextBox
+
     
     '''<summary>
     '''btnAdd control.
@@ -47,7 +54,9 @@ Partial Public Class ReportGraphs
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("btnAdd control.")> _
     Protected WithEvents btnAdd As Global.System.Web.UI.WebControls.Button
+
     
     '''<summary>
     '''repeater1 control.
@@ -56,7 +65,9 @@ Partial Public Class ReportGraphs
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("repeater1 control.")> _
     Protected WithEvents repeater1 As Global.System.Web.UI.WebControls.Repeater
+
     
     '''<summary>
     '''btnSave control.
@@ -65,5 +76,6 @@ Partial Public Class ReportGraphs
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("btnSave control.")> _
     Protected WithEvents btnSave As Global.System.Web.UI.WebControls.Button
 End Class

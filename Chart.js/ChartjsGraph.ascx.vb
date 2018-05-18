@@ -20,11 +20,11 @@ Partial Public Class ChartjsGraph
 		doDrilldown(row)
 	End Sub
 
-	'Public Overrides ReadOnly Property propertyList() As String
-	'	Get
-	'		Return "chartTitle,chartType,formatNumberScale,Height,Width,numberOfSeries,numberPrefix,numberSuffix,palette,rotateValues,displayedTextColStr,showValues,Wrap,setAdaptiveYMin,xAxisMinValue,xAxisMaxValue,yAxisMinValue,yAxisMaxValue,xAxisName,yAxisName,addtionalChartProperties,baseFontSize,baseFont,baseFontColor,labelDisplay,roundEdges,showBorder,theme,showShadow,showGradient,showPlotBorder,animation,backgroundColor,canvasColor,captionColor,showLegend,plotSpacePercent,chartColors"
-	'	End Get
-	'End Property
+	Public Overrides ReadOnly Property propertyList() As String
+		Get
+			Return "chartTitle,Height,Width,addtionalChartProperties,addtionalItemLevelProperties,beginAtZero,chartTitle,chartType,colorScheme,colorSchemeBaseColor,colorSchemedistance,colorSchemeRandomizeColorOrder,colorSchemeVariation,cornerRadius,datsetLabelsStr,defaultFontColor,defaultFontFamily,defaultFontSize,defaultFontStyle,dropShadow,dropShadowBlur,dropShadowColor,dropShadowOffsetX,dropShadowOffsetY,fillLineChart,gradient,gradientEnd,gradientEndShade,gradientStart,gradientStartShade,labelCol,numberOfSeries,valueColsStr"
+		End Get
+	End Property
 
 	Private Sub DynamicPropertyEditor1_objectPropertiesSet(ByVal objectInstance As Object) Handles propgrid.objectPropertiesSet
 		Dim regex1 As Regex = New Regex("\x40\w+", RegexOptions.IgnoreCase Or RegexOptions.CultureInvariant Or RegexOptions.IgnorePatternWhitespace Or RegexOptions.Compiled)

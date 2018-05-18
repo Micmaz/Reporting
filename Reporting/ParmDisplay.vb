@@ -25,7 +25,9 @@ Public Class ParmDisplay
         NameValueAutocomplete = 6
     End Enum
 
-    Private ReadOnly Property sqlhelper() As BaseClasses.BaseHelper
+	Public Property controlPanel As New Panel
+
+	Private ReadOnly Property sqlhelper() As BaseClasses.BaseHelper
         Get
             Return parentGraph.sqlhelper
         End Get
@@ -124,7 +126,7 @@ Public Class ParmDisplay
 			'End If
 
 			'Me.Controls.Add(New LiteralControl("<br />"))
-			Me.Controls.Add(p)
+			controlPanel.Controls.Add(p)
 			Return p
 		End If
 		Return Nothing
@@ -215,6 +217,7 @@ Public Class ParmDisplay
 		'If hasparms Then
 		Me.Controls.AddAt(0, New LiteralControl("<fieldset class='reportField'><legend>" & Me.parentGraph.GraphName & "</legend>"))
 		Me.Controls.Add(Submit)
+		Me.Controls.Add(controlPanel)
 		Me.Controls.Add(New LiteralControl("</fieldset>"))
 		'End If
 
@@ -237,12 +240,22 @@ Public Class ParmDisplay
 	End Function
 
 	Private Sub ParmDisplay_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
-		If Not Me.parentGraph.parms Is Me Then
-			For Each parm As String In controlParmHash.Keys
-				Me.parentGraph.parms.Controls.Add(controlParmHash(parm))
-				Me.parentGraph.parms.Visible = True
-			Next
-
-		End If
+		For Each gr As Graph In Me.parentGraph.parentReport.GraphsList
+			If gr.parms Is Me Then
+				Exit For
+			End If
+			If gr.parms.Visible() Then
+				For Each key As String In controlParmHash.Keys
+					If Not gr.parms.controlParmHash.ContainsKey(key) Then
+						gr.parms.controlParmHash.Add(key, controlParmHash(key))
+						gr.parms.controlPanel.Controls.Add(controlParmHash(key))
+						'Dim r As dsReports.DTIGraphParmsRow = savedparms(parmName)
+						'Dim c As Control = addParmControl(parmName, r.DisplayName, r.Parm_Type, r.ParmProperties)
+						'controlParmHash.Add(parmName, c)
+					End If
+				Next
+				Me.Visible = False
+			End If
+		Next
 	End Sub
 End Class

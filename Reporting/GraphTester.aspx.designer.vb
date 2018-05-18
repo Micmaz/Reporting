@@ -12,6 +12,7 @@ Option Explicit On
 
 
 Partial Public Class GraphTester
+
     
     '''<summary>
     '''form1 control.
@@ -20,7 +21,9 @@ Partial Public Class GraphTester
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("form1 control.")> _
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
+
     
     '''<summary>
     '''ListBox1 control.
@@ -29,7 +32,9 @@ Partial Public Class GraphTester
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("ListBox1 control.")> _
     Protected WithEvents ListBox1 As Global.System.Web.UI.WebControls.ListBox
+
     
     '''<summary>
     '''tbSqlStmt control.
@@ -38,7 +43,9 @@ Partial Public Class GraphTester
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("tbSqlStmt control.")> _
     Protected WithEvents tbSqlStmt As Global.DTIMiniControls.HighlighedEditor
+
     
     '''<summary>
     '''tabs control.
@@ -47,7 +54,9 @@ Partial Public Class GraphTester
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("tabs control.")> _
     Protected WithEvents tabs As Global.JqueryUIControls.Tabs
+
     
     '''<summary>
     '''btnRun control.
@@ -56,7 +65,9 @@ Partial Public Class GraphTester
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("btnRun control.")> _
     Protected WithEvents btnRun As Global.System.Web.UI.WebControls.Button
+
     
     '''<summary>
     '''ddTheme control.
@@ -65,5 +76,6 @@ Partial Public Class GraphTester
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("ddTheme control.")> _
     Protected WithEvents ddTheme As Global.System.Web.UI.WebControls.DropDownList
 End Class

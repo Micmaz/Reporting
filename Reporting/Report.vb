@@ -465,10 +465,10 @@ Public Class Report
             i += 1
         Next
         Me.CssClass = "DTIReport"
-        If isadmin Then
-            ReportTitleLabel.Text = ReportName
-        End If
-        Controls.AddAt(0, ReportTitleLabel)
+		'If isadmin Then
+		ReportTitleLabel.Text = ReportName
+		'End If
+		Controls.AddAt(0, ReportTitleLabel)
         Controls.AddAt(1, New LiteralControl("<br>"))
         If isadmin Then
             Report.reghsString(Me.Page)
@@ -488,8 +488,9 @@ Public Class Report
     End Sub
 
     Private Sub Report_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
-        'If Me.Visible Then
-        RaiseEvent PreInit()
+		'If Me.Visible Then
+		Me.ReportTitleLabel.CssClass = "ReportTitleLabel"
+		RaiseEvent PreInit()
         If Me.isadmin Then
 		try
             Page.EnableEventValidation = False
@@ -590,6 +591,8 @@ Public Class Report
 				.Control_Name = "~/res/Reporting/" & graphName & "Graph.ascx"
 				.Name = graphName
 			End With
+			If graphName.ToLower = "chartjs" Then row.Control_Name = "~/res/Chart.js/ChartjsGraph.ascx"
+
 			If Not ctrlList.Contains(row.Control_Name.ToLower) OrElse dtGraphTypes.Select("Name = '" & row.Name & "'").Length = 0 Then
 				dtGraphTypes.AddDTIGraphTypesRow(row)
 				ctrlList.Add(row.Control_Name.ToLower())
@@ -625,28 +628,34 @@ Public Class Report
 
 		'Get Graph types from the Assembly cache
 		For Each asm As System.Reflection.Assembly In AppDomain.CurrentDomain.GetAssemblies
-			For Each tp As Type In asm.GetTypes()
-				If tp.IsSubclassOf(GetType(BaseGraph)) Then
-					Dim newGraph As DTIGraphTypesRow = dtGraphTypes.NewDTIGraphTypesRow
-					newGraph.Control_Name = "~/res/" & tp.FullName.Replace(".", "/") & ".ascx"
-					newGraph.Name = tp.Name.Replace("Graph", "")
-					Dim ctrlName As String = newGraph.Control_Name.ToLower
-					foundlist.Add(ctrlName)
-					If Not fullList.ContainsKey(ctrlName) Then
-						'ctrlList.Add(ctrlName)
-						fullList.Add(ctrlName, New List(Of DTIGraphTypesRow))
-						fullList(ctrlName).Add(newGraph)
-						dtGraphTypes.AddDTIGraphTypesRow(newGraph)
+			Try
+				For Each tp As Type In asm.GetTypes()
+					If tp.IsSubclassOf(GetType(BaseGraph)) Then
+						Dim newGraph As DTIGraphTypesRow = dtGraphTypes.NewDTIGraphTypesRow
+						newGraph.Control_Name = "~/res/" & tp.FullName.Replace(".", "/") & ".ascx"
+						newGraph.Name = tp.Name.Replace("Graph", "")
+						Dim ctrlName As String = newGraph.Control_Name.ToLower
+						foundlist.Add(ctrlName)
+						If Not fullList.ContainsKey(ctrlName) Then
+							'ctrlList.Add(ctrlName)
+							fullList.Add(ctrlName, New List(Of DTIGraphTypesRow))
+							fullList(ctrlName).Add(newGraph)
+							dtGraphTypes.AddDTIGraphTypesRow(newGraph)
+						End If
 					End If
-				End If
-			Next
+				Next
+			Catch ex As Reflection.ReflectionTypeLoadException
+
+			End Try
 		Next
 
 		Try
-			'this update is to add any new graph types from other assemblies.
+			'this Update Is to add any New graph types from other assemblies.
 			myhelper.Update(dtGraphTypes)
 		Catch ex As Exception
-
+			If HttpContext.Current.Request.QueryString("showerror") = "y" Then
+				Throw ex
+			End If
 		End Try
 
 

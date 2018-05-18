@@ -12,6 +12,7 @@ Option Explicit On
 
 
 Partial Public Class TableEditorGridGraph
+
     
     '''<summary>
     '''PlaceHolder1 control.
@@ -20,5 +21,6 @@ Partial Public Class TableEditorGridGraph
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    <System.ComponentModel.Description("PlaceHolder1 control.")> _
     Protected WithEvents PlaceHolder1 As Global.System.Web.UI.WebControls.PlaceHolder
 End Class

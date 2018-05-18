@@ -22,14 +22,14 @@ Public Partial Class ReportGraphs
 
             ds.Clear()
             If ReportID <> -1 Then
-                Try
+				Try
 					sqlhelper.FillDataSetMultiSelect("Select * from DTIReports where id = " & ReportID & "; Select * from DTIGraphs where Report_Id = " & ReportID & " order by [order];Select * from DTIGraphTypes", ds, New String() {"DTIReports", "DTIGraphs", "DTIGraphTypes"})
-					Report.getGraphTypeList(sqlhelper, ds.DTIGraphTypes)
 				Catch ex As Exception
-                    Report.loadDSToDatabase(sqlhelper)
+					Report.loadDSToDatabase(sqlhelper)
                     sqlhelper.FillDataSetMultiSelect("Select * from DTIReports where id = " & ReportID & "; Select * from DTIGraphs where Report_Id = " & ReportID & " order by [order];Select * from DTIGraphTypes", ds, New String() {"DTIReports", "DTIGraphs", "DTIGraphTypes"})
                 End Try
             End If
+			Report.getGraphTypeList(sqlhelper, ds.DTIGraphTypes)
 
 
 			If ds.DTIReports.Count > 0 Then

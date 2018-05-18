@@ -11,7 +11,7 @@ namespace _reportTester
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			Chart1.data = sqlHelper.FillDataTable("select * from media_types");
+			//Chart1.data = sqlHelper.FillDataTable("select * from media_types");
 		}
 	}
 }

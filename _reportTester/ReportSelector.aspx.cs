@@ -12,7 +12,7 @@ namespace _reportTester
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			Reporting.Report.ReportDataConnectionShared = new System.Data.SqlClient.SqlConnection(WebConfigurationManager.ConnectionStrings["phData"].ConnectionString);
+			//Reporting.Report.ReportDataConnectionShared = new System.Data.SqlClient.SqlConnection(WebConfigurationManager.ConnectionStrings["phData"].ConnectionString);
 		}
 
 		protected void btnToggleEditing_Click(object sender, EventArgs e)
