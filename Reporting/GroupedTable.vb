@@ -23,17 +23,30 @@ Public Class GroupedTable
         End Set
     End Property
 
-    'Private groupedColsValue As String
-    'Public Property groupedCols() As String
-    '    Get
-    '        Return groupedColsValue
-    '    End Get
-    '    Set(ByVal value As String)
-    '        groupedColsValue = value
-    '    End Set
-    'End Property
+	''' <summary>
+	''' Determins weather the floatHead javascript is included. Floats the header even if the page is scrolled.
+	''' </summary>
+	''' <returns></returns>
+	Public Property floatHead As Boolean = True
 
-    Private groupedColValue As String
+	''' <summary>
+	''' If the header is floated, this tells the item to stop floating this far from the top. This can be a js function, a % or px string. 
+	''' </summary>
+	''' <returns></returns>
+	Public Property floatHeadScrollingTop As Integer = 0
+
+
+	'Private groupedColsValue As String
+	'Public Property groupedCols() As String
+	'    Get
+	'        Return groupedColsValue
+	'    End Get
+	'    Set(ByVal value As String)
+	'        groupedColsValue = value
+	'    End Set
+	'End Property
+
+	Private groupedColValue As String
     Public Property groupedCol() As String
         Get
             Return groupedColValue
@@ -107,25 +120,27 @@ Public Class GroupedTable
 
 #End Region
 
+	Public myScriptsLiteral As New LiteralControl
+	Public myScripts As String = ""
 	Enum TableStyles
-        NotSet
-        Bars
-        Blueborder
-        Blueborderhover
-        Bluegradient
-        Bluezebra
-        Bluehover
-        DCoLogo
-        Indigohover
-        Plain
-        Plainhover
-        Purplehover
-        Zebrahover
-        Lightbluehover
-        Rounded
-    End Enum
+		NotSet
+		Bars
+		Blueborder
+		Blueborderhover
+		Bluegradient
+		Bluezebra
+		Bluehover
+		DCoLogo
+		Indigohover
+		Plain
+		Plainhover
+		Purplehover
+		Zebrahover
+		Lightbluehover
+		Rounded
+	End Enum
 
-    Public Event hadError(ex As Exception)
+	Public Event hadError(ex As Exception)
 
     Private Function cols() As List(Of String)
         Dim ret As New List(Of String)
@@ -310,20 +325,52 @@ Public Class GroupedTable
         End If
     End Sub
 
-    Private Sub GroupedTable_PreRender(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.PreRender
-        If Not hasbound Then
-            Me.DataBind()
-        End If
-        If Not tableStyle = TableStyles.NotSet Then
-            If Me.Rows.Count > 0 Then
-                If Me.Rows(0).Cells.Count > 0 Then
-                    Me.Rows(0).Cells(0).Controls.Add(New LiteralControl("<link rel='stylesheet' href='~/res/BaseClasses/Scripts.aspx?f=Reporting/" & [Enum].GetName(tableStyle.GetType(), tableStyle) & ".css' />"))
-                End If
-            End If
-        End If
-    End Sub
+	Private Sub GroupedTable_PreRender(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.PreRender
 
+		If Not hasbound Then
+			Me.DataBind()
+		End If
+		'If Me.Rows.Count > 0 Then
+		'	If Me.Rows(0).Cells.Count > 0 Then
+		If Not tableStyle = TableStyles.NotSet Then
+			'Me.Rows(0).Cells(0).Controls.Add(New LiteralControl(jQueryLibrary.jQueryInclude.getScriptFile("Reporting/" & [Enum].GetName(tableStyle.GetType(), tableStyle) & ".css")))
+			'jQueryLibrary.jQueryInclude.addScriptFile(Me.Page, "Reporting/" & [Enum].GetName(tableStyle.GetType(), tableStyle) & ".css")
+			myScripts &= jQueryLibrary.jQueryInclude.getScriptFile("Reporting/" & [Enum].GetName(tableStyle.GetType(), tableStyle) & ".css")
+		End If
+		jQueryLibrary.jQueryInclude.addScriptFile(Me.Page, "Reporting/jquery.floatThead.min.js")
+		myScripts &= " <script type=""text/javascript""> var tbl_" & ClientID & "; $(function(){ $('.floatThead-container').remove(); "
+		If floatHead Then
+			myScripts &= "tbl_" & ClientID & "="
+			If floatHeadScrollingTop = 0 Then
+				'jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, " $('#" & Me.ClientID & "').floatThead({scrollingTop:" & floatHeadScrollingTop & "});")
+				myScripts &= " $('#" & Me.ClientID & "').floatThead();"
+			Else
+				myScripts &= " $('#" & Me.ClientID & "').floatThead({top:" & floatHeadScrollingTop & "});"
+			End If
 
+			'Me.Rows(0).Cells(0).Controls.Add(New LiteralControl(jQueryLibrary.jQueryInclude.getScriptFile("Reporting/jquery.floatThead.min.js")))
+			'Me.Rows(0).Cells(0).Controls.Add(New LiteralControl(jQueryLibrary.jQueryInclude.isolateJqueryLoad(" $('#" & Me.ClientID & "').floatThead();", True)))
+		End If
+		myScripts &= vbCrLf & "  }); </script> " & vbCrLf
+		If Me.Rows.Count > 0 Then
+			If Me.Rows(Me.Rows.Count - 1).Cells.Count > 0 Then
+				Me.Rows(Me.Rows.Count - 1).Cells(0).Controls.Add(New LiteralControl(myScripts))
+			End If
+		End If
+		'	End If
+		'End If
+	End Sub
+
+	'Protected Overrides Sub Render(writer As HtmlTextWriter)
+	'	Dim tmpId = ClientID
+	'	Me.ClientID = "tbl_" & ClientID
+	'	writer.Write("<span id=""" & tmpId & """>")
+	'	writer.Write(myScripts)
+	'	MyBase.Render(writer)
+	'	ID = tmpId
+	'	writer.Write("</span>")
+
+	'End Sub
 
 End Class
 

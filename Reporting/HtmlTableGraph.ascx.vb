@@ -9,7 +9,7 @@ Partial Public Class HtmlTableGraph
 
 	Public Overrides ReadOnly Property propertyList() As String
 		Get
-			Return "Caption,CaptionAlign,CellPadding,CellSpacing,VisibleCols,tableStyle,Height,Width,groupedCol,GridLines,BackColor,BorderColor,BorderWidth,ColumnTitles,CssClass,nullDisplay,removeRepeats,TotalColumnFormat,TotalFormat"
+			Return "Caption,CaptionAlign,CellPadding,CellSpacing,VisibleCols,tableStyle,Height,Width,groupedCol,GridLines,BackColor,BorderColor,BorderWidth,ColumnTitles,CssClass,nullDisplay,removeRepeats,TotalColumnFormat,TotalFormat,floatHead,floatHeadScrollingTop"
 		End Get
 	End Property
 

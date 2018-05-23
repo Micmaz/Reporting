@@ -64,6 +64,7 @@
     <Content Include="chartJS.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="jquery.floatThead.min.js" />
     <Content Include="ReportSelector.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

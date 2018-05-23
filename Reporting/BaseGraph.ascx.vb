@@ -31,8 +31,10 @@ Partial Public Class BaseGraph
 #Region "Properties"
 
     Protected _dt As DataTable
-    Public err As New JqueryUIControls.InfoDiv
-    Protected ReadOnly Property dt() As DataTable
+	Public err As New JqueryUIControls.InfoDiv
+	Public exportLink As New LiteralControl
+
+	Protected ReadOnly Property dt() As DataTable
         Get
             If Me.Visible = False Then
                 Return Nothing
@@ -148,9 +150,11 @@ Partial Public Class BaseGraph
 				End If
             End If
             err.Visible = False
-            Me.Controls.Add(err)
-            Me.Controls.Add(propgrid)
-            If Me.graph.Visible Then
+
+			Me.Controls.Add(err)
+			Me.Controls.Add(propgrid)
+			Me.Controls.Add(exportLink)
+			If Me.graph.Visible Then
                 bindToDisplay()
             End If
         Catch ex As Exception
@@ -166,12 +170,14 @@ Partial Public Class BaseGraph
     End Property
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        If graph.ExportExcel Then
-            Dim url As String = "~/res/Reporting/ExcellExport.aspx?iasdf=" & HttpUtility.UrlEncode(graph.GraphID) & "&filename=" & HttpUtility.UrlEncode(graph.GraphName)
-            Dim lit As New LiteralControl
-            lit.Text = "<a href=""#"" onclick=""return window.open('" & url & "','Window1','menubar=no,titlebar=no,status=no,location=no,width=250,height=100,toolbar=no');""><img src='~/res/BaseClasses/Scripts.aspx?f=Reporting/excel.gif' border=0></a> "
-            Me.Controls.Add(lit)
-        End If
+		If graph.ExportExcel Then
+			Dim url As String = "~/res/Reporting/ExcellExport.aspx?iasdf=" & HttpUtility.UrlEncode(graph.GraphID) & "&filename=" & HttpUtility.UrlEncode(graph.GraphName)
+			'Dim lit As New LiteralControl
+			exportLink.Text = "<a href=""#"" onclick=""return window.open('" & url & "','Window1','menubar=no,titlebar=no,status=no,location=no,width=250,height=100,toolbar=no');""><img src='~/res/BaseClasses/Scripts.aspx?f=Reporting/excel.gif' border=0></a> "
+			'Me.Controls.Add(lit)
+		Else
+			exportLink.Text = ""
+		End If
     End Sub
 
     'Private Sub ExcelExport(ByVal sender As System.Object, ByVal e As System.EventArgs)

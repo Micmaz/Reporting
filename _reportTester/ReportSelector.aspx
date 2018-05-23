@@ -11,8 +11,21 @@
 <body>
     <form id="form1" runat="server">
         <div>
+			
         	<asp:Button ID="btnToggleEditing" runat="server" OnClick="btnToggleEditing_Click" Text="Toggle report editing" />
 			<br />
+
+			<script type="text/JavaScript" src="jquery.floatThead.min.js"></script>
+			<script>$(function () {
+				//$('table.groupedTbl').each(function () { $(this).floatThead(); });
+	
+
+				});
+
+
+			</script>
+
+
 			<%@ Register assembly="Reporting" namespace="Reporting" tagprefix="DTI" %>
 			<DTI:ReportSelector ID="ReportSelector1" runat="server"></DTI:ReportSelector>
         </div>

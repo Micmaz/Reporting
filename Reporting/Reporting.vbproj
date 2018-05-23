@@ -246,6 +246,7 @@
     <EmbeddedResource Include="Icons\piechart.png" />
     <EmbeddedResource Include="Icons\report.png" />
     <EmbeddedResource Include="Icons\sales.png" />
+    <EmbeddedResource Include="js\jquery.floatThead.min.js" />
     <Content Include="propertyEditor\ComparatorDS.xsc">
       <DependentUpon>ComparatorDS.xsd</DependentUpon>
     </Content>
