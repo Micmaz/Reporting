@@ -35,6 +35,11 @@ Public Class GroupedTable
 	''' <returns></returns>
 	Public Property floatHeadScrollingTop As Integer = 0
 
+	''' <summary>
+	''' Indicates weather the table sorter should be part included as a function of the html table.
+	''' </summary>
+	''' <returns></returns>
+	Public Property SortingEnabled As Boolean = True
 
 	'Private groupedColsValue As String
 	'Public Property groupedCols() As String
@@ -338,7 +343,11 @@ Public Class GroupedTable
 			myScripts &= jQueryLibrary.jQueryInclude.getScriptFile("Reporting/" & [Enum].GetName(tableStyle.GetType(), tableStyle) & ".css")
 		End If
 		jQueryLibrary.jQueryInclude.addScriptFile(Me.Page, "Reporting/jquery.floatThead.min.js")
+		jQueryLibrary.jQueryInclude.addScriptFile(Me.Page, "Reporting/jquery.tablesorter.min.js")
 		myScripts &= " <script type=""text/javascript""> var tbl_" & ClientID & "; $(function(){ $('.floatThead-container').remove(); "
+		If SortingEnabled Then
+			myScripts &= " $('#" & Me.ClientID & "').tablesorter(); "
+		End If
 		If floatHead Then
 			myScripts &= "tbl_" & ClientID & "="
 			If floatHeadScrollingTop = 0 Then
