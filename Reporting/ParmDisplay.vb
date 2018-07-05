@@ -135,10 +135,12 @@ Public Class ParmDisplay
     Public Function parentSavedParms() As Dictionary(Of String, dsReports.DTIGraphParmsRow)
         Dim dv As New DataView(parentGraph.parentReport.graphParmsDT, "graph_id = " & parentGraph.GraphRowId, "", DataViewRowState.CurrentRows)
         Dim ht As New Dictionary(Of String, dsReports.DTIGraphParmsRow)
-        For Each rv As DataRowView In dv
-            ht.Add(rv("Name").ToString.ToLower, rv.Row)
-        Next
-        Return ht
+		For Each rv As DataRowView In dv
+			If Not ht.ContainsKey(rv("Name").ToString.ToLower) Then
+				ht.Add(rv("Name").ToString.ToLower, rv.Row)
+			End If
+		Next
+		Return ht
     End Function
 
     Private Sub submitClicked()

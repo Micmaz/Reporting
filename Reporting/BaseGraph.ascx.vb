@@ -43,21 +43,25 @@ Partial Public Class BaseGraph
                 Try
                     Dim regex1 As Regex = New Regex("\x40\w+", RegexOptions.IgnoreCase Or RegexOptions.CultureInvariant Or RegexOptions.IgnorePatternWhitespace Or RegexOptions.Compiled)
                     Dim i As Integer = 0
-                    Dim parms As New Generic.List(Of Object)
-                    For Each singleMatch As Match In regex1.Matches(graph.SQLStmt)
-                        Dim key As String = singleMatch.ToString.ToLower.Substring(1)
-                        If graph.clickedvals.ContainsKey(key) Then
-                            parms.Add(graph.clickedvals(key))
-                        Else
-                            parms.Add(DBNull.Value)
-                        End If
-                    Next
-                    'If Session("ReportDataConnection") Is Nothing Then
-                    'sqlHelper.SafeFillTable(graph.SQLStmt, _dt, parms.ToArray)
-                    'Else
-                    DataBase.createHelper(ReportDataConnection).SafeFillTable(graph.SQLStmt, _dt, parms.ToArray)
-                    'End If
-                    If graph.ExportExcel Then
+					Dim parms As New Generic.List(Of Object)
+					Dim parmNames As New Generic.List(Of Object)
+					For Each singleMatch As Match In regex1.Matches(graph.SQLStmt)
+						Dim key As String = singleMatch.ToString.ToLower.Substring(1)
+						If Not parmNames.Contains(key) Then
+							parmNames.Add(key)
+							If graph.clickedvals.ContainsKey(key) Then
+								parms.Add(graph.clickedvals(key))
+							Else
+								parms.Add(DBNull.Value)
+							End If
+						End If
+					Next
+					'If Session("ReportDataConnection") Is Nothing Then
+					'sqlHelper.SafeFillTable(graph.SQLStmt, _dt, parms.ToArray)
+					'Else
+					DataBase.createHelper(ReportDataConnection).SafeFillTable(graph.SQLStmt, _dt, parms.ToArray)
+					'End If
+					If graph.ExportExcel Then
                         excellHash(graph.GraphID) = _dt
                     End If
                 Catch ex As Exception
