@@ -255,8 +255,8 @@ Public Class Report
             If mygraphsDT Is Nothing Then
                 Dim dt As New DTIGraphsDataTable
                 Try
-                    sqlhelper.SafeFillTable("select * from DTIGraphs where report_id in (select id from DTIReports where name = @name) order by [Order]", CType(dt, DataTable), New Object() {ReportName})
-                Catch ex As Exception
+					sqlhelper.SafeFillTable("select g.*,gt.Control_Name,gt.Name as typeName from DTIGraphs g left outer join DTIGraphTypes gt on g.Graph_Type=gt.id where report_id in (select id from DTIReports where name = @name) order by [Order]", CType(dt, DataTable), New Object() {ReportName})
+				Catch ex As Exception
                     If ex.Message.Contains("Invalid object name") Then
                         Report.loadDSToDatabase(sqlhelper)
                     Else : Throw New Exception(ex.Message)
@@ -321,34 +321,34 @@ Public Class Report
         End Get
     End Property
 
-    Public ReadOnly Property graphTypesDT() As DTIGraphTypesDataTable
-        Get
-            If session("AllGraphTypes") Is Nothing Then
-                Dim dt As New DTIGraphTypesDataTable
-                Try
-                    sqlhelper.FillDataTable("select * from DTIGraphTypes", CType(dt, DataTable))
-                Catch ex As Exception
-                    If ex.Message.Contains("Invalid object name") Then
-                        Report.loadDSToDatabase(sqlhelper)
-                    Else : Throw New Exception(ex.Message)
-                    End If
-                End Try
-                session("AllGraphTypes") = dt
-            End If
-            Return CType(session("AllGraphTypes"), DTIGraphTypesDataTable)
-        End Get
-    End Property
+	'Public ReadOnly Property graphTypesDT() As DTIGraphTypesDataTable
+	'    Get
+	'        If session("AllGraphTypes") Is Nothing Then
+	'            Dim dt As New DTIGraphTypesDataTable
+	'            Try
+	'                sqlhelper.FillDataTable("select * from DTIGraphTypes", CType(dt, DataTable))
+	'            Catch ex As Exception
+	'                If ex.Message.Contains("Invalid object name") Then
+	'                    Report.loadDSToDatabase(sqlhelper)
+	'                Else : Throw New Exception(ex.Message)
+	'                End If
+	'            End Try
+	'            session("AllGraphTypes") = dt
+	'        End If
+	'        Return CType(session("AllGraphTypes"), DTIGraphTypesDataTable)
+	'    End Get
+	'End Property
 
-    'Public Property isadmin() As Boolean
-    '    Get
-    '        Return isadminShared
-    '    End Get
-    '    Set(ByVal value As Boolean)
-    '        session(PropertiesEditorvb.DynamicPropertyEditor.PropEditorOnDefaultKey) = value
-    '    End Set
-    'End Property
+	'Public Property isadmin() As Boolean
+	'    Get
+	'        Return isadminShared
+	'    End Get
+	'    Set(ByVal value As Boolean)
+	'        session(PropertiesEditorvb.DynamicPropertyEditor.PropEditorOnDefaultKey) = value
+	'    End Set
+	'End Property
 
-    Private _isadmin As Boolean = False
+	Private _isadmin As Boolean = False
     Public Property isadmin() As Boolean
         Get
             If Report.isGlobalAdmin Then Return True

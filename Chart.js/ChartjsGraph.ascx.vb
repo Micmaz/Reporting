@@ -10,7 +10,7 @@ Partial Public Class ChartjsGraph
 		Me.dynamicObject = Chart1
 		Chart1.chartTitle = Me.graph.GraphName
 		If parentReport IsNot Nothing Then
-			If parentReport.graphTypesDT.Count > graph.myIndex Then Me.Chart1.drillable = True
+			If parentReport.graphsDT.Count > graph.myIndex Then Me.Chart1.drillable = True
 		End If
 		Me.Chart1.drillable = Me.graph.drillable
 		MyBase.bindToDisplay()

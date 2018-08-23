@@ -562,9 +562,8 @@ Public Class PropertiesGrid
         ' filter out anything that is write only
         ' skip read onlys except for read only objects because we can go into the objects for more properties
         If xBrowsableAttributeMode = BrowsableAttributeMode.OnlyListed Then
-            If Not _propertyStringList.Contains(pPropertyInfo.Name.ToLower) Then Return True
-            Return False
-        End If
+			Return Not _propertyStringList.Contains(pPropertyInfo.Name.ToLower)
+		End If
         If Not pPropertyInfo.CanRead AndAlso pPropertyInfo.CanWrite Then
             ' write only
             Return True
@@ -678,7 +677,7 @@ Public Class PropertiesGrid
     Protected Overridable Function GetPropertyInfoList(ByVal pClassType As Type) As SortedList
         Dim vSortedProperties As SortedList = Nothing
         Dim vInCacheB As Boolean = False
-        Dim vNameInCache As String = "PE." & pClassType.Name
+		Dim vNameInCache As String = "PE." & pClassType.ToString()
 		Dim vBindingFlags As BindingFlags = BindingFlags.[Public] Or BindingFlags.Instance Or BindingFlags.DeclaredOnly
 
 		'If you declare a property list, show any properties from parent classes.
@@ -689,8 +688,8 @@ Public Class PropertiesGrid
 		' We'll use a different cache too because the list is different.
 		If xShowNonPublicB Then
             vBindingFlags = BindingFlags.[Public] Or BindingFlags.Instance Or BindingFlags.NonPublic
-            vNameInCache = "PE.ALL." & pClassType.Name
-        End If
+			vNameInCache = "PE.ALL." & pClassType.ToString()
+		End If
 
         ' first check for this class in the application Cache
         If (Context IsNot Nothing) AndAlso (Context.Cache(vNameInCache) IsNot Nothing) Then

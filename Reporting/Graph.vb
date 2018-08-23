@@ -77,7 +77,7 @@ Public Class Graph
         End Get
     End Property
 
-    Private _type As GraphType
+	Private _type As GraphType
 	<Bindable(True),
 	Category("Graph Data"),
 	DefaultValue(GraphType.ChartJS),
@@ -144,6 +144,13 @@ Public Class Graph
 			Next
 		End Set
 	End Property
+
+	Public ReadOnly Property GraphRow As dsReports.DTIGraphsRow
+		Get
+			Return parentReport.graphsDT.FindById(GraphRowId)
+		End Get
+	End Property
+
 
 	Private _order As Integer
     <Bindable(True), _
@@ -348,7 +355,12 @@ Public Class Graph
 
 			'If Not parms.hasparms Then
 			Try
-				baseGraph = CType(Me.Page.LoadControl(getGraphIDPath(GraphTypeId)), BaseGraph)
+				If GraphRow IsNot Nothing AndAlso GraphRow.Table.Columns.Contains("Control_Name") Then
+					baseGraph = CType(Me.Page.LoadControl(correctGraphPath(GraphRow("Control_Name").ToString())), BaseGraph)
+				Else
+					baseGraph = CType(Me.Page.LoadControl(getGraphIDPath(GraphTypeId)), BaseGraph)
+				End If
+
 			Catch ex As Exception
 				handelError(ex)
 				baseGraph = CType(Me.Page.LoadControl("~/res/Reporting/BaseGraph.ascx"), BaseGraph)
