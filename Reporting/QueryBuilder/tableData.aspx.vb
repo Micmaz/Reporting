@@ -249,21 +249,21 @@ Public Class tableData
 			Next
 			Return outTbl
 		ElseIf helpername.StartsWith("sqlhelper") Then
-            sql = "				SELECT " & vbCrLf & _
-"				FK_Table = FK.TABLE_NAME, " & vbCrLf & _
-"                FK_Column = CU.COLUMN_NAME, " & vbCrLf & _
-"                PK_Table = PK.TABLE_NAME, " & vbCrLf & _
-"                PK_Column = CUPK.COLUMN_NAME, " & vbCrLf & _
-"                Constraint_Name = C.CONSTRAINT_NAME,  " & vbCrLf & _
-"                Constraint_schema = c.Constraint_schema, " & vbCrLf & _
-"				Ordinal_position = CU.Ordinal_position " & vbCrLf & _
-"				FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS c  " & vbCrLf & _
-"				INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS PK ON C.UNIQUE_CONSTRAINT_NAME = PK.CONSTRAINT_NAME " & vbCrLf & _
-"				INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS FK ON C.CONSTRAINT_NAME = FK.CONSTRAINT_NAME " & vbCrLf & _
-"				INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE CU ON C.CONSTRAINT_NAME = CU.CONSTRAINT_NAME " & vbCrLf & _
-"				INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE CUPK ON PK.CONSTRAINT_NAME = CUPK.CONSTRAINT_NAME AND CUPK.Ordinal_position = CU.Ordinal_position " & vbCrLf & _
-"				order by c.CONSTRAINT_NAME,FK_Table, Ordinal_position " & vbCrLf
-            If otherDatabaseName IsNot Nothing Then sql = "use [" & otherDatabaseName & "] " & sql
+			sql = "				SELECT " & vbCrLf &
+"				FK_Table = FK.TABLE_NAME, " & vbCrLf &
+"                FK_Column = CU.COLUMN_NAME, " & vbCrLf &
+"                PK_Table = PK.TABLE_NAME, " & vbCrLf &
+"                PK_Column = CUPK.COLUMN_NAME, " & vbCrLf &
+"                Constraint_Name = C.CONSTRAINT_NAME,  " & vbCrLf &
+"                Constraint_schema = C.Constraint_schema, " & vbCrLf &
+"				Ordinal_position = CU.Ordinal_position " & vbCrLf &
+"				FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS C  " & vbCrLf &
+"				INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS PK ON C.UNIQUE_CONSTRAINT_NAME = PK.CONSTRAINT_NAME " & vbCrLf &
+"				INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS FK ON C.CONSTRAINT_NAME = FK.CONSTRAINT_NAME " & vbCrLf &
+"				INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE CU ON C.CONSTRAINT_NAME = CU.CONSTRAINT_NAME " & vbCrLf &
+"				INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE CUPK ON PK.CONSTRAINT_NAME = CUPK.CONSTRAINT_NAME AND CUPK.Ordinal_position = CU.Ordinal_position " & vbCrLf &
+"				order by C.CONSTRAINT_NAME,FK_Table, Ordinal_position " & vbCrLf
+			If otherDatabaseName IsNot Nothing Then sql = "use [" & otherDatabaseName & "] " & sql
             Dim dt As DataTable = helper.FillDataTable(sql)
             If otherDatabaseName IsNot Nothing Then
                 For Each r As DataRow In dt.Rows

@@ -6,7 +6,7 @@ Partial Public Class GridGraph
     Public Overrides Sub bindToDisplay()
         '_dt = New DataTable()
         propgrid.manuallySetProperties = True
-        Me.dynamicObject = DTIGrid1
+
         DTIGrid1.DataSource = dt
         DTIGrid1.EnablePaging = False
         DTIGrid1.PageSize = 1000
@@ -24,6 +24,7 @@ Partial Public Class GridGraph
         'DTIGrid1.ReadOnlyMode = True
         DTIGrid1.EnableSorting = True
         DTIGrid1.Title = ""
+        Me.dynamicObject = DTIGrid1
         propgrid.setProperties()
         DTIGrid1.AutoPostBack = Me.graph.drillable
 

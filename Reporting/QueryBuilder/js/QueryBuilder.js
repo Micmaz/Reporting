@@ -284,8 +284,10 @@ function createTree(htmlString, target, plugins, preventAdds) {
 
 function getColumnString(type, name, id, select) {
     if (!select)
-        select = name;
-    return "<li data-jstree='{\"type\":\"" + type + "\",\"select\":\"" + select + "\", \"name\":\"" + name + "\"}' id='" + id + "'>" + name + " (" + type + ")</li>"
+		select = name;
+	if (select.lastIndexOf(".") > 0)
+		select = select.substring(0, select.lastIndexOf(".")) + ".[" + select.substring(select.lastIndexOf(".") + 1) + "]";
+	return "<li data-jstree='{\"type\":\"" + type + "\",\"select\":\"" + select + "\", \"name\":\"" + stripChars(name) + "\"}' id='" + id + "'>" + name + " (" + type + ")</li>"
 }
 
 
@@ -305,7 +307,7 @@ function createNode(tableName, clientX, clientY, data) {
     createInstace()
     //$(data.element).clone().appendTo('.drop');
     var div = $("<div class='tableNode w'>" + tableName + "</div>")
-    var tableKey = getNextSelector(tableName.substring(0,2));
+	var tableKey = getNextSelector(stripChars(tableName).substring(0,3));
     createTreeString(tableName, div, null, tableKey);
     div.appendTo('.drop');
     div.attr("tableName", tableName)
@@ -460,20 +462,27 @@ var SQLKEYWORDS = [ "LI", "ADD", "EXTERNAL", "PROCEDURE", "ALL", "FETCH", "PUBLI
 function isKeyword(key) {
     return $.inArray(key.toUpperCase(), SQLKEYWORDS) > -1;
 }
+
+function stripChars(selector) {
+	if (isKeyword(selector)) selector += "0";
+	selector = selector.toLowerCase();
+	selector = replaceAll(selector, ".", "_");
+	selector = replaceAll(selector, "[", "");
+	selector = replaceAll(selector, "]", "");
+	selector = replaceAll(selector, "/", "");
+	selector = replaceAll(selector, "\\", "");
+	return selector;
+}
+
 function getNextSelector(selector) {
-    var i = 0;
-    if (isKeyword(selector)) selector += "0";
-    selector = selector.toLowerCase();
-    selector = replaceAll(selector,".","_");
-    selector = replaceAll(selector,"[","");
-    selector = replaceAll(selector,"]","");
-    var ret = selector;
-    if(selector)
-    while ($("#" + ret).length) {
-        ret = selector + "" + i;
-        i++;
-    }
-    return ret;
+	var i = 0;
+	var ret = stripChars(selector);
+	if (selector)
+		while ($("#" + ret).length) {
+			ret = selector + "" + i;
+			i++;
+		}
+	return ret;
 }
 
 function replaceAll(str, find, replace) {

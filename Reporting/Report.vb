@@ -181,11 +181,11 @@ Public Class Report
     End Property
 
     Private _scrollable As Boolean
-    <Bindable(True), _
-    Category("Report Data"), _
-    DefaultValue(False), _
-    Description("The enabling makes the div keep in its bounds by scrolling."), _
-    Localizable(True)> _
+    <Bindable(True),
+    Category("Report Data"),
+    DefaultValue(False),
+    Description("Enabling makes the div keep in its bounds by scrolling."),
+    Localizable(True)>
     Public Property Scrollable() As Boolean
         Get
             Return _scrollable
@@ -539,11 +539,20 @@ Public Class Report
 
     End Sub
 
+    Public Property setParmsFromQueryString As Boolean = True
+
     Public ReadOnly Property clickedvals() As Hashtable
         Get
             Dim idstr As String = "DTIReportClickedVals_" & Me.ReportName
             If Me.session(idstr) Is Nothing Then
-                Me.session(idstr) = New Hashtable
+                Dim ht As New Hashtable
+
+                If setParmsFromQueryString Then
+                    For Each key As String In HttpContext.Current.Request.QueryString.AllKeys
+                        ht.Add(key, HttpContext.Current.Request.QueryString(key))
+                    Next
+                End If
+                Me.session(idstr) = ht
             End If
             Return Me.session(idstr)
         End Get
