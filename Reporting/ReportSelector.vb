@@ -177,9 +177,9 @@ Public Class ReportSelector
             shownreport.ReportSettingsConnection = Me.ReportSettingsConnection
             shownreport.setParmsFromQueryString = setParmsFromQueryString
             lbRevert.Text = "<i class='fa fa-times-circle'></i> Clear Report "
-            linkdiv.Controls.Add(New LiteralControl(" "))
+            linkdiv.Controls.Add(New LiteralControl(" &nbsp;&nbsp;"))
             linkdiv.Controls.Add(lbRevert)
-
+            linkdiv.Controls.Add(New LiteralControl(" &nbsp;&nbsp;"))
             If Page.Request.Params("__EVENTTARGET") = lbRevert.UniqueID Then
 				If Not shownreport Is Nothing Then shownreport.cleargraphs()
 				clearReport(selectedReport)

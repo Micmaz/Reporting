@@ -66,6 +66,7 @@
     <Content Include="Global.asax" />
     <Content Include="jquery.floatThead.min.js" />
     <Content Include="ReportSelector.aspx" />
+    <Content Include="tbltest.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -95,6 +96,13 @@
     </Compile>
     <Compile Include="ReportSelector.aspx.designer.cs">
       <DependentUpon>ReportSelector.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="tbltest.aspx.cs">
+      <DependentUpon>tbltest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="tbltest.aspx.designer.cs">
+      <DependentUpon>tbltest.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

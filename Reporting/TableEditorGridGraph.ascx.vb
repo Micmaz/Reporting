@@ -9,7 +9,7 @@ Partial Public Class TableEditorGridGraph
     Public Overrides Sub bindToDisplay()
         If DTIGrid1 Is Nothing Then
             DTIGrid1 = New DTIDataGrid
-            PlaceHolder1.Controls.Add(DTIGrid1)
+
         End If
         propgrid.manuallySetProperties = True
         DTIGrid1.gridConnection = ReportDataConnection
@@ -28,11 +28,11 @@ Partial Public Class TableEditorGridGraph
 
         DTIGrid1.Title = ""
 
-        DTIGrid1.AutoPostBack = Me.graph.drillable
+        'DTIGrid1.AutoPostBack = Me.graph.drillable
         Me.dynamicObject = DTIGrid1
         propgrid.setProperties()
+        PlaceHolder1.Controls.Add(DTIGrid1)
 
-        DTIGrid1.databind()
         MyBase.bindToDisplay()
     End Sub
 
@@ -60,6 +60,10 @@ Partial Public Class TableEditorGridGraph
     End Sub
 
     Private Sub DTIGrid1_gridBindingError(ex As Exception) Handles DTIGrid1.gridBindingError
+
+    End Sub
+
+    Private Sub TableEditorGridGraph_Load(sender As Object, e As EventArgs) Handles Me.Load
 
     End Sub
 End Class
