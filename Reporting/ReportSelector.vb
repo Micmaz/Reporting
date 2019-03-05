@@ -201,6 +201,9 @@ Public Class ReportSelector
 
     Public Function getReportLink() As String
         Dim url As String = HttpContext.Current.Request.Url.AbsolutePath & "?initialreport=" & HttpUtility.UrlEncode(selectedReport)
+        If shownreport IsNot Nothing Then
+            url &= "&LastClickedIndex=" & shownreport.lastClickIndex
+        End If
         For Each key As String In Me.shownreport.clickedvals.Keys
             If key.ToLower() = "initialreport" OrElse key.ToLower() = "selectedreport" Then
             Else

@@ -296,6 +296,7 @@ Public Class Report
         session.Remove("DTIReportGraphs_" & ReportName)
         session.Remove("DTIReportGraphParms_" & ReportName)
         session.Remove("DTIReportClickedVals_" & ReportName)
+        lastClickIndex = 0
     End Sub
 
     Private _GraphsList As New List(Of Graph)
@@ -421,12 +422,19 @@ Public Class Report
 
     Public  Property lastClickIndex() As Integer
         Get
-			If Me.Page.Cache(Me.ID & "LastClickedIdx") Is Nothing Then Return 0
-			Return Me.Page.Cache(Me.ID & "LastClickedIdx")
-		End Get
+
+            If session(Me.ID & "LastClickedIdx") Is Nothing Then
+                If System.Web.HttpContext.Current.Request.QueryString("LastClickedIndex") <> Nothing Then
+                    session(Me.ID & "LastClickedIdx") = System.Web.HttpContext.Current.Request.QueryString("LastClickedIndex")
+                Else
+                    Return 0
+                End If
+            End If
+            Return session(Me.ID & "LastClickedIdx")
+        End Get
         Set(ByVal value As Integer)
-			Me.Page.Cache(Me.ID & "LastClickedIdx") = value
-		End Set
+            session(Me.ID & "LastClickedIdx") = value
+        End Set
     End Property
 
     Public Sub buildData()
@@ -539,20 +547,25 @@ Public Class Report
 
     End Sub
 
-    Public Property setParmsFromQueryString As Boolean = True
+    Public Property setParmsFromQueryString As Boolean = False
 
+    'Boolean latch to only parse query string once.
+    Private queryValsRun As Boolean = False
     Public ReadOnly Property clickedvals() As Hashtable
         Get
             Dim idstr As String = "DTIReportClickedVals_" & Me.ReportName
             If Me.session(idstr) Is Nothing Then
                 Dim ht As New Hashtable
 
-                If setParmsFromQueryString Then
-                    For Each key As String In HttpContext.Current.Request.QueryString.AllKeys
-                        ht.Add(key, HttpContext.Current.Request.QueryString(key))
-                    Next
-                End If
+
                 Me.session(idstr) = ht
+            End If
+            If setParmsFromQueryString AndAlso Not queryValsRun Then
+                queryValsRun = True
+                Dim ht As Hashtable = Me.session(idstr)
+                For Each key As String In HttpContext.Current.Request.QueryString.AllKeys
+                    ht(key) = HttpContext.Current.Request.QueryString(key)
+                Next
             End If
             Return Me.session(idstr)
         End Get

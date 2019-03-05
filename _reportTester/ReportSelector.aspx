@@ -11,7 +11,13 @@
 <body>
     <form id="form1" runat="server">
         <div>
-			
+			<style type="text/css">
+       .DTIGraph {
+    float: left;
+    margin: 8px;
+}
+
+			</style>
         	<asp:Button ID="btnToggleEditing" runat="server" OnClick="btnToggleEditing_Click" Text="Toggle report editing" />
 			<br />
 
