@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using System.Web.Routing;
 
 namespace _reportTester
 {
@@ -12,7 +13,8 @@ namespace _reportTester
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
-			DTIControls.Share.initializePathProvider();
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            DTIControls.Share.initializePathProvider();
 			
 		}
 

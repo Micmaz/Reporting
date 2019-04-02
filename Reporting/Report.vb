@@ -49,21 +49,23 @@ Public Class Report
 	Public Property ReportDataConnection() As System.Data.Common.DbConnection
 		Get
 			If _ReportDataConnection IsNot Nothing Then Return _ReportDataConnection
-			If session("ReportDataConnection") IsNot Nothing Then Return session("ReportDataConnection")
-			Return BaseClasses.DataBase.getHelper.defaultConnection
+            If session("ReportDataConnection") IsNot Nothing Then Return session("ReportDataConnection")
+            If Sharedsession("ReportDataConnection") IsNot Nothing Then Return Sharedsession("ReportDataConnection")
+            Return BaseClasses.DataBase.getHelper.defaultConnection
 		End Get
-		Set(ByVal value As System.Data.Common.DbConnection)
-			_ReportDataConnection = value
-			'session("ReportDataConnection") = value
-		End Set
-	End Property
+        Set(ByVal value As System.Data.Common.DbConnection)
+            _ReportDataConnection = value
+            'session("ReportDataConnection") = value
+        End Set
+    End Property
 
 	Private _ReportSettingsConnection As System.Data.Common.DbConnection
 	Public Property ReportSettingsConnection() As System.Data.Common.DbConnection
 		Get
 			If _ReportSettingsConnection IsNot Nothing Then Return _ReportSettingsConnection
-			If session("ReportSettingsConnection") IsNot Nothing Then Return session("ReportSettingsConnection")
-			Return BaseClasses.DataBase.defaultConnectionSessionWide
+            If session("ReportSettingsConnection") IsNot Nothing Then Return session("ReportSettingsConnection")
+            If Sharedsession("ReportSettingsConnection") IsNot Nothing Then Return Sharedsession("ReportSettingsConnection")
+            Return BaseClasses.DataBase.defaultConnectionSessionWide
 		End Get
 		Set(ByVal value As System.Data.Common.DbConnection)
 			'If ReportDataConnection.ToString = sqlhelper.defaultConnection.ToString Then
@@ -310,9 +312,11 @@ Public Class Report
         End Get
     End Property
 
+    Private Shared _sharedsession As System.Web.SessionState.HttpSessionState
     Private Shared ReadOnly Property Sharedsession() As System.Web.SessionState.HttpSessionState
         Get
-            Return System.Web.HttpContext.Current.Session
+            If _sharedsession Is Nothing Then _sharedsession = BaseClasses.DataBase.createSession(True)
+            Return _sharedsession
         End Get
     End Property
 

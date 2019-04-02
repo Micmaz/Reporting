@@ -98,9 +98,11 @@ Public Class Chart
 	Public Property gradientStart As Double = 1.5
 	Public Property gradientEnd As Double = 0.5
 	Public Property gradientStartShade As Double = 0
-	Public Property gradientEndShade As Double = 0.8
+    Public Property gradientEndShade As Double = 0.8
+    Public Property chartBorderColor As Color = Color.Black
+    Public Property chartBorderWidth As Integer = 0
 
-	Public ReadOnly Property chartTypeName As String
+    Public ReadOnly Property chartTypeName As String
 		Get
 			Return [Enum].GetName(GetType(chartTypeEnum), chartType)
 		End Get
@@ -264,20 +266,20 @@ Public Class Chart
 			Next
 			valueColsStr = colList
 		End If
-		'If displayedTextCol IsNot Nothing AndAlso displayedTextCol.Length < valueCols.Length Then
-		'	Dim cols As String() = valueCols.Clone
-		'	Dim i As Integer = 0
-		'	For Each displayName As String In displayedTextCol
-		'		If Not displayName.Trim = "" Then _
-		'			cols(i) = displayName
-		'		i += 1
-		'	Next
-		'	displayedTextCol = cols
-		'End If
-		'If displayedTextCol Is Nothing OrElse displayedTextCol.Length < valueCols.Length Then
-		'		displayedTextCol = valueCols
-		'	End If
-		Dim out As String = "<script>
+        'If displayedTextCol IsNot Nothing AndAlso displayedTextCol.Length < valueCols.Length Then
+        '	Dim cols As String() = valueCols.Clone
+        '	Dim i As Integer = 0
+        '	For Each displayName As String In displayedTextCol
+        '		If Not displayName.Trim = "" Then _
+        '			cols(i) = displayName
+        '		i += 1
+        '	Next
+        '	displayedTextCol = cols
+        'End If
+        'If displayedTextCol Is Nothing OrElse displayedTextCol.Length < valueCols.Length Then
+        '		displayedTextCol = valueCols
+        '	End If
+        Dim out As String = "<script>
 $(function(){
 " &
 getGlobalString(defaultFontColor, "defaultFontColor") &
@@ -285,35 +287,40 @@ getGlobalString(defaultFontFamily, "defaultFontFamily") &
 getGlobalString(defaultFontSize, "defaultFontSize") &
 getGlobalString(defaultFontStyle, "defaultFontStyle") &
 "
-Chart.cornerRadius = " & cornerRadius & ";
-Chart.dropShadow = " & getBoolString(dropShadow) & ";
-Chart.shadowColor = '" & getColorString(dropShadowColor, "#000000") & "';
-Chart.shadowBlur = " & dropShadowBlur & ";
-Chart.shadowOffsetX = " & dropShadowOffsetX & ";
-Chart.shadowOffsetY = " & dropShadowOffsetY & ";
-
-Chart.gradient = " & getBoolString(gradient) & ";
-Chart.gradientStart = " & gradientStart & ";
-Chart.gradientEnd = " & gradientEnd & ";
-Chart.gradientStartShade = " & gradientStartShade & ";
-Chart.gradientEndShade = " & gradientEndShade & ";
-
 var ctx = document.getElementById('" & ClientID & "cnv').getContext('2d');
+
+ctx.cornerRadius = " & cornerRadius & ";"
+
+        If dropShadow Then
+            out &= "
+ctx._dropShadow = " & getBoolString(dropShadow) & ";
+ctx._shadowColor = '" & getColorString(dropShadowColor, "#000000") & "';
+ctx._shadowBlur = " & dropShadowBlur & ";
+ctx._shadowOffsetX = " & dropShadowOffsetX & ";
+ctx._shadowOffsetY = " & dropShadowOffsetY & ";"
+        End If
+        out &= "
+ctx.gradient = " & getBoolString(gradient) & ";
+ctx.gradientStart = " & gradientStart & ";
+ctx.gradientEnd = " & gradientEnd & ";
+ctx.gradientStartShade = " & gradientStartShade & ";
+ctx.gradientEndShade = " & gradientEndShade & ";
+
 var " & ID & " = new Chart(ctx, {
     type: '" & chartTypeName & "',
     data: {
         labels: " & getValueArry(labelCol) & ",
 		datasets: " & getDataSets()
 
-		'If numberOfSeries > 1 Then
-		'		out &= getCatagoriesString(labelCol)
-		'		For i As Integer = 0 To valueCols.Length - 1
-		'			out &= series(i).getMultiSerieseString(valueCols(i), displayedTextCol(i))
-		'		Next
-		'	Else
-		'		out &= series(0).getSingleSerieseString(labelCol, valueCols(0))
-		'	End If
-		out &= "
+        'If numberOfSeries > 1 Then
+        '		out &= getCatagoriesString(labelCol)
+        '		For i As Integer = 0 To valueCols.Length - 1
+        '			out &= series(i).getMultiSerieseString(valueCols(i), displayedTextCol(i))
+        '		Next
+        '	Else
+        '		out &= series(0).getSingleSerieseString(labelCol, valueCols(0))
+        '	End If
+        out &= "
 	},
 	options: {
 		maintainAspectRatio: false"
@@ -359,13 +366,19 @@ var " & ID & " = new Chart(ctx, {
 			defColorStr = getJSValue(colorSchemeBaseColor).Replace("#", "")
 		End If
 		defColorStr = "," & defColorStr
-		out &= "
+        out &= "
  		    label: " & getJSValue(label, True) & ",
 		    data: " & getValueArry(valueCols(i)) & "
       		,backgroundColor: getColors(" & dt.Rows.Count & defColorStr & ", '" & colorScheme.ToString().ToLower() & "', '" & colorSchemeVariation.ToString().ToLower() & "'," & colorSchemedistance & "," & getBoolString(Not colorSchemeRandomizeColorOrder) & ")
-			,fill: " & getJSValue(fillLineChart) & "
+			,fill: " & getJSValue(fillLineChart)
+        If Not chartBorderColor = Color.Empty AndAlso chartBorderWidth > 0 Then
+            out &= "
+        ,borderWidth: " & getJSValue(chartBorderWidth) & "
+        ,borderColor: '" & getColorString(chartBorderColor, "#000000") & "'"
+        End If
+        out &= "
 "
-		Return out & "      	}"
+        Return out & "      	}"
 	End Function
 
 

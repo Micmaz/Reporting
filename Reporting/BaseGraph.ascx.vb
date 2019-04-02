@@ -142,7 +142,7 @@ Partial Public Class BaseGraph
                 propgrid.AdminOn = True
             End If
             If propgrid.AdminOn Then
-                propgrid.Height = New Unit(400)
+                propgrid.Height = New Unit(600)
                 propgrid.Width = New Unit(600)
                 propgrid.propeditor.xShowNonPublicB = False
                 propgrid.propeditor.xViewOnlyB = False

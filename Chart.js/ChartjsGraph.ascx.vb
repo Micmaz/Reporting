@@ -22,8 +22,8 @@ Partial Public Class ChartjsGraph
 
 	Public Overrides ReadOnly Property propertyList() As String
 		Get
-			Return "chartTitle,Height,Width,addtionalChartProperties,addtionalItemLevelProperties,beginAtZero,chartTitle,chartType,colorScheme,colorSchemeBaseColor,colorSchemedistance,colorSchemeRandomizeColorOrder,colorSchemeVariation,cornerRadius,datsetLabelsStr,defaultFontColor,defaultFontFamily,defaultFontSize,defaultFontStyle,dropShadow,dropShadowBlur,dropShadowColor,dropShadowOffsetX,dropShadowOffsetY,fillLineChart,gradient,gradientEnd,gradientEndShade,gradientStart,gradientStartShade,labelCol,numberOfSeries,valueColsStr"
-		End Get
+            Return "chartBorderColor,chartBorderWidth,chartTitle,Height,Width,addtionalChartProperties,addtionalItemLevelProperties,beginAtZero,chartTitle,chartType,colorScheme,colorSchemeBaseColor,colorSchemedistance,colorSchemeRandomizeColorOrder,colorSchemeVariation,cornerRadius,datsetLabelsStr,defaultFontColor,defaultFontFamily,defaultFontSize,defaultFontStyle,dropShadow,dropShadowBlur,dropShadowColor,dropShadowOffsetX,dropShadowOffsetY,fillLineChart,gradient,gradientEnd,gradientEndShade,gradientStart,gradientStartShade,labelCol,numberOfSeries,valueColsStr"
+        End Get
 	End Property
 
 	Private Sub DynamicPropertyEditor1_objectPropertiesSet(ByVal objectInstance As Object) Handles propgrid.objectPropertiesSet
