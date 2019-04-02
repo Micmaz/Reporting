@@ -2,8 +2,8 @@ Imports System.Web.UI.WebControls
 Imports System.Web.UI
 Imports BaseClasses
 
-<ToolboxData("<{0}:DynamicPropertyEditor runat=server></{0}:DynamicPropertyEditor>")> _
-<ComponentModel.Designer(GetType(PropertiesEditorDesigner))> _
+<ToolboxData("<{0}:DynamicPropertyEditor runat=server></{0}:DynamicPropertyEditor>")>
+<ComponentModel.Designer(GetType(PropertiesEditorDesigner))>
 Public Class DynamicPropertyEditor
     Inherits DTIServerControls.DTIServerControl
     Private pnl As Panel
@@ -12,7 +12,7 @@ Public Class DynamicPropertyEditor
     Private litSavedChangeList As LiteralControl
     Private litChangeList As LiteralControl
     Private script As LiteralControl
-    Public WithEvents btnupdate As new Button
+    Public WithEvents btnupdate As New Button
     Public WithEvents btnCancel As Button
     Public WithEvents btnrevert As Button
     Public WithEvents btnsave As Button
@@ -61,10 +61,7 @@ Public Class DynamicPropertyEditor
 
     Public ReadOnly Property propeditor() As PropertiesGrid
         Get
-            If _propeditor Is Nothing Then
-                _propeditor = New PropertiesGrid
-                _propeditor.Page = Page
-            End If
+            If _propeditor Is Nothing Then _propeditor = New PropertiesGrid
             Return _propeditor
         End Get
     End Property
@@ -175,8 +172,8 @@ Public Class DynamicPropertyEditor
         End Set
     End Property
 
-        Public Property secondaryKey As String = "DefaultSettings"
-        
+    Public Property secondaryKey As String = "DefaultSettings"
+
 #End Region
 
     Protected Overrides Sub Render(ByVal writer As HtmlTextWriter)
@@ -185,8 +182,8 @@ Public Class DynamicPropertyEditor
             writer.Write("[Dynamic Property Editor]")
         End If
         Try
-        MyBase.Render(writer)
-        Catch e as Exception
+            MyBase.Render(writer)
+        Catch e As Exception
         End Try
     End Sub
 
@@ -209,8 +206,9 @@ Public Class DynamicPropertyEditor
         If Not AdminOn Then
             Comparator.setProperties(changes, startingControl, CType(System.Web.HttpContext.Current.Handler, Page).Session)
             RaiseEvent objectPropertiesSet(startingControl)
-        Else
-            If litChangeList Is Nothing Then setgrid()
+        End If
+        If AdminOn AndAlso Not pnlChanges Is Nothing Then
+            If litChangeList Is Nothing Then litChangeList = New LiteralControl
             litChangeList.Text = displayChangeList(propeditor.changes)
             'pnlChanges.Controls.Add(New LiteralControl(displayChangeList(propeditor.changes)))
             If litSavedChangeList Is Nothing Then litSavedChangeList = New LiteralControl
@@ -268,115 +266,103 @@ Public Class DynamicPropertyEditor
         End If
     End Sub
 
-    Private hasGirdSet As Boolean = False
     Private Sub setgrid()
-        If hasGirdSet Then
-            pnlChanges.ID = "propPendingChanges_" & MainID & "_" & startingControl.ID
-            pnlSavedChanges.ID = "propSavedChanges_" & MainID & "_" & startingControl.ID
-            propeditor.xInstance = startingControl
-            jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnupdate.ClientID))
-            jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnsave.ClientID))
-            jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnrevert.ClientID))
-            jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnCancel.ClientID))
+        If dlgChanges Is Nothing Then dlgChanges = New JqueryUIControls.Dialog()
+        pnl = dlgChanges
+
+        'pnl.Style("display") = "none"
+        'pnl.Style("border") = "2px solid black"
+        If Not Me.Height = Nothing Then
+            pnl.Height = Me.Height
         Else
-            hasGirdSet = True
-            If dlgChanges Is Nothing Then dlgChanges = New JqueryUIControls.Dialog()
-            pnl = dlgChanges
-
-            'pnl.Style("display") = "none"
-            'pnl.Style("border") = "2px solid black"
-            If Not Me.Height = Nothing Then
-                pnl.Height = Me.Height
-            Else
-                pnl.Height = 500
-            End If
-
-            If Not Me.Width = Nothing Then
-                pnl.Width = Me.Width
-            Else
-                pnl.Width = 600
-            End If
-
-            createButtons()
-            'pnl.Style("overflow") = "auto"
-            pnl.ID = "proppnl_" & MainID & "_" & startingControl.ID
-            'dd.Items.Add("")
-            'For Each ctrl As Control In startingControl.Controls
-            '    dd.Items.Add(New ListItem(ctrl.ID & " " & ctrl.GetType().Name, ctrl.ID))
-            'Next
-            'pnl.Controls.Add(dd)
-
-
-            btnupdate.Text = "Update"
-            btnsave.Text = "Save"
-            btnCancel.Text = "Cancel Edit"
-            btnrevert.Text = "Revert"
-
-            pnl.Controls.Add(New LiteralControl("<br/>"))
-            pnl.Controls.Add(btnupdate)
-            pnl.Controls.Add(btnsave)
-            pnl.Controls.Add(btnCancel)
-            pnl.Controls.Add(New LiteralControl("</div>"))
-            propeditor.xInstance = startingControl
-
-            Dim pnl1 As New Panel
-            'pnl1.Style("border") = "2px solid black"
-            'pnl1.Style("overflow") = "auto"
-            'If Not Me.Height = Nothing Then pnl1.Height = Me.Height
-            'If Not Me.width = Nothing Then pnl1.Width = Me.width
-            pnl1.CssClass = "propEditorTable"
-            pnl1.Controls.Add(propeditor)
-            pnl.Controls.Add(pnl1)
-
-            Me.Controls.Add(pnl)
-
-            pnlChanges = New Panel
-            pnlChanges.Style("display") = "none"
-            pnlChanges.ID = "propPendingChanges_" & MainID & "_" & startingControl.ID
-            If litChangeList Is Nothing Then litChangeList = New LiteralControl
-            pnlChanges.Controls.Add(litChangeList)
-
-            pnlSavedChanges = New Panel
-            pnlSavedChanges.Style("display") = "none"
-            pnlSavedChanges.ID = "propSavedChanges_" & MainID & "_" & startingControl.ID
-            pnlSavedChanges.Controls.Add(btnrevert)
-            pnlSavedChanges.Controls.Add(New LiteralControl("<br>"))
-            If litSavedChangeList Is Nothing Then litSavedChangeList = New LiteralControl
-            pnlSavedChanges.Controls.Add(litSavedChangeList)
-
-            pnl.Controls.AddAt(0, pnlSavedChanges)
-            pnl.Controls.AddAt(0, pnlChanges)
-            pnl.Controls.AddAt(0, New LiteralControl("<a style=""font-size: x-small;"" href=""javascript:void(0);"" onclick=""$('#" & pnlSavedChanges.ClientID & "').toggle('slow');"">Saved Changes</a> "))
-            pnl.Controls.AddAt(0, New LiteralControl("<a style=""font-size: x-small;"" href=""javascript:void(0);"" onclick=""$('#" & pnlChanges.ClientID & "').toggle('slow');"">Current Changes</a> "))
-            pnl.Controls.AddAt(0, New LiteralControl("<div class='propEditorButtons'>"))
-            'dlgChanges.Width = 600
-
-            dlgChanges.OpenerAttributes = "style='font-size: x-small;'"
-
-            dlgChanges.OpenerText = "<i class='fa fa-wrench' aria-hidden='true'></i> Edit Properties"
-            Me.Controls.AddAt(0, dlgChanges)
-            'Me.Controls.AddAt(0, New LiteralControl(dlgChanges.openerLink("Edit Properties")))
-            'Me.Controls.AddAt(0, New LiteralControl("<a style=""font-size: x-small;"" href=""#"" onclick=""toggleProperties('" & pnl.ClientID & "');"">Edit Properties</a> "))
-            'Me.Controls.Add(getScript)
-
-            'ajaxSubmitButtonSearchString('.{0}', $('#{1}'), '<!--##{0}##-->')
-
-            jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnupdate.ClientID))
-            jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnsave.ClientID))
-            jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnrevert.ClientID))
-            jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnCancel.ClientID))
-
-
-            'jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButton('#{0}', $('#{1}'));", startingControl.ClientID, Me.btnupdate.ClientID))
-            'jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButton('#{0}', $('#{1}'));", startingControl.ClientID, Me.btnsave.ClientID))
-            'jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButton('#{0}', $('#{1}'));", startingControl.ClientID, Me.btnrevert.ClientID))
-            'jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButton('#{0}', $('#{1}'));", startingControl.ClientID, Me.btnCancel.ClientID))
-
-            ' ajaxSubmitButton('#ctl09_Chart1', $('#ctl09_propbtns_0_Chart1_update'));
-            RaiseEvent gridSet()
-            Me.Height = Nothing
-            Me.Width = Nothing
+            pnl.Height = 500
         End If
+
+        If Not Me.Width = Nothing Then
+            pnl.Width = Me.Width
+        Else
+            pnl.Width = 600
+        End If
+
+        createButtons()
+        'pnl.Style("overflow") = "auto"
+        pnl.ID = "proppnl_" & MainID & "_" & startingControl.ID
+        'dd.Items.Add("")
+        'For Each ctrl As Control In startingControl.Controls
+        '    dd.Items.Add(New ListItem(ctrl.ID & " " & ctrl.GetType().Name, ctrl.ID))
+        'Next
+        'pnl.Controls.Add(dd)
+
+
+        btnupdate.Text = "Refresh"
+        btnsave.Text = "Save"
+        btnCancel.Text = "Cancel Edit"
+        btnrevert.Text = "Revert"
+
+        pnl.Controls.Add(New LiteralControl("<br/>"))
+        pnl.Controls.Add(btnupdate)
+        pnl.Controls.Add(btnsave)
+        pnl.Controls.Add(btnCancel)
+        pnl.Controls.Add(New LiteralControl("</div>"))
+        propeditor.xInstance = startingControl
+
+        Dim pnl1 As New Panel
+        'pnl1.Style("border") = "2px solid black"
+        'pnl1.Style("overflow") = "auto"
+        'If Not Me.Height = Nothing Then pnl1.Height = Me.Height
+        'If Not Me.width = Nothing Then pnl1.Width = Me.width
+        pnl1.CssClass = "propEditorTable"
+        pnl1.Controls.Add(propeditor)
+        pnl.Controls.Add(pnl1)
+
+        Me.Controls.Add(pnl)
+
+        pnlChanges = New Panel
+        pnlChanges.Style("display") = "none"
+        pnlChanges.ID = "propPendingChanges_" & MainID & "_" & startingControl.ID
+        If litChangeList Is Nothing Then litChangeList = New LiteralControl
+        pnlChanges.Controls.Add(litChangeList)
+
+        pnlSavedChanges = New Panel
+        pnlSavedChanges.Style("display") = "none"
+        pnlSavedChanges.ID = "propSavedChanges_" & MainID & "_" & startingControl.ID
+        pnlSavedChanges.Controls.Add(btnrevert)
+        pnlSavedChanges.Controls.Add(New LiteralControl("<br>"))
+        If litSavedChangeList Is Nothing Then litSavedChangeList = New LiteralControl
+        pnlSavedChanges.Controls.Add(litSavedChangeList)
+
+        pnl.Controls.AddAt(0, pnlSavedChanges)
+        pnl.Controls.AddAt(0, pnlChanges)
+        pnl.Controls.AddAt(0, New LiteralControl("<a style=""font-size: x-small;"" href=""javascript:void(0);"" onclick=""$('#" & pnlSavedChanges.ClientID & "').toggle('slow');"">Saved Changes</a> "))
+        pnl.Controls.AddAt(0, New LiteralControl("<a style=""font-size: x-small;"" href=""javascript:void(0);"" onclick=""$('#" & pnlChanges.ClientID & "').toggle('slow');"">Current Changes</a> "))
+        pnl.Controls.AddAt(0, New LiteralControl("<div class='propEditorButtons'>"))
+        'dlgChanges.Width = 600
+
+        dlgChanges.OpenerAttributes = "style='font-size: x-small;'"
+
+        dlgChanges.OpenerText = "<i class='fa fa-wrench' aria-hidden='true'></i> Edit Properties"
+        Me.Controls.AddAt(0, dlgChanges)
+        'Me.Controls.AddAt(0, New LiteralControl(dlgChanges.openerLink("Edit Properties")))
+        'Me.Controls.AddAt(0, New LiteralControl("<a style=""font-size: x-small;"" href=""#"" onclick=""toggleProperties('" & pnl.ClientID & "');"">Edit Properties</a> "))
+        'Me.Controls.Add(getScript)
+
+        'ajaxSubmitButtonSearchString('.{0}', $('#{1}'), '<!--##{0}##-->')
+
+        jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnupdate.ClientID))
+        jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnsave.ClientID))
+        jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnrevert.ClientID))
+        jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButtonSearchString('#{0}', $('#{1}'), '<!--'+'##{0}##-->');", startingControl.ClientID, Me.btnCancel.ClientID))
+
+
+        'jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButton('#{0}', $('#{1}'));", startingControl.ClientID, Me.btnupdate.ClientID))
+        'jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButton('#{0}', $('#{1}'));", startingControl.ClientID, Me.btnsave.ClientID))
+        'jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButton('#{0}', $('#{1}'));", startingControl.ClientID, Me.btnrevert.ClientID))
+        'jQueryLibrary.jQueryInclude.addScriptBlockPageLoad(Me.Page, String.Format("ajaxSubmitButton('#{0}', $('#{1}'));", startingControl.ClientID, Me.btnCancel.ClientID))
+
+        ' ajaxSubmitButton('#ctl09_Chart1', $('#ctl09_propbtns_0_Chart1_update'));
+        RaiseEvent gridSet()
+        Me.Height = Nothing
+        Me.Width = Nothing
     End Sub
 
     Public Shared Sub addHtmlCommentBeforAndAfter(ByVal ctrl As Control, ByVal str As String)
@@ -503,5 +489,4 @@ Public Class DynamicPropertyEditor
             addHtmlCommentBeforAndAfter(startingControl, "##" & startingControl.ClientID & "##")
         End If
     End Sub
-
 End Class
