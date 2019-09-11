@@ -227,6 +227,7 @@ Public Class ReportSelector
     Public Shared Sub clearReport(Optional ByVal reportname As String = Nothing)
         Dim s As HttpSessionState = HttpContext.Current.Session
         If Not s Is Nothing Then
+            s.Remove("selected Report")
             If reportname Is Nothing Then
                 Dim remkeys As New List(Of String)
 
