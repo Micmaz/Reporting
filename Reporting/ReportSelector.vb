@@ -207,7 +207,17 @@ Public Class ReportSelector
         For Each key As String In Me.shownreport.clickedvals.Keys
             If key.ToLower() = "initialreport" OrElse key.ToLower() = "selectedreport" Then
             Else
-                url &= "&" & HttpUtility.UrlEncode(key) & "=" & HttpUtility.UrlEncode(Me.shownreport.clickedvals(key)).ToString()
+                Try
+                    If (Me.shownreport.clickedvals(key) Is DBNull.Value) Then
+                        url &= "&" & HttpUtility.UrlEncode(key) & "=NULL"
+                    Else
+                        url &= "&" & HttpUtility.UrlEncode(key) & "=" & HttpUtility.UrlEncode(Me.shownreport.clickedvals(key)).ToString()
+                    End If
+
+
+                Catch ex As Exception
+
+                End Try
             End If
         Next
         Return url

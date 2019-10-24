@@ -20,10 +20,13 @@ namespace _reportTester
 
 		protected void Session_Start(object sender, EventArgs e)
 		{
-			Reporting.Report.isGlobalAdmin = true;
-		}
+            //Reporting.Report.isGlobalAdmin = true;
+            if(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["ReportConnection"] !=null)
+                Reporting.Report.ReportDataConnectionShared = new System.Data.SqlClient.SqlConnection(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["ReportConnection"].ConnectionString);
 
-		protected void Application_BeginRequest(object sender, EventArgs e)
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
 		{
 
 		}

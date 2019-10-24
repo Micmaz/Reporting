@@ -22,13 +22,13 @@ namespace _reportTester {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// btnToggleEditing control.
+        /// btnEnable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnToggleEditing;
+        protected global::System.Web.UI.WebControls.Button btnEnable;
         
         /// <summary>
         /// ReportSelector1 control.
@@ -38,5 +38,14 @@ namespace _reportTester {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Reporting.ReportSelector ReportSelector1;
+        
+        /// <summary>
+        /// edit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl edit;
     }
 }

@@ -113,8 +113,8 @@ Public Class ParmDisplay
         If Not c Is Nothing Then
 			'c.ID = "parm_" & Me.parentGraph.GraphID & "_" & name
 			Dim p As New Panel()
-			p.CssClass = "dtiReportingPArm"
-			Dim l As New Label
+            p.CssClass = "dtiReportingParm"
+            Dim l As New Label
 			l.CssClass = "dtiReportingParmLabel"
 			l.Text = displayname & ": "
 			p.Controls.Add(l)
@@ -218,9 +218,11 @@ Public Class ParmDisplay
 
 		'If hasparms Then
 		Me.Controls.AddAt(0, New LiteralControl("<fieldset class='reportField'><legend>" & Me.parentGraph.GraphName & "</legend>"))
-		Me.Controls.Add(Submit)
-		Me.Controls.Add(controlPanel)
-		Me.Controls.Add(New LiteralControl("</fieldset>"))
+
+        Me.Controls.Add(controlPanel)
+        'Me.Controls.Add(New LiteralControl("<br/>"))
+        Me.Controls.Add(Submit)
+        Me.Controls.Add(New LiteralControl("</fieldset>"))
 		'End If
 
 		If Me.Page.Request.Params(Submit.UniqueID) = Submit.Text Then

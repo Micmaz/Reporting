@@ -31,10 +31,11 @@ Public Class Report
 		Get
 			Return Sharedsession("ReportDataConnection")
 		End Get
-		Set(ByVal value As System.Data.Common.DbConnection)
-			Sharedsession("ReportDataConnection") = value
-		End Set
-	End Property
+        Set(ByVal value As System.Data.Common.DbConnection)
+            Sharedsession.Remove("ReportDataConnection")
+            Sharedsession.Add("ReportDataConnection", value)
+        End Set
+    End Property
 
 	Public Shared Property ReportSettingsConnectionShared() As System.Data.Common.DbConnection
         Get

@@ -18,12 +18,26 @@
 }
 
 			</style>
-        	<asp:Button ID="btnToggleEditing" runat="server" OnClick="btnToggleEditing_Click" Text="Toggle report editing" />
-			<br />
+    <br />
+	 <asp:Button ID="btnEnable" runat="server" Text="Toggle Report Editing" 
+        onclick="btnToggleEditing_Click" CssClass="btnToggle"/>
+    <DTI:ReportSelector ID="ReportSelector1" runat="server">
+    </DTI:ReportSelector>
+      <script>
+        $(function () {
+            $(".btnToggle").hide();
+            $(document).keypress(function (e) {
+                if (e.which == 13) {
+                    $(".btnToggle").fadeIn();
 
-
-			<%@ Register assembly="Reporting" namespace="Reporting" tagprefix="DTI" %>
-			<DTI:ReportSelector ID="ReportSelector1" runat="server"></DTI:ReportSelector>
+                }
+            });
+        })
+    </script>
+    <div style="float:right;" visible="false" runat="server" id="edit">
+        
+		<a target="_blank" href="/~/res/Reporting/QueryBuilder.aspx">SQL Builder</a>
+    </div>
         </div>
     </form>
 </body>

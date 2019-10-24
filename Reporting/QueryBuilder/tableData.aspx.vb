@@ -57,13 +57,13 @@ Public Class tableData
     Private _helper As BaseClasses.BaseHelper
     Public ReadOnly Property helper() As BaseClasses.BaseHelper
         Get
-            If Not Session("ReportDataConnection") Is Nothing Then
+            If Not Report.ReportDataConnectionShared Is Nothing Then
                 If _helper Is Nothing Then
-                    _helper = BaseClasses.DataBase.createHelper(Session("ReportDataConnection"))
+                    _helper = BaseClasses.DataBase.createHelper(Report.ReportDataConnectionShared)
                 End If
                 Return _helper
             Else
-				Return BaseClasses.DataBase.getHelper()
+                Return BaseClasses.DataBase.getHelper()
 			End If
         End Get
     End Property
