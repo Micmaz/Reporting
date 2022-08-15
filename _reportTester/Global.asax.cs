@@ -23,7 +23,7 @@ namespace _reportTester
             //Reporting.Report.isGlobalAdmin = true;
             if(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["ReportConnection"] !=null)
                 Reporting.Report.ReportDataConnectionShared = new System.Data.SqlClient.SqlConnection(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["ReportConnection"].ConnectionString);
-
+			Reporting.Report.defaultParameters.Add("election_id", 105);
         }
 
         protected void Application_BeginRequest(object sender, EventArgs e)

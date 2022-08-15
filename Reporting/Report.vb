@@ -314,7 +314,7 @@ Public Class Report
     End Property
 
     Private Shared _sharedsession As System.Web.SessionState.HttpSessionState
-    Private Shared ReadOnly Property Sharedsession() As System.Web.SessionState.HttpSessionState
+    Friend Shared ReadOnly Property Sharedsession() As System.Web.SessionState.HttpSessionState
         Get
             If _sharedsession Is Nothing Then _sharedsession = BaseClasses.DataBase.createSession(True)
             Return _sharedsession
@@ -374,6 +374,14 @@ Public Class Report
         Set(ByVal value As Boolean)
             BaseClasses.DataBase.httpSession("GlobalReportsAdmin") = value
         End Set
+    End Property
+
+
+    Public Shared ReadOnly Property defaultParameters() As Hashtable
+        Get
+            If (BaseClasses.DataBase.httpSession("GlobalReportProperties") Is Nothing) Then BaseClasses.DataBase.httpSession("GlobalReportProperties") = New Hashtable()
+            Return BaseClasses.DataBase.httpSession("GlobalReportProperties")
+        End Get
     End Property
 
 #End Region
@@ -514,6 +522,7 @@ Public Class Report
             'initializeReport()
         End If
         buildData()
+        Me.Controls.Add(New LiteralControl("<div class=""DTIReportEnd""></div>"))
         'End If
     End Sub
 
@@ -561,9 +570,10 @@ Public Class Report
             Dim idstr As String = "DTIReportClickedVals_" & Me.ReportName
             If Me.session(idstr) Is Nothing Then
                 Dim ht As New Hashtable
-
-
                 Me.session(idstr) = ht
+                For Each parmkey As String In defaultParameters.Keys
+                    If Not ht.ContainsKey(parmkey) Then ht(parmkey) = defaultParameters(parmkey)
+                Next
             End If
             If setParmsFromQueryString AndAlso Not queryValsRun Then
                 queryValsRun = True
@@ -572,6 +582,7 @@ Public Class Report
                     ht(key) = HttpContext.Current.Request.QueryString(key)
                 Next
             End If
+
             Return Me.session(idstr)
         End Get
     End Property

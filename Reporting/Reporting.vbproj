@@ -349,6 +349,7 @@
     <EmbeddedResource Include="propertyEditor\clear.png" />
     <EmbeddedResource Include="propertyEditor\close.png" />
     <EmbeddedResource Include="propertyEditor\open.png" />
+    <EmbeddedResource Include="QueryBuilder\js\jstreeTheme\jstreeTheme.style.throbber.gif" />
     <Content Include="QueryBuilder\js\tablethemes\green\tablethemes.green.asc.png" />
     <Content Include="QueryBuilder\js\tablethemes\green\tablethemes.green.background.png" />
     <Content Include="QueryBuilder\js\tablethemes\green\tablethemes.green.desc.png" />

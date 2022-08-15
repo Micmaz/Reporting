@@ -14,15 +14,11 @@ Public Class ReportEditorBase
 
 	End Sub
 
-	Private _helper As BaseHelper
-    Public Shadows Property sqlhelper() As BaseClasses.BaseHelper
+    Private _helper As BaseHelper
+    Public Property sqlhelper() As BaseClasses.BaseHelper
         Get
             If _helper Is Nothing Then
-                If Not Session("ReportSettingsConnection") Is Nothing Then
-                    _helper = BaseClasses.DataBase.createHelper(Session("ReportSettingsConnection"))
-                Else
-                    _helper = BaseClasses.DataBase.getHelper
-                End If
+                _helper = BaseClasses.DataBase.createHelper(ReportSettingsConnection)
             End If
             Return _helper
         End Get
@@ -31,7 +27,24 @@ Public Class ReportEditorBase
         End Set
     End Property
 
-	Public Property ds() As dsReports
+    Private _ReportSettingsConnection As System.Data.Common.DbConnection
+    Public Property ReportSettingsConnection() As System.Data.Common.DbConnection
+        Get
+            If _ReportSettingsConnection IsNot Nothing Then Return _ReportSettingsConnection
+            If Session("ReportSettingsConnection") IsNot Nothing Then Return Session("ReportSettingsConnection")
+            If Report.Sharedsession("ReportSettingsConnection") IsNot Nothing Then Return Report.Sharedsession("ReportSettingsConnection")
+            Return BaseClasses.DataBase.defaultConnectionSessionWide
+        End Get
+        Set(ByVal value As System.Data.Common.DbConnection)
+            'If ReportDataConnection.ToString = sqlhelper.defaultConnection.ToString Then
+            '	ReportDataConnection = sqlhelper.defaultConnection
+            'End If
+            _ReportSettingsConnection = value
+            _helper = Nothing
+        End Set
+    End Property
+
+    Public Property ds() As dsReports
 		Get
 			If Session("DTIReportDATAsetForEditingGraphsOfAPartciularReport") Is Nothing Then
 				Session("DTIReportDATAsetForEditingGraphsOfAPartciularReport") = New dsReports

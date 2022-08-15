@@ -167,12 +167,18 @@ function setupData(schema, targetElement) {
 */
 
 function loadData(){
-	$.getJSON(schemaExtendedJsonCall, {}, function (data) { 
-            tableSchemaExtended = data; 
-    }).fail(ajaxError);
+
 	$.getJSON(schemaJsonCall, {}, function (data) {
-            tableSchema = data;
-            var externalTables="";  //Tables in external Schema that aren't in the main database.
+            tableSchema = $.extendext(true, 'concat', tableSchema, data);
+			loadExternalTables();
+    }).fail(ajaxError);
+    $("body").trigger("dataloaded");
+}
+
+function loadExternalTables(expandedNode){
+	$.getJSON(schemaExtendedJsonCall, {}, function (data) { 
+            tableSchemaExtended = data; 	
+	        var externalTables="";  //Tables in external Schema that aren't in the main database.
             $.each(tableSchemaExtended,function(key,val){ 
                 if(!(key in tableSchema)) externalTables+= key + "##"
             });
@@ -180,15 +186,14 @@ function loadData(){
 			
             //jQuery.extend(true, tableSchema, tableSchemaExtended);
             if(externalTables=="")
-                setupData(tableSchema);
+                setupData(tableSchema,expandedNode);
             else 
-                $.getJSON(schemaJsonCall+"&tablelist="+externalTables, function (data) { 
+                $.getJSON(schemaJsonCall+"&tablelist="+encodeURIComponent(externalTables), function (data) { 
                     //jQuery.extend(true, tableSchema, data);
                     tableSchema = $.extendext(true, 'concat',{}, tableSchema, data);
-                    setupData(tableSchema);   
+                    setupData(tableSchema,expandedNode);   
                 }).fail(ajaxError);
-    }).fail(ajaxError);
-    $("body").trigger("dataloaded");
+	}).fail(ajaxError);
 }
 
 var viewsLoaded = false;
@@ -197,7 +202,8 @@ function addViewData()
         $.getJSON(schemaViewsJsonCall, function (data) { 
             //jQuery.extend(true, tableSchema, data); 
             tableSchema = $.extendext(true, 'concat', tableSchema, data);
-            setupData(data,'#views'); 
+            //setupData(data,'#views'); 
+			loadExternalTables('#views');
         }).fail(ajaxError);
          //$('#jstree').jstree().create_node('#' ,  { "id" : "ajson5", "text" : "newly added" }, "last", function(){});
 }

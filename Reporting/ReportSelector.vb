@@ -13,11 +13,7 @@ Public Class ReportSelector
     Public Property sqlhelper() As BaseClasses.BaseHelper
         Get
             If _helper Is Nothing Then
-                If session("ReportSettingsConnection") Is Nothing Then
-                    _helper = BaseClasses.DataBase.getHelper
-                Else
-                    _helper = BaseClasses.DataBase.createHelper(session("ReportSettingsConnection"))
-                End If
+                _helper = BaseClasses.DataBase.createHelper(ReportSettingsConnection)
             End If
             Return _helper
         End Get
@@ -53,25 +49,24 @@ Public Class ReportSelector
         End Set
     End Property
 
+    Private _ReportSettingsConnection As System.Data.Common.DbConnection
     Public Property ReportSettingsConnection() As System.Data.Common.DbConnection
         Get
-            Return sqlhelper.defaultConnection
+            If _ReportSettingsConnection IsNot Nothing Then Return _ReportSettingsConnection
+            If session("ReportSettingsConnection") IsNot Nothing Then Return session("ReportSettingsConnection")
+            If Report.Sharedsession("ReportSettingsConnection") IsNot Nothing Then Return Report.Sharedsession("ReportSettingsConnection")
+            Return BaseClasses.DataBase.defaultConnectionSessionWide
         End Get
-		Set(ByVal value As System.Data.Common.DbConnection)
-			If value Is Nothing Then
-				sqlhelper = Nothing
-			Else
-				sqlhelper = BaseClasses.DataBase.createHelper(value)
-			End If
-			If shownreport IsNot Nothing Then
-				shownreport.ReportSettingsConnection = sqlhelper.defaultConnection
-			End If
-		End Set
-	End Property
+        Set(ByVal value As System.Data.Common.DbConnection)
+            'If ReportDataConnection.ToString = sqlhelper.defaultConnection.ToString Then
+            '	ReportDataConnection = sqlhelper.defaultConnection
+            'End If
+            _ReportSettingsConnection = value
+            _helper = Nothing
+        End Set
+    End Property
 
-
-
-	Private _ReportSettingsConnectionName As String = Nothing
+    Private _ReportSettingsConnectionName As String = Nothing
 	Public Property ReportSettingsConnectionName As String
 		Get
 			Return _ReportSettingsConnectionName

@@ -1,9 +1,12 @@
 ﻿{
-	"Patients": {"universalRelations":[{"child_cols":["PatientID"],"parent_cols":["PatientID"]}]}
-	,"AllStaff": {"universalRelations":[{"child_cols":["StaffID"],"parent_cols":["StaffID"]}]}
-	,"AllUsers": {"universalRelations":[{"child_cols":["InsertedBy"],"parent_cols":["UserID"]}]}
-	,"AllUsers": {"universalRelations":[{"child_cols":["LastEditedBy"],"parent_cols":["UserID"]}]}
-	,"Clinical_Data.PatientEncounter": {"universalRelations":[{"child_cols":["PatientEncounterID"],"parent_cols":["PatientEncounterID"]}]}
-	,"InsurancePlan": { "universalRelations":[{ "child_cols": ["InsurancePlanID"], "parent_cols": ["InsurancePlanID"] }] }
-	,"SlidingFeeScalePrograms": { "universalRelations":[{ "child_cols": ["SlidingFeeScaleProgramsID"], "parent_cols": ["SlidingFeeScaleProgramsID"] }] }
+	  "Asset": { "universalRelations": [{ "parent_cols": ["id"], "child_cols": ["assetid"] }] }
+	, "AssetItem": { "universalRelations": [{ "parent_cols": ["id"], "child_cols": ["assetitemid"] }] }
+	, "Truck": { "universalRelations": [{ "parent_cols": ["id"], "child_cols": ["truckid"] }] }
+	, "PackList": { "universalRelations": [{ "parent_cols": ["id"], "child_cols": ["packListid"] }] }
+	, "Inventory": { "universalRelations": [{ "parent_cols": ["id"], "child_cols": ["Inventoryid"] }] }
+	, "Delivery": { "universalRelations": [{ "parent_cols": ["id"], "child_cols": ["Deliveryid"] }] }
+	, "BOEBallotTracking.dbo.LK_ELECTION": { "universalRelations": [{ "parent_cols": ["ID"], "child_cols": ["electionid"] }] }
+	, "BOEBallotTracking.dbo.POLLING_PLACE": { "universalRelations": [{ "parent_cols": ["polling_place_id"], "child_cols": ["pollingPlaceid"] }] }
+	, "BOEBallotTracking.dbo.EPB_SITE_INFO": { "universalRelations": [{ "parent_cols": ["name_abbr"], "child_cols": ["site_lbl"] }] }
+	, "BOEBallotTracking.dbo.EPB_SITE_INFO": { "universalRelations": [{ "parent_cols": ["id"], "child_cols": ["OneStopID"] }] }
 }
