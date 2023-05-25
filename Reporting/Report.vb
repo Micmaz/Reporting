@@ -588,17 +588,19 @@ Public Class Report
     End Property
 
 	Public Shared Sub loadDSToDatabase(ByRef myhelper As BaseHelper)
-		Dim ds As New dsReports
-		For Each dt As DataTable In ds.Tables
-			If Not myhelper.checkDBObjectExists(dt.TableName) Then
-				myhelper.checkAndCreateTable(dt)
-				If dt.TableName = ds.DTIGraphTypes.TableName Then
-					getGraphTypeList(myhelper, ds.DTIGraphTypes)
+        Dim ds As New dsReports
+        ds.Tables.Add(New ComparatorDS.DTIPropDifferencesDataTable())
+        For Each dt As DataTable In ds.Tables
+            If Not myhelper.checkDBObjectExists(dt.TableName) Then
+                myhelper.checkAndCreateTable(dt)
+                If dt.TableName = ds.DTIGraphTypes.TableName Then
+                    getGraphTypeList(myhelper, ds.DTIGraphTypes)
 
-				End If
-			End If
-		Next
-	End Sub
+                End If
+            End If
+        Next
+
+    End Sub
 
 	Public Shared Function getGraphTypeList(myhelper As BaseHelper, Optional dtGraphTypes As dsReports.DTIGraphTypesDataTable = Nothing) As dsReports.DTIGraphTypesDataTable
 		If dtGraphTypes Is Nothing Then dtGraphTypes = New dsReports.DTIGraphTypesDataTable

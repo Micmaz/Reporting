@@ -109,6 +109,10 @@ margin: -3px;
  </div>    
 
         &nbsp;<br />
+<div style="font-size: x-small;float: right;">
+        <a href="ReportExport.aspx">Export Reports</a>&nbsp;&nbsp;
+        <a href="ReportImport.aspx">Import Reports</a>
+</div>
         &nbsp;<asp:Button ID="btnSave" runat="server" Text="Save" /></div>
     </form>
 </body>

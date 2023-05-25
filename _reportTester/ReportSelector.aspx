@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ReportSelector.aspx.cs" Inherits="_reportTester.ReportSelector" %>
 
-<%@ Register assembly="Reporting" namespace="Reporting" tagprefix="DTI" %>
+
 
 <!DOCTYPE html>
 
@@ -21,6 +21,7 @@
     <br />
 	 <asp:Button ID="btnEnable" runat="server" Text="Toggle Report Editing" 
         onclick="btnToggleEditing_Click" CssClass="btnToggle"/>
+    <%@ Register assembly="Reporting" namespace="Reporting" tagprefix="DTI" %>
     <DTI:ReportSelector ID="ReportSelector1" runat="server">
     </DTI:ReportSelector>
       <script>

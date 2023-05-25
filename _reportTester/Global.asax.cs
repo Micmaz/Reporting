@@ -13,7 +13,7 @@ namespace _reportTester
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            //RouteConfig.RegisterRoutes(RouteTable.Routes);
             DTIControls.Share.initializePathProvider();
 			
 		}

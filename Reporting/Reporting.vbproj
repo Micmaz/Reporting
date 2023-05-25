@@ -62,9 +62,6 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.106.0\lib\net20\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -145,6 +142,20 @@
       <DependentUpon>GraphTester.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="ReportImport.aspx.designer.vb">
+      <DependentUpon>ReportImport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportImport.aspx.vb">
+      <DependentUpon>ReportImport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReportExport.aspx.designer.vb">
+      <DependentUpon>ReportExport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReportExport.aspx.vb">
+      <DependentUpon>ReportExport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="TableEditorGridGraph.ascx.designer.vb">
       <DependentUpon>TableEditorGridGraph.ascx</DependentUpon>
     </Compile>
@@ -221,6 +232,8 @@
     <Compile Include="Report.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ReportImport.aspx" />
+    <EmbeddedResource Include="ReportExport.aspx" />
     <None Include="dsReports.xsc">
       <DependentUpon>dsReports.xsd</DependentUpon>
     </None>
@@ -255,6 +268,13 @@
     <Content Include="propertyEditor\ComparatorDS.xss">
       <DependentUpon>ComparatorDS.xsd</DependentUpon>
     </Content>
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="js\reportRefresher.js" />
