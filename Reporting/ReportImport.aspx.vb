@@ -22,6 +22,7 @@ Partial Public Class ReportImport
     Protected Sub btnUpload_Click(sender As Object, e As EventArgs)
         dsReportList.Clear()
         dsReportList.EnforceConstraints = False
+
         dsReportList.ReadXml(fuReportsFile.PostedFile.InputStream)
         pnlSelectReports.Visible = True
         pnlUpload.Visible = False
@@ -38,8 +39,7 @@ Partial Public Class ReportImport
         sqlhelper.FillDataTable("Select * from DTIGraphParms", dsNew.DTIGraphParms)
         sqlhelper.FillDataTable("Select * from DTIGraphTypes", dsNew.DTIGraphTypes)
 
-        dsNew.Tables.Add("DTIPropDifferences")
-        sqlhelper.FillDataTable("Select * from DTIPropDifferences", dsNew.Tables("DTIPropDifferences"))
+        sqlhelper.FillDataTable("Select * from DTIPropDifferences", dsNew.DTIPropDifferences)
         Dim graphTypesHash As New Hashtable()
         For Each gt As dsReports.DTIGraphTypesRow In dsReportList.DTIGraphTypes
             Dim typeRow As Reporting.dsReports.DTIGraphTypesRow
@@ -51,7 +51,6 @@ Partial Public Class ReportImport
             End If
             graphTypesHash.Add(gt.Id, typeRow.Id)
         Next
-        Dim dsPd As New ComparatorDS
         For Each r As dsReports.DTIReportsRow In dsReportList.DTIReports
             If importIDlist.Contains("," & r.Id & ",") Then
                 Dim renameRows As DataRow() = dsNew.DTIReports.Select("name like '" & EscapeFilter(r.Name) & "'")
@@ -65,6 +64,7 @@ Partial Public Class ReportImport
                         i += 1
                     End While
                     renameRows(0)("name") = newname
+                    renameRows(0)("Published") = False
                 End If
                 Dim newRep = dsNew.DTIReports.AddDTIReportsRow(r.Name, r.Height, r.Width, r.Scrollable, r.showHistory, r.Published)
                 sqlhelper.Update(dsNew.DTIReports)
@@ -77,20 +77,17 @@ Partial Public Class ReportImport
                                 dsNew.DTIGraphParms.AddDTIGraphParmsRow(p.Name, p.DisplayName, p.Parm_Type, newg.Id, p.ParmProperties)
                             End If
                         Next
-                        If dsReportList.Tables.Contains("DTIPropDifferences") Then
-
-                            For Each pr As DataRow In dsReportList.Tables("DTIPropDifferences").Rows
-                                If pr("ObjectKey") = "Graph_" & g.Id Then
-                                    dsPd.DTIPropDifferences.AddDTIPropDifferencesRow(pr("PropertyPath"), pr("PropertyValue"), pr("PropertyType"), "Graph_" & newg.Id, pr("mainID"))
-                                End If
-                            Next
-                        End If
+                        For Each pr As DataRow In dsReportList.DTIPropDifferences
+                            If pr("ObjectKey") = "Graph_" & g.Id Then
+                                dsNew.DTIPropDifferences.AddDTIPropDifferencesRow(pr("PropertyPath"), pr("PropertyValue"), pr("PropertyType"), "Graph_" & newg.Id, pr("mainID"))
+                            End If
+                        Next
                     End If
                 Next
             End If
         Next
         sqlhelper.Update(dsNew.DTIGraphParms)
-        sqlhelper.Update(dsPd.DTIPropDifferences)
+        sqlhelper.Update(dsNew.DTIPropDifferences)
         Response.Clear()
         Response.Write("Import Complete.")
         Response.End()

@@ -24,11 +24,10 @@ Partial Public Class ReportExport
         sqlHelper.FillDataTable("Select * from DTIGraphs where report_id in " & idStr, dsReportList.DTIGraphs)
         sqlHelper.FillDataTable("Select * from DTIGraphParms where graph_id in (select id from DTIGraphs where id in " & idStr & " )", dsReportList.DTIGraphParms)
         sqlhelper.FillDataTable("Select * from DTIGraphTypes", dsReportList.DTIGraphTypes)
-        dsReportList.Tables.Add("DTIPropDifferences")
         sqlhelper.FillDataTable("
  SELECT *
   FROM DTIPropDifferences
-  where ObjectKey in (select 'Graph_' + Cast(id as varchar) from DTIGraphs)", dsReportList.Tables("DTIPropDifferences"))
+  where ObjectKey in (select 'Graph_' + Cast(id as varchar) from DTIGraphs)", dsReportList.DTIPropDifferences)
 
 
         Dim filename = "Reports-" & DateTime.Now.ToString("yyyy-dd-M") & ".xml"
