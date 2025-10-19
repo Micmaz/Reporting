@@ -66,7 +66,7 @@ Partial Public Class GridGraph
         Return q
     End Function
 
-    Private Sub DTIGrid1_Click(ByRef row As DTIGrid.DTIGridRow) Handles DTIGrid1.Click
+    Private Sub DTIGrid1_Click(row As DTIGrid.DTIGridRow) Handles DTIGrid1.Click
         doDrilldown(row.dataRow)
     End Sub
 

@@ -147,10 +147,10 @@ Public Class tableData
 
                 End Try
                 Try
-                    helper.Adaptor(dt.TableName).FillSchema(dt, SchemaType.Mapped)
+                    helper.get_Adaptor(dt.TableName).FillSchema(dt, SchemaType.Mapped)
                 Catch ex As Exception
                     Try
-                        helper.Adaptor(tablename).FillSchema(dt, SchemaType.Mapped)
+                        helper.get_Adaptor(tablename).FillSchema(dt, SchemaType.Mapped)
                     Catch ex2 As Exception
 
                     End Try

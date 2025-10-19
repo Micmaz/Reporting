@@ -10,7 +10,7 @@
     <Shape ID="DesignTable:DTIGraphTypes" ZOrder="5" X="138" Y="435" Height="130" Width="154" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="126" />
     <Shape ID="DesignTable:DTIReports" ZOrder="4" X="513" Y="240" Height="130" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="126" />
     <Shape ID="DesignTable:DTIGraphParms" ZOrder="3" X="740" Y="391" Height="181" Width="161" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="177" />
-    <Shape ID="DesignTable:DTIPropDifferences" ZOrder="1" X="851" Y="174" Height="143" Width="179" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="86" />
+    <Shape ID="DesignTable:DTIPropDifferences" ZOrder="1" X="851" Y="174" Height="143" Width="179" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="139" />
   </Shapes>
   <Connectors />
 </DiagramLayout>

@@ -644,7 +644,7 @@ Partial Public Class dsReports
             Me.columnId.Unique = true
             Me.columnReport_Id.AllowDBNull = false
             Me.columnName.AllowDBNull = false
-            Me.columnName.MaxLength = 100
+            Me.columnName.MaxLength = 500
             Me.columnSelectStmt.AllowDBNull = false
             Me.columnSelectStmt.MaxLength = 1073741823
             Me.columnOrder.AllowDBNull = false
@@ -941,7 +941,7 @@ Partial Public Class dsReports
             Me.columnId.ReadOnly = true
             Me.columnId.Unique = true
             Me.columnControl_Name.AllowDBNull = false
-            Me.columnControl_Name.MaxLength = 500
+            Me.columnControl_Name.MaxLength = 2000
             Me.columnName.AllowDBNull = false
             Me.columnName.MaxLength = 100
         End Sub
@@ -1288,7 +1288,7 @@ Partial Public Class dsReports
             Me.columnId.ReadOnly = true
             Me.columnId.Unique = true
             Me.columnName.AllowDBNull = false
-            Me.columnName.MaxLength = 50
+            Me.columnName.MaxLength = 500
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1620,7 +1620,7 @@ Partial Public Class dsReports
             Me.columnId.ReadOnly = true
             Me.columnId.Unique = true
             Me.columnName.AllowDBNull = false
-            Me.columnName.MaxLength = 100
+            Me.columnName.MaxLength = 500
             Me.columnDisplayName.MaxLength = 8000
             Me.columnParm_Type.AllowDBNull = false
             Me.columnParm_Type.Caption = "Graph_Type"

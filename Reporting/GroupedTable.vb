@@ -267,14 +267,20 @@ Public Class GroupedTable
         If DataSource IsNot Nothing Then
             Dim colLst As List(Of String) = cols()
             Dim r As TableRow
-
+            Dim sourcetbl As DataTable = DataSource
             'Make the header
             r = New TableHeaderRow
-			For Each col As String In colLst
-				col = col.Trim()
-				r.Cells.Add(makeHeaderCell(col, "headerCell"))
-			Next
-			r.TableSection = TableRowSection.TableHeader
+
+            Dim clonedList As New List(Of String)(colLst)
+            For Each col As String In clonedList
+                If sourcetbl.Columns.Contains(col.Trim()) Then
+                    r.Cells.Add(makeHeaderCell(col.Trim(), "headerCell"))
+                Else
+                    colLst.Remove(col)
+                End If
+            Next
+
+            r.TableSection = TableRowSection.TableHeader
 			Rows.Add(r)
 
             For Each row As DataRow In DataSource.Rows

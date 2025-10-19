@@ -34,32 +34,37 @@ Partial Public Class BaseGraph
 	Public err As New JqueryUIControls.InfoDiv
 	Public exportLink As New LiteralControl
 
-	Protected ReadOnly Property dt() As DataTable
+    Public Shared Function getParmsList(sql As String, Optional htVals As Hashtable = Nothing) As List(Of Object)
+        Dim regex1 As Regex = New Regex("\x40\w+", RegexOptions.IgnoreCase Or RegexOptions.CultureInvariant Or RegexOptions.IgnorePatternWhitespace Or RegexOptions.Compiled)
+        Dim i As Integer = 0
+        Dim parms As New Generic.List(Of Object)
+        Dim parmNames As New Generic.List(Of Object)
+        For Each singleMatch As Match In regex1.Matches(sql)
+            Dim key As String = singleMatch.ToString.ToLower.Substring(1)
+            If Not parmNames.Contains(key) Then
+                parmNames.Add(key)
+                If htVals.ContainsKey(key) Then
+                    parms.Add(htVals(key))
+                Else
+                    parms.Add(DBNull.Value)
+                End If
+            End If
+        Next
+        Return parms
+    End Function
+
+    Protected ReadOnly Property dt() As DataTable
         Get
             If Me.Visible = False Then
                 Return Nothing
             End If
             If _dt Is Nothing Then
                 Try
-                    Dim regex1 As Regex = New Regex("\x40\w+", RegexOptions.IgnoreCase Or RegexOptions.CultureInvariant Or RegexOptions.IgnorePatternWhitespace Or RegexOptions.Compiled)
-                    Dim i As Integer = 0
-					Dim parms As New Generic.List(Of Object)
-					Dim parmNames As New Generic.List(Of Object)
-					For Each singleMatch As Match In regex1.Matches(graph.SQLStmt)
-						Dim key As String = singleMatch.ToString.ToLower.Substring(1)
-						If Not parmNames.Contains(key) Then
-							parmNames.Add(key)
-							If graph.clickedvals.ContainsKey(key) Then
-								parms.Add(graph.clickedvals(key))
-							Else
-								parms.Add(DBNull.Value)
-							End If
-						End If
-					Next
-					'If Session("ReportDataConnection") Is Nothing Then
-					'sqlHelper.SafeFillTable(graph.SQLStmt, _dt, parms.ToArray)
-					'Else
-					DataBase.createHelper(ReportDataConnection).SafeFillTable(graph.SQLStmt, _dt, parms.ToArray)
+                    Dim parms = getParmsList(graph.SQLStmt, graph.clickedvals)
+                    'If Session("ReportDataConnection") Is Nothing Then
+                    'sqlHelper.SafeFillTable(graph.SQLStmt, _dt, parms.ToArray)
+                    'Else
+                    DataBase.createHelper(ReportDataConnection).SafeFillTable(graph.SQLStmt, _dt, parms.ToArray)
 					'End If
 					If graph.ExportExcel Then
                         excellHash(graph.GraphID) = _dt

@@ -722,28 +722,95 @@ Public Class Report
 		Controls.AddAt(1, parms)
 	End Sub
 
-	Private Sub renderParameters(Optional destControl As Control = Nothing)
-		If isadmin Then
-			If clickedvals.Count > 0 Then
-				If destControl Is Nothing Then destControl = Me
-				Dim dlg As JqueryUIControls.Dialog = JqueryUIControls.Dialog.CreateDialogue("Show Current Parameters")
-				dlg.OpenerAttributes = "style='font-size: x-small;display:inline-block;margin-left: 5px;'"
-				dlg.OpenerText = "<i class='fa fa-list' aria-hidden='true'></i> Show Current Parameters"
-				'dlg.Style = "font-size: x-small;"
-				Dim str As String = ""
-				For Each key As String In clickedvals.Keys
-					str &= String.Format("@{0} = {1} <br/>", key, clickedvals(key))
-				Next
-				dlg.Controls.Add(New LiteralControl(str))
-				destControl.Controls.Add(dlg)
-			End If
+    Private Sub renderParameters(Optional destControl As Control = Nothing)
+        If isadmin Then
+            If clickedvals.Count > 0 Then
+                If destControl Is Nothing Then destControl = Me
+                Dim dlg As JqueryUIControls.Dialog = JqueryUIControls.Dialog.CreateDialogue("Show Current Parameters")
+                dlg.OpenerAttributes = "style='font-size: x-small;display:inline-block;margin-left: 5px;'"
+                dlg.OpenerText = "<i class='fa fa-list' aria-hidden='true'></i> Show Current Parameters"
+                'dlg.Style = "font-size: x-small;"
+                Dim str As String = ""
+                For Each key As String In clickedvals.Keys
+                    Dim type As String = "VARCHAR(200)"
+                    Dim val As String = clickedvals(key).ToString()
+                    If clickedvals(key).GetType() Is GetType(Date) Then
+                        type = "DATETIME"
+                        val = "'" & val & "'"
+                    ElseIf clickedvals(key).GetType() Is GetType(Integer) Then
+                        type = "INT"
+                    ElseIf clickedvals(key).GetType() Is GetType(Double) Then
+                        type = "DECIMAL(10, 2)"
+                    ElseIf clickedvals(key).GetType() Is GetType(Boolean) Then
+                        type = "BIT"
+                    Else
+                        val = "'" & val & "'"
+                    End If
+                    str &= $"DECLARE @{key} {type} = {val}; <br/>"
+                Next
+                dlg.Controls.Add(New LiteralControl(str))
+                destControl.Controls.Add(dlg)
+            End If
 
-		End If
-	End Sub
+        End If
+    End Sub
+
+    Protected Shared Function getSettingsHelper() As BaseClasses.BaseHelper
+        If Report.ReportSettingsConnectionShared IsNot Nothing Then
+            Return BaseClasses.DataBase.createHelper(Report.ReportSettingsConnectionShared)
+        Else
+            Return BaseClasses.DataBase.getHelper()
+        End If
+    End Function
+
+    Protected Shared Function getDataHelper() As BaseClasses.BaseHelper
+        If Report.ReportDataConnectionShared IsNot Nothing Then
+            Return BaseClasses.DataBase.createHelper(Report.ReportDataConnectionShared)
+        Else
+            Return BaseClasses.DataBase.getHelper()
+        End If
+    End Function
+
+    Public Shared Function getReportData(ReportName As String, parmList As Hashtable) As List(Of DataTable)
+        Dim settingsHelper As BaseClasses.BaseHelper = getSettingsHelper()
+        Dim dtReports As DataTable = settingsHelper.FillDataTable("select * from DTIReports where name like @name", ReportName)
+        If dtReports.Rows.Count > 0 Then
+            Dim reportId As Integer = dtReports.Rows(0)("id")
+            Return getReportData(reportId, parmList)
+        End If
+        Return New List(Of DataTable)
+    End Function
+
+    Public Shared Function getReportData(ReportId As Integer, parmList As Hashtable) As List(Of DataTable)
+        Dim dtList As New List(Of DataTable)
+        Dim settingsHelper As BaseClasses.BaseHelper = getSettingsHelper()
+        Dim dtGraphs As DataTable = settingsHelper.FillDataTable("select * from DTIGraphs where Report_id = @id", ReportId)
+        For Each row As DataRow In dtGraphs.Rows
+            Dim dt As DataTable = getGraphData(row("SelectStmt").ToString(), parmList)
+            dt.TableName = row("Name").ToString()
+            dtList.Add(dt)
+        Next
+        Return dtList
+    End Function
+
+    Public Shared Function getGraphDataById(GraphId As Integer, parmList As Hashtable) As DataTable
+        Dim settingsHelper As BaseClasses.BaseHelper = getSettingsHelper()
+        Dim dtGraphs As DataTable = settingsHelper.FillDataTable("select * from DTIGraphs where id = @id", GraphId)
+        For Each row As DataRow In dtGraphs.Rows
+            Dim dt As DataTable = getGraphData(row("SelectStmt").ToString(), parmList)
+            dt.TableName = row("Name").ToString()
+        Next
+    End Function
+
+    Public Shared Function getGraphData(GraphSQL As String, parmList As Hashtable) As DataTable
+        Dim parms = BaseGraph.getParmsList(GraphSQL, parmList)
+        Dim dataHelper As BaseClasses.BaseHelper = getDataHelper()
+        Return dataHelper.FillDataTable(GraphSQL, parms.ToArray)
+    End Function
 
 #Region "Script render helpers"
 
-	Public Shared Function getJSValue(val As Object, Optional returnEmptyString As Boolean = False) As String
+    Public Shared Function getJSValue(val As Object, Optional returnEmptyString As Boolean = False) As String
 		If val Is Nothing OrElse val Is DBNull.Value Then
 			val = ""
 		End If

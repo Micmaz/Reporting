@@ -42,7 +42,7 @@
     <input type="checkbox" id="checkAll" > Check All <br /><br />
     <%For Each r In dsReportList.DTIReports%>
     <%=r.Name%> <input type="checkbox" class="cbID" dbid="<%=r.id %>" />
-        <%If dtExistingReports.select("name like '" & r.Name & "'").Length > 0 then%> (Rename Existing Report) <%End If %>
+        <%If dtExistingReports.select("name like '" & EscapeFilter(r.Name) & "'").Length > 0 then%> (Rename Existing Report) <%End If %>
         <br />
     <%Next %>
          <asp:TextBox ID="tbReportList" CssClass="idlst" runat="server"></asp:TextBox>
